@@ -3,7 +3,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Washk12 Partners</title>
+  <title>Partners</title>
 
   <link href="https://coreui.io/docs/assets/css/coreui-docs.min.css" rel="stylesheet">
   <link href="https://coreui.io/docs/assets/css/coreui-icons.css" rel="stylesheet">
@@ -31,9 +31,9 @@
       <div class="card-group">
         <div class="card p-4">
           <div class="card-body">
-            <h1>WBL Partners Login</h1>
+            <h1>Partners Login</h1>
             <p class="text-muted">Click the button below to log in</p>
-            <a href="{{ url('/googlelogin') }}"><img src="img/btn_google_signin_dark_normal_web.png"></a>
+            <a href="{{ url('/googlelogin') }}"><img src="/img/btn_google_signin_dark_normal_web.png"></a>
           </div>
         </div>
       </div>
