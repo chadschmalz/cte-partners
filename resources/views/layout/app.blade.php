@@ -182,6 +182,6 @@
       feather.replace()
 
 		</script>
-      <script src="{{asset('js/custom.js')}}"></script>
+      <script src="{{asset('js/custom.js')}}?date={{date('m/d/y')}}"></script>
   </body>
 </html>

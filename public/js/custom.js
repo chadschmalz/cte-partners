@@ -325,7 +325,7 @@ $app.businessdetail = function(){
                       if(button.getAttribute('data-bs-action') == '/internshipupdate'){
                         // Button that triggered the modal
                         document.getElementById('InternshipAddform').action = '/internshipupdate'
-                        $('.InternshipAddModalLabel').html('Edit Opportunity: '+button.getAttribute('data-bs-name'));
+                        $('.InternshipAddModalLabel').html('Edit Opportunity: '+ button.getAttribute('data-bs-interntitle'));
                         $('.internid').val(button.getAttribute('data-bs-internid'));
                         $('.interntitle').val(button.getAttribute('data-bs-interntitle'));
                         $('.internnotes').val(button.getAttribute('data-bs-notes'));
