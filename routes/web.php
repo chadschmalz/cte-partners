@@ -78,7 +78,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 	Route::get('/semesters/{semester?}/{location?}/{pathway?}', 'SemesterController@index')->name('semesters');
-	Route::post('/semesteradd', 'SemesterController@create')->name('semesteradd');
+	Route::post('/semesteradd', 'SemesterController@store')->name('semesteradd');
 	Route::post('/semesterupdate', 'SemesterController@update')->name('semesterupdate');
 
 

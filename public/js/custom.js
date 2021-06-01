@@ -207,6 +207,55 @@ function formatBusinessSelection (employers) {
   return  employers.text ;
 }
 }
+
+
+$app.semesters = function(){
+
+  var addSemesterModal = document.getElementById('addSemesterModal')
+  addSemesterModal.addEventListener('show.bs.modal', function (event) {
+    // Button that triggered the modal
+    var button = event.relatedTarget
+    // Extract info from data-bs-* attributes
+    var modalTitle = addSemesterModal.querySelector('.modal-title')
+    var modalBodyInput = addSemesterModal.querySelector('.modal-body input')
+
+  // Update the modal's content.
+
+  if(button.getAttribute('data-bs-action') == 'semesterupdate'){
+console.log(button.getAttribute('data-bs-enddt'));
+    document.getElementById('semesterform').action = '/semesterupdate';
+
+    $('#semester_id').val(button.getAttribute('data-bs-id'));
+    $('#school_year').val(button.getAttribute('data-bs-year'));
+    $('#semester_desc').val(button.getAttribute('data-bs-desc'));
+    $('#semester_enddt').val(button.getAttribute('data-bs-enddt'));
+
+    switch(button.getAttribute('data-bs-status')){
+      case 'inactive':
+        document.getElementById("semester_status").selectedIndex = "0";
+            break;
+        case 'active':
+        document.getElementById("semester_status").selectedIndex = "1";
+            break;
+          }
+
+    $('.modal-title').html( 'Edit Semester: '+button.getAttribute('data-bs-desc'));
+  }
+  else{
+    $('#semester_id').val();
+    $('#semester_year').val();
+    $('#semester_desc').val();
+    $('#semester_enddt').val();
+    $('#semester_status').val();
+    document.getElementById("semester_status").selectedIndex = "1";
+    modalTitle.textContent = 'Add New Semester'
+  }
+});
+
+
+
+}
+
 $app.restore = function(){
 
   var restoreModal = document.getElementById('RestoreBizModal')
@@ -432,6 +481,9 @@ $app.route = function(){
             break;
         case 'changeform':
             $app.changeform();
+            break;
+        case 'semesters':
+            $app.semesters();
             break;
         default:
             return;

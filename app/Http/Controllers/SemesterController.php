@@ -15,20 +15,11 @@ class SemesterController extends Controller
     public function index()
     {
       return view('semesters.index')->with([
-        'semesters'=>semester::all(),
+        'semesters'=>semester::where('status','!=','disabled' )->orderBy('school_year')->get(),
       ]);
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -38,30 +29,18 @@ class SemesterController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $semester = new semester;
+
+        $semester->school_year = $request->school_year;
+        $semester->semester_desc = $request->semester_desc;
+        $semester->semester_enddt = $request->semester_enddt;
+        $semester->status = $request->semester_status;
+        $semester->save();
+        // $semester->school_year = $request->school_year;
+        return redirect('/semesters');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -70,9 +49,25 @@ class SemesterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+      if($request->semester_status)
+        {
+          foreach (semester::where('status','active')->get() as $key => $value) {
+            $value->status = 'inactive';
+            $value->save();
+          }
+        }
+
+      $semester = semester::find($request->semester_id);
+
+      $semester->school_year = $request->school_year;
+      $semester->semester_desc = $request->semester_desc;
+      $semester->semester_enddt = $request->semester_enddt;
+      $semester->status = $request->semester_status;
+      $semester->save();
+      // $semester->school_year = $request->school_year;
+      return redirect('/semesters');
     }
 
     /**

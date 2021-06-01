@@ -33,14 +33,14 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link {{Request::is('utils') ? 'active':''}} d-inline-flex align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#system-collapse" aria-expanded="false" href="/utils">
+        <a class="nav-link  d-inline-flex align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#system-collapse" aria-expanded="false" href="/utils">
           <span data-feather="layers"></span>
           System Management
         </a>
         <div class="collapse " id="system-collapse">
           <ul class="nav flex-column mx-1">
-            <li class="nav-item mx-4"><a href="/utils" class="nav-link">Utilities</a></li>
-            <li class="nav-item mx-4"><a href="/semesters" class="nav-link">Manage Semesters</a></li>
+            <li class="nav-item mx-4 {{Request::is('/utils') ? 'active':''}}"><a href="/utils" class="nav-link">Utilities</a></li>
+            <li class="nav-item mx-4 {{Request::is('semesters') ? 'active':''}}"><a href="/semesters" class="nav-link">Manage Semesters</a></li>
           </ul>
         </div>
       </li>
