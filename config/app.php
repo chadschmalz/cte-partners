@@ -232,7 +232,7 @@ return [
     ],
 
     'db_fields' => [
-      'School',
+      'schoolname',
       'name',
       'email',
       'phone',

@@ -8,6 +8,7 @@ use App\Models\location;
 use App\Http\Requests\CsvImportRequest;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\cluster;
 
 class StudentImportController extends Controller
 {
@@ -23,8 +24,8 @@ class StudentImportController extends Controller
         $path = $request->file('csv_file')->getRealPath();
 
         if ($request->has('header')) {
-            $data = Excel::load($path, function($reader) {})->get()->toArray();
-        } else {
+        //     $data = Excel::load($path, function($reader) {})->get()->toArray();
+        // } else {
             $data = array_map('str_getcsv', file($path));
         }
         $csv_header_fields = [];
@@ -32,7 +33,7 @@ class StudentImportController extends Controller
         if (count($data) > 0) {
             if ($request->has('header')) {
                 foreach ($data[0] as $key => $value) {
-                    $csv_header_fields[] = $key;
+                    $csv_header_fields[] = $value;
                 }
             }
             $csv_data = array_slice($data, 0, 2);
@@ -53,24 +54,35 @@ class StudentImportController extends Controller
     public function processImport(Request $request)
     {
 
-        $data = CsvData::find($request->csv_data_file_id);
-        $csv_data = json_decode($data->csv_data, true);
-        foreach ($csv_data as $row) {
+
+      $data = CsvData::find($request->csv_data_file_id);
+       $csv_data = json_decode($data->csv_data, true);
+
+      foreach ($csv_data as $rowindex => $row) {
+          if($data->csv_header and $rowindex == 0)
+            continue;
+
           $student = new student();
-          foreach (config('app.db_fields') as $index => $field) {
-            if($field == 'School'){
 
-              $student->location_id = location::where('location_desc','like','%'.$row[$request->fields[$field]].'%')->first()[0]->id;
+        foreach ($request->fields as $index => $field) {
 
-            }
-              else {
-                $student->$field = $row[$request->fields[$field]];
+              if($field == 'schoolname'){
+                $student->location_id = location::where('location_desc','like','%'.$row[$index].'%')->first()->id;
               }
-          }
-        }
-        $student->save();
+                else {
+                  $student->$field = $row[$index];
+                }
+            }
 
-        return view('student.studentimport.import_success');
+          $student->save();
+        }
+
+        $clusters =  cluster::all();
+        $data = array(
+                   'clusters'=> $clusters,
+                   'studentuploadMessage'=>'Import Successful'
+                 );
+        return view('utils')->with($data);
     }
 
 }

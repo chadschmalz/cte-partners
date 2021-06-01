@@ -199,7 +199,7 @@
                             <div class="row">
 
                               <div class="col-md-12 col-lg-12">
-                                This Utility can add a list of Pathways<br /><br />
+                                This Utility can add a list of Pathways (if the cluster doesn't exist it will add the cluster too)<br /><br />
                                 <strong>These the fields it expects:</strong><br />
 
                                 Cluster Desc(cluster), Pathway Desc (pathway)
@@ -228,6 +228,74 @@
                       </div>
 
 
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12 col-lg-12 mt-3">
+                          <div class="card ">
+                              <div class="card-header"><h3>Student CSV Import</h3></div>
+
+                              <div class="card-body">
+                                @if(isset($studentuploadMessage))
+                                <div class="row">
+                                  <div class="col-md-4 col-lg-4">
+                                    <div class="form-control btn btn-success">
+                                      {{$studentuploadMessage}}
+                                    </div>
+                                  </div>
+                                </div>
+                                @endif
+                                @if(isset($studentuploadFailed))
+                                <div class="row">
+                                  <div class="col-md-8 col-lg-8">
+                                    <div class="form-control btn btn-danger">
+                                      {{$studentuploadFailed}}
+                                    </div>
+                                  </div>
+                                </div>
+                                @endif
+                                <div class="col-md-12 col-lg-12">
+                                  This Utility imports csv of students<br /><br />
+                                  <strong>These the fields it expects:</strong><br />
+
+                                  schoolname, studentname, email, phone, emerg_contact, emerg_email, emerg_phone<br /><br />
+                                </div>
+                                  <form class="form-horizontal" method="POST" action="{{ route('import_parse') }}" enctype="multipart/form-data">
+                                      {{ csrf_field() }}
+
+                                      <div class="form-group{{ $errors->has('csv_file') ? ' has-error' : '' }}">
+
+                                          <div class="col-md-6">
+                                              <input id="csv_file" type="file" class="form-control" name="csv_file" required>
+
+                                              @if ($errors->has('csv_file'))
+                                                  <span class="help-block">
+                                                  <strong>{{ $errors->first('csv_file') }}</strong>
+                                              </span>
+                                              @endif
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group">
+                                          <div class="col-md-6 col-md-offset-4">
+                                              <div class="checkbox">
+                                                  <label>
+                                                      <input type="checkbox" name="header" checked> File contains header row?
+                                                  </label>
+                                              </div>
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group">
+                                          <div class="col-md-8 col-md-offset-4">
+                                              <button type="submit" class="btn btn-primary">
+                                                  Parse CSV
+                                              </button>
+                                          </div>
+                                      </div>
+                                  </form>
+                              </div>
+                          </div>
+                      </div>
                     </div>
 
 

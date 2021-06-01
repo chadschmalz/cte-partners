@@ -5,9 +5,11 @@
         <div class="row m-2">
             <div class="col-md-12 ">
                 <div class="card ">
-                    <div class="card-header">CSV Import</div>
+                    <div class="card-header">Student Import Review</div>
 
                     <div class="card-body">
+                      <div class="h3">Does the header and drop down fields match?</div>
+
                         <form class="form-horizontal" method="POST" action="{{ route('import_process') }}">
                             {{ csrf_field() }}
                             <input type="hidden" name="csv_data_file_id" value="{{ $csv_data_file->id }}" />
@@ -22,11 +24,12 @@
                                 @endif
                                   <tr>
                                   @foreach ($csv_data[0] as $key => $value)
+
                                       <td>
-                                          <select class="form-select" name="fields[{{ $value }}]">
+                                          <select class="form-select" name="fields[]">
                                               @foreach (config('app.db_fields') as $db_field)
                                                   <option value="{{$db_field}}"
-                                                      @if ($value === $db_field) selected @endif>{{ $db_field }}</option>
+                                                      {{trim($value) == trim($db_field) ? 'selected':''}}>{{ $db_field }}</option>
                                               @endforeach
                                           </select>
                                       </td>
@@ -34,8 +37,14 @@
                               </tr>
 
                                 @foreach ($csv_data as $row)
+                                @if($row[0] == 'schoolname')
+                                <?PHP continue;?>
+                                @endif
+
+
                                     <tr>
                                     @foreach ($row as $key => $value)
+
                                         <td>{{ $value }}</td>
                                     @endforeach
                                     </tr>

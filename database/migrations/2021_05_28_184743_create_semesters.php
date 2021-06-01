@@ -17,8 +17,7 @@ class CreateSemesters extends Migration
             $table->id();
             $table->string('semester_desc', 20)->nullable();
             $table->string('school_year', 100)->nullable();
-            $table->string('semester_enddt', 50)->nullable();
-            $table->date('state');
+            $table->date('semester_enddt')->nullable();
             $table->string('status', 15)->nullable();
             $table->timestamps();
             $table->softDeletes($column = 'deleted_at', $precision = 0);

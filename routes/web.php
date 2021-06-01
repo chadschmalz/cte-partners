@@ -77,6 +77,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/processImport', 'StudentImportController@processImport')->name('import_process');
 
 
+	Route::get('/semesters/{semester?}/{location?}/{pathway?}', 'SemesterController@index')->name('semesters');
+	Route::post('/semesteradd', 'SemesterController@create')->name('semesteradd');
+	Route::post('/semesterupdate', 'SemesterController@update')->name('semesterupdate');
+
+
+
+
 	Route::get('/utils', 'ClusterController@utils');
 
 	Route::get('/dashboard',function () {

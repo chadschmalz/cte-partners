@@ -40,8 +40,7 @@
         <div class="collapse " id="system-collapse">
           <ul class="nav flex-column mx-1">
             <li class="nav-item mx-4"><a href="/utils" class="nav-link">Utilities</a></li>
-            <li class="nav-item mx-4"><a href="#" class="nav-link">Manage Semesters</a></li>
-              <li class="nav-item mx-4"><a href="/studentimport" class="nav-link">Import Students</a></li>
+            <li class="nav-item mx-4"><a href="/semesters" class="nav-link">Manage Semesters</a></li>
           </ul>
         </div>
       </li>
