@@ -1,6 +1,6 @@
 ## Laravel 8.4 CTE Business Partner Database
 
-Simple project for storing business partners, internship Oopportunities and student assignments.
+Simple project for storing business partners, internship opportunities and student assignments.
 
 ---
 
