@@ -8,7 +8,7 @@ Simple project for storing business partners, internship opportunities and stude
 
 - Clone the repository with __git clone__
 - Copy __.env.example__ file to __.env__ and edit database credentials there
-- Then you'll need to need to set up your App registration and add the configuration to your .env file for Socialite authentication
+- Then you'll need to set up your App registration and add the configuration to your .env file for Socialite authentication
 - Run __composer install__
 - Run __php artisan key:generate__
 - Run __php artisan migrate__
