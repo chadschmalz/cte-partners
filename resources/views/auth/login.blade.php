@@ -33,7 +33,13 @@
           <div class="card-body">
             <h1>Partners Login</h1>
             <p class="text-muted">Click the button below to log in</p>
-            <a href="{{ url('/googlelogin') }}"><img src="/img/btn_google_signin_dark_normal_web.png"></a>
+            <div class="row">
+              <div class="col-12">
+                <a href="{{ url('/authlogin/google') }}"><div class="col-4 border border-2 rounded p-1 text-center"><img src="/img/google-icon-v2.svg"><strong> Sign in with Google</strong></div></a>
+                <!-- br /><a href="{{ url('/authlogin/microsoft') }}"><div class="col-4 border border-2 rounded p-1 text-center"><img src="/img/microsoft-icon-v2.svg"><strong> Sign in with Microsoft</strong></div></a -->
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

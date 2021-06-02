@@ -22,8 +22,8 @@ Route::get('/login', function () {
 	    return view('auth.login');
 	})->name('login');
 
-Route::get('googlelogin', 'Auth\LoginController@redirectToProvider');
-Route::get('callback/google', 'Auth\LoginController@handleProviderCallback');
+Route::get('authlogin/{provider?}', 'Auth\LoginController@redirectToProvider');
+Route::get('callback/{provider?}', 'Auth\LoginController@handleProviderCallback');
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
 // Any route within this group will redirect to the login page if called while logged out
