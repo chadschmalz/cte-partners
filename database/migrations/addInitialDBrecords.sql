@@ -1,12 +1,3 @@
-INSERT INTO internshipdev.users
-( name, email,password, created_at, updated_at)
-VALUES( 'Chad Schmalz', 'chad.schmalz@washk12.org',NULL, '2020-12-11', '2020-12-11');
-
-INSERT INTO internshipdev.user_permissions
-( email, permission_level, location_id, job_function_id)
-VALUES( 'chad.schmalz@washk12.org', 'superuser', 950, 0);
-
-
 
 
 
