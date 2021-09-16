@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="generator" content="Hugo 0.79.0">
-    <title>CTE Partners</title>
+    <title>{{env('APP_TITLE','CTE Partners')}}</title>
 
 
     <!-- Bootstrap core CSS -->

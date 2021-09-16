@@ -93,25 +93,7 @@
                 </div>
               </div>
             </div>
-            <div class="row mb-2">
-
-                  <div class="col-md-6 col-lg-6">
-                    <div class="card">
-                      <div class="card-header">
-                        <div class="row">
-                          <h5>Create Activity</h5>
-                        </div>
-                      </div>
-                      <div class="card-body">
-                        <div class="row">
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
-                </div>
+            
                 <div class="row mb-2">
 
                       <div class="col-md-6 col-lg-6">

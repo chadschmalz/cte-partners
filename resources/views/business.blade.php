@@ -65,36 +65,39 @@
           <div class="card-body">
             <div class="row">
 
-                      <div class="databuttons mb-1">
-                        Toggle column:
-                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="1">Business</a>
-                      					<a class="toggle-vis btn btn-sm btn-outline-primary" data-column="2">Safety Agreement</a>
-                                <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="3">POC</a>
-                                <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="4">Email</a>
-                                <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="5">Phone</a>
-                                <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="6">Note</a>
-                                <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="7">Involvement</a>
-                                <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="0"> ID</a>
-                      				</div>
+              <div class="databuttons mb-1">
+               Toggle column:
+               <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="0">Business</a>
+               <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="1">Address</a>
+               <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="2">Safety Agreement</a>
+                                               <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="3">POC</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="4">Email</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="5">Phone</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="6">Note</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="7">Involvement</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="8">ID</a>
+                                       </div>
 
                       <table class="table table-sm table-striped display allBizDataTable" id="allBizDataTable" w>
                                           <thead>
-                                              <tr>
-                                                <th scope="col" >Business</th>
-                                                <th scope="col" >Safety Agreement</th>
-                                                <th scope="col" >POC</th>
-                                                <th scope="col" >Email</th>
-                                                <th scope="col" >Phone</th>
-                                                <th scope="col" >Note</th>
-                                                <th scope="col" >Involvement</th>
-                                                <th scope="col" > ID</th>
-                                              </tr>
+                                            <tr>
+                                             <th scope="col" >Business</th>
+                                             <th scope="col" >Address</th>
+                                             <th scope="col" >Safety Agreement</th>
+                                             <th scope="col" >POC</th>
+                                             <th scope="col" >Email</th>
+                                             <th scope="col" >Phone</th>
+                                             <th scope="col" >Note</th>
+                                             <th scope="col" >Involvement</th>
+                                             <th scope="col" > ID</th>
+                                           </tr>
                                               </thead>
                                               <tbody >
                             @if(isset($businesses))
                                @foreach($businesses as $biz)
                                <tr>
                                  <td><a   href="/businessdetail/{{$biz->id}}">{{$biz->name}}</a></td>
+                                 <td>{{$biz->address}} {{$biz->city}} {{$biz->state}} {{$biz->zip}}</td>
                                <td>{{$biz->safety_agreement}}</td>
                                      <td>{{$biz->pocs[0]->name}}</td>
                                      <td>{{$biz->pocs[0]->email}}</td>
@@ -106,6 +109,7 @@
                                         $activities .= $act->activity->activity_desc.", ";
                                      ?>
                                      <td>{{$activities}}</td>
+
                                      <td><a   href="/businessdetail/{{$biz->id}}">{{$biz->id}}</a></td>
 
                                   </tr>
@@ -115,15 +119,16 @@
                               </tbody>
                               <tfoot>
                                 <tr>
-                                  <th scope="col" >Business</th>
-                                  <th scope="col" >Safety Agreement</th>
-                                  <th scope="col" >POC</th>
-                                  <th scope="col" >Email</th>
-                                  <th scope="col" >Phone</th>
-                                  <th scope="col" >Note</th>
-                                  <th scope="col" >Involvement</th>
-                                  <th scope="col" > ID</th>
-                                </tr>
+                                     <th scope="col" >Business</th>
+                                     <th scope="col" >Address</th>
+                                     <th scope="col" >Safety Agreement</th>
+                                     <th scope="col" >POC</th>
+                                     <th scope="col" >Email</th>
+                                     <th scope="col" >Phone</th>
+                                     <th scope="col" >Note</th>
+                                     <th scope="col" >Involvement</th>
+                                     <th scope="col" > ID</th>
+                                   </tr>
                               </tfoot>
                           </table>
 

@@ -82,6 +82,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/semesterupdate', 'SemesterController@update')->name('semesterupdate');
 
 
+	Route::get('/locations/', 'LocationController@index')->name('locations');
+	Route::get('/locationdestroy/{id}', 'LocationController@destroy')->name('locationdestroy');
+	Route::post('/locationadd', 'LocationController@store')->name('locationadd');
+	Route::post('/locationupdate', 'LocationController@update')->name('locationupdate');
+	Route::get('/locationimport', 'LocationController@getImport')->name('locationimport');
+	Route::post('/locationparse', 'LocationController@parseImport')->name('locationparse');
+	Route::post('/processLocationImport', 'LocationController@processImport')->name('locationImport');
 
 
 	Route::get('/utils', 'ClusterController@utils');

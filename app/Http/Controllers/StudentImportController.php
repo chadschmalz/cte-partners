@@ -67,7 +67,11 @@ class StudentImportController extends Controller
         foreach ($request->fields as $index => $field) {
 
               if($field == 'schoolname'){
-                $student->location_id = location::where('location_desc','like','%'.$row[$index].'%')->first()->id;
+                $student->location_id = location::
+                where(function ($query) use ($request,$row,$index) {
+                                              $query->where('location_desc','like','%'.$row[$index].'%')
+                                                    ->orWhere('location_num','like',$row[$index]);
+                                          })->first()->id;
               }
                 else {
                   $student->$field = $row[$index];
@@ -77,12 +81,21 @@ class StudentImportController extends Controller
           $student->save();
         }
 
-        $clusters =  cluster::all();
-        $data = array(
-                   'clusters'=> $clusters,
-                   'studentuploadMessage'=>'Import Successful'
-                 );
-        return view('utils')->with($data);
+          $selectedSemester = semester::where('status','active')->get()[0]->id;
+          $students = student::all();
+          $pathways = pathway::all();
+
+            $data = array(
+                        'selectedSemester'=> $selectedSemester,
+                        'selectedPathway'=> $selectedPathway,
+                        'selectedLocation'=> $selectedLocation,
+                        'clusters'=> cluster::all(),
+                        'pathways'=> $pathways,
+                        'locations'=> location::all(),
+                        'semesters'=> semester::where('id','like','%')->orderBy('semester_enddt')->get(),
+                       'students'=> $students,
+                     );
+              return view('student.studentlist')->with($data);
     }
 
 }

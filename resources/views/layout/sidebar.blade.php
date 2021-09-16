@@ -41,6 +41,7 @@
           <ul class="nav flex-column mx-1">
             <li class="nav-item mx-4 {{Request::is('/utils') ? 'active':''}}"><a href="/utils" class="nav-link">Utilities</a></li>
             <li class="nav-item mx-4 {{Request::is('semesters') ? 'active':''}}"><a href="/semesters" class="nav-link">Manage Semesters</a></li>
+            <li class="nav-item mx-4 {{Request::is('semesters') ? 'active':''}}"><a href="/locations" class="nav-link">Manage Locations</a></li>
           </ul>
         </div>
       </li>

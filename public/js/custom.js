@@ -20,7 +20,60 @@
 if(typeof($app)=="undefined"){
     $app = [];
 }
+$app.locations = function(){
 
+      document.getElementById('removeLocationModal').addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        $('.removeLocationBody').html('Are you sure your want to remove this location?<br /><br /><strong>  '+button.getAttribute('data-bs-desc')+'</strong>');
+        $('.removeLocationButton').html('<a  href="/locationdestroy/'+button.getAttribute('data-bs-id')+'"><button type="button" class="btn btn-danger ">Remove Location</button></a>');
+      });
+    var locationUpdate = document.getElementById('addlocationModal');
+        locationUpdate.addEventListener('show.bs.modal', function (event) {
+          var button = event.relatedTarget
+          if(button.getAttribute('data-bs-action') == 'locationupdate'){
+            // Button that triggered the modal
+            document.getElementById('locationaddform').action = '/locationupdate'
+            $('.locationid').val(button.getAttribute('data-bs-locationid'));
+            $('#location_num').val(button.getAttribute('data-bs-location_num'));
+            $('#location_desc').val(button.getAttribute('data-bs-desc'));
+            $('#location_address1').val(button.getAttribute('data-bs-phone'));
+            $('.stemail').val(button.getAttribute('data-bs-email'));
+            $('.stpathway').val(button.getAttribute('data-bs-pathway'));
+            $('.stemerg_phone').val(button.getAttribute('data-bs-emerg_phone'));
+            $('.stemerg_contact').val(button.getAttribute('data-bs-emerg_contact'));
+            $('.stnotes').val(button.getAttribute('data-bs-notes'));
+
+            var sel = document.getElementById('stlocation_id');
+            var opts = sel.options;
+            for (var opt, j = 0; opt = opts[j]; j++) {
+              if (opt.value == button.getAttribute('data-bs-locationid')) {
+                sel.selectedIndex = j;
+                break;
+              }
+            }
+            sel = document.getElementById('stpathway');
+            var opts = sel.options;
+            for (var opt, j = 0; opt = opts[j]; j++) {
+              if (opt.value == button.getAttribute('data-bs-pathway')) {
+                sel.selectedIndex = j;
+                break;
+              }
+            }
+
+            $('.employerfield').hide();
+
+          }
+          else{
+            $('.studentid').val();
+            $('.stname').val();
+            $('.stphone').val();
+            $('.stemail').val();
+            $('.stemerg_phone').val();
+            $('.stemerg_contact').val();
+            $('.stnotes').val();
+          }
+        });
+}
 $app.studentdetail = function(){
 
 
@@ -485,6 +538,9 @@ $app.route = function(){
         case 'semesters':
             $app.semesters();
             break;
+        case 'locations':
+            $app.locations();
+            break;
         default:
             return;
     }
@@ -532,6 +588,9 @@ $(".clickable-row").on('click', function() {
 
     } );
     $('#allBizDataTable_filter').append(allBizDataTable.buttons().container());
+    allBizDataTable.column( 2 ).visible( false );
+    allBizDataTable.column( 4 ).visible( false );
+    allBizDataTable.column( 8).visible( false );
 
     $('a.toggle-vis').on( 'click', function (e) {
       e.preventDefault();

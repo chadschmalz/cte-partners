@@ -285,8 +285,8 @@ class BusinessController extends Controller
 
             $poc->business_id = $business->id;
             $poc->name = $request->pocname;
-            $poc->email = $request->phone;
-            $poc->phone = $request->email;
+            $poc->email = $request->email;
+            $poc->phone = $request->phone;
             $poc->notes = $request->notes;
             if(isset($request->mentor)){
               $poc->mentor = 'Y';

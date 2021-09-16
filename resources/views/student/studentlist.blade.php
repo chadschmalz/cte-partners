@@ -87,14 +87,12 @@
                                                 <th scope="col" >Student</th>
                                                 <th scope="col" >Location</th>
                                                 <th scope="col" >Pathway</th>
-                                                @if($selectedSemester == 'all')
-                                                <th scope="col" ></th>
-                                                @else
+
                                                 <th scope="col" >Employer</th>
                                                 <th scope="col" >Semester</th>
                                                 <th scope="col" >Mentor</th>
                                                 <th scope="col" >Mentor Phone</th>
-                                                @endif
+
                                               </tr>
                                               </thead>
                                               <tbody >
@@ -103,7 +101,11 @@
                                <tr>
                                  <td><a   href="/studentdetail/{{$student->id}}">{{$student->name}}</a></td>
                                      <td>{{$student->location->location_desc}}</td>
-                                     <td>{{$student->pathway->pathway_desc}}</td>
+                                     <td>
+                                       @if(isset($student->pathway))
+                                       {{$student->pathway->pathway_desc}}
+                                     @endif
+                                   </td>
                                      @if(count($student->internships) != 0 && $selectedSemester != 'all')
                                        <td>{{$student->internships->where('semester_id',$selectedSemester)[0]->employer->name}}</td>
                                        <td>{{$student->internships->where('semester_id',$selectedSemester)[0]->semester->semester_desc}}</td>
@@ -124,14 +126,9 @@
                                         @endif
                                        </td>
                                        @elseif($selectedSemester == 'all')
-                                       <td >
+                                       <td colspan="4">
                                          <table width="100%">
-                                           <tr>
-                                             <th scope="col" >Employer</th>
-                                             <th scope="col" >Semester</th>
-                                             <th scope="col" >Mentor</th>
-                                             <th scope="col" >Mentor Phone</th>
-                                           </tr>
+
                                            @foreach($student->internships as $s)
 
                                          <tr>
