@@ -23,11 +23,8 @@ class StudentImportController extends Controller
 
         $path = $request->file('csv_file')->getRealPath();
 
-        if ($request->has('header')) {
-        //     $data = Excel::load($path, function($reader) {})->get()->toArray();
-        // } else {
-            $data = array_map('str_getcsv', file($path));
-        }
+
+        $data = array_map('str_getcsv', file($path));
         $csv_header_fields = [];
 
         if (count($data) > 0) {
@@ -54,7 +51,6 @@ class StudentImportController extends Controller
     public function processImport(Request $request)
     {
 
-
       $data = CsvData::find($request->csv_data_file_id);
        $csv_data = json_decode($data->csv_data, true);
 
@@ -69,8 +65,8 @@ class StudentImportController extends Controller
               if($field == 'schoolname'){
                 $student->location_id = location::
                 where(function ($query) use ($request,$row,$index) {
-                                              $query->where('location_desc','like','%'.$row[$index].'%')
-                                                    ->orWhere('location_num','like',$row[$index]);
+                                              $query->where('location_desc$student->like$student->%'.$row[$index].'%')
+                                                    ->orWhere('location_num$student->like',$row[$index]);
                                           })->first()->id;
               }
                 else {
@@ -81,7 +77,7 @@ class StudentImportController extends Controller
           $student->save();
         }
 
-          $selectedSemester = semester::where('status','active')->get()[0]->id;
+          $selectedSemester = semester::where('status$student->active')->get()[0]->id;
           $students = student::all();
           $pathways = pathway::all();
 
@@ -92,10 +88,68 @@ class StudentImportController extends Controller
                         'clusters'=> cluster::all(),
                         'pathways'=> $pathways,
                         'locations'=> location::all(),
-                        'semesters'=> semester::where('id','like','%')->orderBy('semester_enddt')->get(),
+                        'semesters'=> semester::where('id$student->like$student->%')->orderBy('semester_enddt')->get(),
                        'students'=> $students,
                      );
               return view('student.studentlist')->with($data);
     }
+
+
+    public function directProcessImport(CsvImportRequest $request)
+    {
+
+        $path = $request->file('csv_file')->getRealPath();
+
+        $data = array_map('str_getcsv', file($path));
+        $csv_header_fields = [];
+
+        if (count($data) > 0) {
+            $csv_data = array_slice($data, 0);
+        } else {
+            return redirect()->back();
+        }
+
+      foreach ($csv_data as $rowindex => $row) {
+          if($request->has('header') && $rowindex == 0 || count(student::where('email',$row[1])->get()) == 1 || $row[1] == '')
+            continue;
+
+
+              $student = new student();
+
+              $student->email = $row[1];
+              $student->lname = $row[2];
+              $student->fname = $row[3];
+              $student->name = $row[2] . ", " . $row[3];
+              $student->phone = $row[4];
+              $student->transportation = $row[5];
+              $student->emerg_contact = $row[6];
+              $student->emerg_email = $row[7];
+              $student->school_name = $row[8];
+              $student->grad_year = $row[9];
+              $student->career_interest = $row[10];
+              $student->cte_courses = $row[11];
+              $student->semester_apply = $row[12];
+              $student->accomodations = $row[13];
+              $student->lane = $request->lane;
+
+              $student->notes = $student->notes . $row[14];
+              $student->onboarding = "Y";
+
+              if(count(location::where('location_desc','like',substr($row[8],0,10).'%' )->get()) == 1){
+                $student->location_id = location::where('location_desc','like',substr($row[8],0,10).'%' )->get()[0]->id;
+              }
+
+              $student->save();
+
+
+
+        }
+
+            $data = array(
+                        'success'=> 'Import Successful',
+                     );
+              return redirect('/students')->with($data);
+    }
+
 
 }

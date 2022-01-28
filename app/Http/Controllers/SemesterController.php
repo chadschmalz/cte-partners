@@ -15,7 +15,7 @@ class SemesterController extends Controller
     public function index()
     {
       return view('semesters.index')->with([
-        'semesters'=>semester::where('status','!=','disabled' )->orderBy('school_year')->get(),
+        'semesters'=>semester::where('id',">",0)->orderBy('school_year')->orderBy('semester_desc')->get(),
       ]);
 
     }
@@ -51,10 +51,10 @@ class SemesterController extends Controller
      */
     public function update(Request $request)
     {
-      if($request->semester_status)
+      if($request->semester_status == 'active')
         {
-          foreach (semester::where('status','active')->get() as $key => $value) {
-            $value->status = 'inactive';
+          foreach (semester::where('status','active')->where('id','<>',$request->semester_id)->get() as $key => $value) {
+            $value->status = "inactive";
             $value->save();
           }
         }

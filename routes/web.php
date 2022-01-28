@@ -39,6 +39,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('/', 'BusinessController@index')->name('business');
 	Route::get('/business/{cluster?}/{pathway?}/{activity?}', 'BusinessController@index')->name('business');
+	Route::get('/allpocs/{cluster?}/{pathway?}/{activity?}', 'BusinessController@allpocs')->name('allpocs');
 	Route::get('/businessaddress/{cluster?}/{pathway?}/{activity?}', 'BusinessController@address')->name('businessaddress');
 	Route::get('/removedpartners/{cluster?}/{pathway?}/{activity?}', 'BusinessController@removed')->name('removedpartners');
 	Route::get('/businessdestroy/{id}', 'BusinessController@destroy')->name('businessdestroy');
@@ -59,6 +60,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/pocdestroy', 'POCController@destroy')->name('POCdestroy');
 	Route::post('/internshipadd', 'BusinessController@internshipadd')->name('internshipadd');
 	Route::post('/clusterstore', 'ClusterController@store')->name('createcluster');
+	Route::get('/pathways', 'PathwayController@index')->name('pathways');
+	Route::post('/updatepathways', 'PathwayController@updatepathways')->name('updatepathways');
 	Route::post('/pathwaystore', 'PathwayController@store')->name('createpathway');
 	Route::post('/uploadPathways', 'PathwayController@bulkupload')->name('uploadpathways');
 	Route::get('/sampleuploadpathwaysfile', 'PathwayController@sampleuploadfile')->name('samplePathwayFile');
@@ -66,20 +69,37 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('/students/{semester?}/{location?}/{pathway?}', 'StudentController@index')->name('students');
 	Route::get('/studentdetail/{id}', 'StudentController@studentdetail')->name('studentdetail');
+	Route::get('/onboardingComplete/{id}', 'StudentController@onboardingComplete')->name('onboardingComplete');
 	Route::post('/studentadd', 'StudentController@create')->name('studentsadd');
 	Route::post('/studentupdate', 'StudentController@update')->name('studentsupdate');
 	Route::post('/studentinternshipadd', 'StudentController@addinternship')->name('addinternship');
+	Route::post('/addsemester', 'StudentController@addsemester')->name('addsemester');
+	Route::post('/removesemester', 'StudentController@removesemester')->name('removesemester');
 	Route::GET('/removestudent/{id?}', 'StudentController@destroy')->name('removestudent');
 	Route::post('/removeInternship/{id?}', 'StudentController@removeinternship')->name('removeinternship');
+	Route::get('/appemail/{id?}', 'StudentController@applicationemail')->name('appemail');
+	Route::get('/appemailPreview/{id?}', 'StudentController@applicationemail')->name('appemail');
+	Route::get('/updatestudentresponse', 'StudentController@updatestudentresponse')->name('updatestudentresponse');
+
+	Route::get('/acceptedPreview', function () {
+		    return view('email.applicationaccepted');
+		})->name('appEmailApprovedPreview');
+
 
 	Route::get('/studentimport', 'StudentImportController@getImport')->name('studentimport');
 	Route::post('/importparse', 'StudentImportController@parseImport')->name('import_parse');
 	Route::post('/processImport', 'StudentImportController@processImport')->name('import_process');
+	Route::post('/directStudentImport', 'StudentImportController@directProcessImport')->name('directStudentImport');
 
 
 	Route::get('/semesters/{semester?}/{location?}/{pathway?}', 'SemesterController@index')->name('semesters');
 	Route::post('/semesteradd', 'SemesterController@store')->name('semesteradd');
 	Route::post('/semesterupdate', 'SemesterController@update')->name('semesterupdate');
+
+	Route::get('/pathwayseats/{semester}/{location?}/{pathway?}', 'PathwaySeatController@pathwayseats')->name('pathwayseats');
+	Route::post('/updatepathwayseats', 'PathwaySeatController@update')->name('pathwayseatsupdate');
+	Route::post('/copypathwayseats', 'PathwaySeatController@copy')->name('pathwayseatscopy');
+	Route::get('/seatallocation/{semester}', 'PathwaySeatController@seatallocation')->name('seatallocation');
 
 
 	Route::get('/locations/', 'LocationController@index')->name('locations');

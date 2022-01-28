@@ -231,14 +231,9 @@ return [
 
     ],
 
-    'db_fields' => [
-      'schoolname',
-      'name',
-      'email',
-      'phone',
-      'emerg_contact',
-      'emerg_email',
-      'emerg_phone',
+    'student_fields' => [
+      'timestamp','fname','lname','location_id','business_id','pathway_id','phone','email','transportation','school_name','career_interest','semester_apply','accomodations','misc','misc2','emerg_contact','emerg_phone','emerg_email'
     ]
+
 
 ];

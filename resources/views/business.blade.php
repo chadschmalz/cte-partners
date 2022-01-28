@@ -73,9 +73,10 @@
                                                <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="3">POC</a>
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="4">Email</a>
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="5">Phone</a>
-                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="6">Note</a>
-                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="7">Involvement</a>
-                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="8">ID</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="6">clusters</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="7">Note</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="8">Involvement</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="9">ID</a>
                                        </div>
 
                       <table class="table table-sm table-striped display allBizDataTable" id="allBizDataTable" w>
@@ -87,6 +88,7 @@
                                              <th scope="col" >POC</th>
                                              <th scope="col" >Email</th>
                                              <th scope="col" >Phone</th>
+                                             <th scope="col" >Clusters</th>
                                              <th scope="col" >Note</th>
                                              <th scope="col" >Involvement</th>
                                              <th scope="col" > ID</th>
@@ -95,6 +97,19 @@
                                               <tbody >
                             @if(isset($businesses))
                                @foreach($businesses as $biz)
+                               <?php
+                               $clusterIDs = array();
+                               $bizclusters = '';
+                               foreach ($biz->pathways as $key => $value) {
+                                 $clusterIDs[$value->cluster_id] = $value->cluster_id;
+                               }
+                               foreach ($clusterIDs as $key => $value) {
+                                 if($bizclusters == '')
+                                    $bizclusters .= $clusters[$value]->cluster_desc;
+                                else
+                                   $bizclusters .= ',' . $clusters[$value]->cluster_desc ;
+                               }
+                               ?>
                                <tr>
                                  <td><a   href="/businessdetail/{{$biz->id}}">{{$biz->name}}</a></td>
                                  <td>{{$biz->address}} {{$biz->city}} {{$biz->state}} {{$biz->zip}}</td>
@@ -102,6 +117,7 @@
                                      <td>{{$biz->pocs[0]->name}}</td>
                                      <td>{{$biz->pocs[0]->email}}</td>
                                      <td>{{$biz->pocs[0]->phone}}</td>
+                                     <td>{{$bizclusters}}</td>
                                      <td>{{$biz->notes}}</td>
                                      <?PHP
                                      $activities = '';

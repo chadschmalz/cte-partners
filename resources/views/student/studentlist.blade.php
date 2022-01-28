@@ -25,6 +25,7 @@
           <label for="recipient-name" class="col-form-label">Semester:</label>
           <select class="form-select" id="studentSemester" aria-label="Default select example" onchange=" return refreshStudentList()">
             @if(isset($semesters))
+            <option value="unassigned" {{ $selectedSemester=='unassigned'?'selected':''}}>Unassigned</option>
             <option value="all" {{ $selectedSemester=='all'?'selected':''}}>All</option>
               @foreach($semesters as $semester)
                       <option value="{{$semester->id}}" {{ $selectedSemester==$semester->id?'selected':''}}>{{$semester->semester_desc}}</option>
@@ -35,7 +36,7 @@
         </div>
         <div class="col-md-3 col-lg-3">
           <label for="recipient-name" class="col-form-label">Location:</label>
-          <select class="form-select" id="studentLocation" aria-label="Default select example" onchange=" return refreshStudentList()">
+          <select class="form-select" id="studentLocation" aria-label="Default select example" onchange="return refreshStudentList()">
             @if(isset($locations))
             <option value="all" {{ $selectedLocation=='all'?'selected':''}}>All</option>
               @foreach($locations as $location)
@@ -48,7 +49,7 @@
 
       <div class="col-md-3 col-lg-3">
         <label for="recipient-name" class="col-form-label">Pathway:</label>
-      <select class="form-select studentPathway" id="studentPathway" aria-label="Default select example" onchange=" return refreshStudentList()">
+      <select class="form-select studentPathway" id="studentPathway" aria-label="Default select example" onchange="return refreshStudentList()">
         <option value="all" {{ $selectedPathway==NULL  ?'selected':''}}>All</option>
         @if(isset($pathways))
           @foreach($pathways as $path)
@@ -60,7 +61,7 @@
 
     <div class="col-md-1 col-lg-1">
       <label for="recipient-name" class="col-form-label">&nbsp;</label>
-      <a href="/"><button type="button" class="form-control btn btn-secondary">Reset</button></a>
+      <a href="/students"><button type="button" class="form-control btn btn-secondary">Reset</button></a>
     </div>
       </div>
 
@@ -81,7 +82,7 @@
                                 <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="7">Mentor Phone</a>
                       				</div>
 
-                      <table class="table table-sm table-striped display allBizDataTable" id="allBizDataTable" >
+                      <table class="table table-sm table-striped display allStudentDataTable" id="allStudentDataTable" >
                                           <thead>
                                               <tr>
                                                 <th scope="col" >Student</th>
@@ -100,13 +101,13 @@
                                @foreach($students as $student)
                                <tr>
                                  <td><a   href="/studentdetail/{{$student->id}}">{{$student->name}}</a></td>
-                                     <td>{{$student->location->location_desc}}</td>
+                                     <td>@if($student->location_id != NULL){{$student->location->location_desc}}@else  {{$student->school_name }}  @endif</td>
                                      <td>
                                        @if(isset($student->pathway))
                                        {{$student->pathway->pathway_desc}}
                                      @endif
                                    </td>
-                                     @if(count($student->internships) != 0 && $selectedSemester != 'all')
+                                     @if(count($student->internships->where('semester_id',$selectedSemester)) > 0 && $selectedSemester != 'all')
                                        <td>{{$student->internships->where('semester_id',$selectedSemester)[0]->employer->name}}</td>
                                        <td>{{$student->internships->where('semester_id',$selectedSemester)[0]->semester->semester_desc}}</td>
                                        <td>
@@ -125,38 +126,7 @@
                                           {{$student->internships->where('semester_id',$selectedSemester)[0]->employer->pocs[0]->phone}}
                                         @endif
                                        </td>
-                                       @elseif($selectedSemester == 'all')
-                                       <td colspan="4">
-                                         <table width="100%">
-
-                                           @foreach($student->internships as $s)
-
-                                         <tr>
-                                                 <td>{{$s->employer->name}}</td>
-                                                 <td>{{$s->semester->semester_desc}}</td>
-                                                 <td>
-                                                   @if(count($s->employer->pocs) > 1 && $s->employer->pocs->where('mentor','Y')!=NULL)
-                                                     @foreach($s->employer->pocs->where('mentor','Y') as $s1)
-                                                      {{$s1->name}}
-                                                     @endforeach
-                                                     @else
-                                                     {{$s->employer->pocs[0]->name}}
-                                                   @endif</td>
-                                                 <td> @if(count($s->employer->pocs) > 1 && $s->employer->pocs->where('mentor','Y')!=NULL)
-                                                    @foreach($s->employer->pocs->where('mentor','Y') as $s2)
-                                                     {{$s2->phone}}
-                                                     @endforeach
-                                                    @else
-                                                    {{$s->employer->pocs[0]->phone}}
-                                                  @endif
-                                                 </td>
-
-
-                                            </tr>
-                                            @endforeach
-
-                                          </table>
-                                       </td>
+                                  
                                        @else
                                      <td></td>
                                      <td></td>

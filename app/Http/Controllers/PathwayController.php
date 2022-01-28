@@ -16,12 +16,16 @@ class PathwayController extends Controller
      */
     public function index()
     {
-
-      $businesses =  business::all();
+      $clusters = array();
+      foreach (cluster::all() as $key => $value) {
+        $clusters[$value->id] =  $value;
+      }
+      $pathways =  pathway::all();
       $data = array(
-                 'businesses'=> $businesses,
+                 'pathways'=> $pathways,
+                 'clusters'=> $clusters,
                );
-        return view('business')->with($data);
+        return view('pathways')->with($data);
     }
 
     /**
@@ -135,7 +139,18 @@ class PathwayController extends Controller
     {
         //
     }
-
+    public function updatepathways(Request $request)
+    {
+        foreach ($request->pathwayid as $key => $value) {
+          $curPathway = pathway::find($value);
+          if($curPathway->pathway_desc != $request->pathway_desc[$key] || $curPathway->cluster_id != $request->cluster_id[$key] ){
+            $curPathway->pathway_desc = $request->pathway_desc[$key] ;
+            $curPathway->cluster_id = $request->cluster_id[$key];
+            $curPathway->save();
+          }
+        }
+        return redirect('/pathways');
+    }
     /**
      * Remove the specified resource from storage.
      *

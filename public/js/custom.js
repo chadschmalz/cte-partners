@@ -76,6 +76,15 @@ $app.locations = function(){
 }
 $app.studentdetail = function(){
 
+    $('.message').delay(3000).fadeOut();
+
+
+  $('#removeStudentSemesterModal').on('show.bs.modal', function(e){
+      var button = e.relatedTarget;
+      $('.semesterDesc').html(button.getAttribute('data-semester'));
+      $('#removal_semester_id').val(button.getAttribute('data-semesterid'));
+  });
+
 
   $(".employer_search2").select2({
     ajax: {
@@ -163,7 +172,7 @@ $app.studentdetail = function(){
           $('.stphone').val(button.getAttribute('data-bs-phone'));
           $('.stemail').val(button.getAttribute('data-bs-email'));
           $('.stpathway').val(button.getAttribute('data-bs-pathway'));
-          $('.stemerg_phone').val(button.getAttribute('data-bs-emerg_phone'));
+          $('.stemerg_email').val(button.getAttribute('data-bs-emerg_email'));
           $('.stemerg_contact').val(button.getAttribute('data-bs-emerg_contact'));
           $('.stnotes').val(button.getAttribute('data-bs-notes'));
 
@@ -322,6 +331,21 @@ $app.restore = function(){
 }
 
 $app.businessdetail = function(){
+
+  var allInternDataTable = $('#allInternshipsDataTable').DataTable( {
+    "scrollY": "400px",
+    "paging": false,
+    buttons: [
+      {
+        extend: 'csv',
+        text: 'Download CSV',
+        "className": 'btn btn-primary btn-sm mx-2',
+    }
+        ]
+
+  } );
+  $('#allInternshipsDataTable_filter').append(allInternDataTable.buttons().container());
+
   var pocremove = document.getElementById('POCremoveModal')
   pocremove.addEventListener('show.bs.modal', function (event) {
     // Button that triggered the modal
@@ -549,20 +573,21 @@ function refreshBusinessList() {
       location = '/business/'+$('#businessCluster option:selected').val()+'/'+$('#businessPathway option:selected').val()+'/'+$('#businessInvolve option:selected').val(); // 'right.html';
     // return false;
 }
+function refreshPathwaySeatList() {
+      location = '/pathwayseats/'+$('#semester option:selected').val(); // 'right.html';
+    // return false;
+}
+function refreshPathwayAllocationList() {
+      location = '/seatallocation/'+$('#semester option:selected').val(); // 'right.html';
+    // return false;
+}
 function refreshBusinessAddressList() {
       location = '/businessaddress/'+$('#businessCluster option:selected').val()+'/'+$('#businessPathway option:selected').val()+'/'+$('#businessInvolve option:selected').val(); // 'right.html';
     // return false;
 }
 function refreshStudentList() {
     // if($('#studentCluster option:selected').val() === "empty")
-     if($('#studentSemester option:selected').val() == "all" &&$('#studentLocation option:selected').val() == "all" && $('#studentPathway option:selected').val() != "all")
-     location = '/students';
-    else if($('#studentSemester option:selected').val() != "" &&  $('#studentLocation option:selected').val() == "all" &&  $('#studentPathway option:selected').val() == "all")
-      location = '/students/'+$('#studentSemester option:selected').val();
-    else if($('#studentLocation option:selected').val() != "all" &&  $('#studentPathway option:selected').val() == "all")
-      location = '/students/'+$('#studentSemester option:selected').val()+'/'+$('#studentLocation option:selected').val();
-    else if($('#studentSemester option:selected').val() == "all" &&$('#studentLocation option:selected').val() == "all" && $('#studentPathway option:selected').val() != "all")
-      location = '/students/all/'+$('#studentPathway option:selected').val();
+      location = '/students/'+$('#studentSemester option:selected').val()+'/'+$('#studentLocation option:selected').val()+'/'+$('#studentPathway option:selected').val();
     // return false;
 }
 
@@ -590,10 +615,24 @@ $(".clickable-row").on('click', function() {
     $('#allBizDataTable_filter').append(allBizDataTable.buttons().container());
     allBizDataTable.column( 2 ).visible( false );
     allBizDataTable.column( 4 ).visible( false );
-    allBizDataTable.column( 8).visible( false );
+    allBizDataTable.column( 9).visible( false );
 
     $('a.toggle-vis').on( 'click', function (e) {
       e.preventDefault();
+
+
+      $('#allContactsBizDataTable').DataTable( {
+        "scrollY": "400px",
+        "paging": false,
+        buttons: [
+          {
+            extend: 'csv',
+            text: 'Download CSV',
+            "className": 'btn btn-primary btn-sm mx-2',
+        }
+            ]
+
+      } );
 
       // Get the column API object
       var column = allBizDataTable.column( $(this).attr('data-column') );

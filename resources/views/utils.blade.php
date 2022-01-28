@@ -93,7 +93,7 @@
                 </div>
               </div>
             </div>
-            
+
                 <div class="row mb-2">
 
                       <div class="col-md-6 col-lg-6">
@@ -241,7 +241,7 @@
 
                                   schoolname, studentname, email, phone, emerg_contact, emerg_email, emerg_phone<br /><br />
                                 </div>
-                                  <form class="form-horizontal" method="POST" action="{{ route('import_parse') }}" enctype="multipart/form-data">
+                                  <form class="form-horizontal" method="POST" action="{{ route('directStudentImport') }}" enctype="multipart/form-data">
                                       {{ csrf_field() }}
 
                                       <div class="form-group{{ $errors->has('csv_file') ? ' has-error' : '' }}">
@@ -258,10 +258,18 @@
                                       </div>
 
                                       <div class="form-group">
-                                          <div class="col-md-6 col-md-offset-4">
+                                          <div class="col-md-2 col-md-offset-4">
                                               <div class="checkbox">
                                                   <label>
-                                                      <input type="checkbox" name="header" checked> File contains header row?
+                                                    <input type="hidden" name="header" value="on">
+                                                      <input type="radio" name="lane" value="L1" checked> L1
+                                                  </label>
+                                              </div>
+                                          </div>
+                                          <div class="col-md-2 col-md-offset-4">
+                                              <div class="checkbox">
+                                                  <label>
+                                                      <input type="radio" name="lane" value="L2"> L2
                                                   </label>
                                               </div>
                                           </div>
@@ -270,7 +278,7 @@
                                       <div class="form-group">
                                           <div class="col-md-8 col-md-offset-4">
                                               <button type="submit" class="btn btn-primary">
-                                                  Parse CSV
+                                                  Import CSV
                                               </button>
                                           </div>
                                       </div>

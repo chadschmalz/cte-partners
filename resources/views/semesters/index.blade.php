@@ -27,7 +27,7 @@
                                           <thead>
                                               <tr>
                                                 <th scope="col" >Semester</th>
-                                                <th scope="col" >Semester Desc</th>
+                                                <th scope="col" >School Year</th>
                                                 <th scope="col" >End Date</th>
                                                 <th scope="col" >Status</th>
                                                 <th scope="col" >Action</th>
@@ -37,10 +37,10 @@
                             @if(isset($semesters))
                                @foreach($semesters as $semester)
                                <tr>
+                                 <td>{{$semester->semester_desc}}</td>
                                  <td><a   href="#">{{$semester->school_year}}</a></td>
-                                     <td>{{$semester->semester_desc}}</td>
                                      <td>{{$semester->semester_enddt}}</td>
-                                     <td>{{$semester->status}}</td>
+                                     <td>{{$semester->status=='active'?$semester->status:''}}</td>
                                      <td>              <div class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSemesterModal" data-bs-id="{{$semester->id}}" data-bs-year="{{$semester->school_year}}"
                                                              data-bs-desc="{{$semester->semester_desc}}" data-bs-enddt="{{$semester->semester_enddt}}" data-bs-status="{{$semester->status}}"
                                                               data-bs-action="semesterupdate">Edit</div></td>

@@ -25,10 +25,9 @@
               <label for="recipient-name" class="col-form-label">Next Internship Availability:</label>
               <select class="form-select" id="next_internshipSelect" name="next_internship" aria-label="next_internshipSelect"  >
               <option value=""></option>
-              <option value="Beginning in January" >Beginning in January</option>
-              <option value="Beginning in August" >Beginning in August</option>
-              <option value="On the fence" >On the fence</option>
-                <option value="No Thanks" >No Thanks</option>
+              <option value="Red" >Red</option>
+              <option value="Yellow" >Yellow</option>
+              <option value="Green" >Green</option>
               </select>
             </div>
           </div>

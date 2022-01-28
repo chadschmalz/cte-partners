@@ -14,9 +14,21 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link  {{Request::is('allpocs') ? 'active':''}}" href="/allpocs">
+          <span data-feather="list"></span>
+          All POC List
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="/students" >
           <span data-feather="users"></span>
           Students
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link  {{Request::is('seatallocation') ? 'active':''}}" href="/seatallocation/{{App\Models\semester::where('status','active')->get()[0]->id}}" >
+          <span data-feather="sliders"></span>
+          Assigned Seats
         </a>
       </li>
       <li class="nav-item" style="display:none">
@@ -41,7 +53,9 @@
           <ul class="nav flex-column mx-1">
             <li class="nav-item mx-4 {{Request::is('/utils') ? 'active':''}}"><a href="/utils" class="nav-link">Utilities</a></li>
             <li class="nav-item mx-4 {{Request::is('semesters') ? 'active':''}}"><a href="/semesters" class="nav-link">Manage Semesters</a></li>
-            <li class="nav-item mx-4 {{Request::is('semesters') ? 'active':''}}"><a href="/locations" class="nav-link">Manage Locations</a></li>
+            <li class="nav-item mx-4 {{Request::is('locations') ? 'active':''}}"><a href="/locations" class="nav-link">Manage Locations</a></li>
+            <li class="nav-item mx-4 {{Request::is('pathways') ? 'active':''}}"><a href="/pathways" class="nav-link">Manage Pathways</a></li>
+            <li class="nav-item mx-4 {{Request::is('pathwayseats') ? 'active':''}}"><a href="/pathwayseats/{{App\Models\semester::where('status','active')->get()[0]->id}}" class="nav-link">Manage Seats</a></li>
           </ul>
         </div>
       </li>

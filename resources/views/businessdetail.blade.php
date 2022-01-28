@@ -195,7 +195,7 @@
                                   <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="6">Note</a>
                                 </div>
 
-                        <table class="table table-sm table-striped display allBizDataTable" id="allBizDataTable" >
+                        <table class="table table-sm table-striped display allInternshipsDataTable" id="allInternshipsDataTable" >
                                             <thead>
                                                 <tr>
                                                   <th scope="col" >Record ID</th>

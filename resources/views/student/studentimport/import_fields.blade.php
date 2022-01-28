@@ -24,7 +24,6 @@
                                 @endif
                                   <tr>
                                   @foreach ($csv_data[0] as $key => $value)
-
                                       <td>
                                           <select class="form-select" name="fields[]">
                                               @foreach (config('app.db_fields') as $db_field)
@@ -37,7 +36,7 @@
                               </tr>
 
                                 @foreach ($csv_data as $row)
-                                @if($row[0] == 'schoolname')
+                                @if($row[0] == 'Timestamp')
                                 <?PHP continue;?>
                                 @endif
 

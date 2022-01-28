@@ -20,7 +20,76 @@ class BusinessController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($selectedcluster = NULL, $selectedpathway= NULL, $selectedactivity = NULL)
+    public function index($selectedcluster = 1, $selectedpathway= 'all', $selectedactivity = 'all')
+    {
+
+
+      if($selectedpathway!='all' && $selectedcluster == 'all'){
+          $selectedcluster = pathway::find($selectedpathway)->cluster_id;
+        }
+
+      if($selectedcluster == NULL  && $selectedpathway== NULL && $selectedactivity == NULL){
+        $businesses =  business::where('name','like','%')->orderBy('name', 'asc')->get();
+      }else if($selectedcluster != NULL && $selectedcluster != 'all' && $selectedpathway== 'all' && $selectedactivity == 'all'){
+        $businesses =  business::
+          whereIn('business.id',business_pathway::where('cluster_id',$selectedcluster)->pluck('business_id'))
+              ->join('business_pathways', 'business.id', '=', 'business_pathways.business_id')
+              ->select( 'business.*')
+              ->distinct()
+              ->orderBy('business.name', 'asc')
+              ->get();
+      }else if($selectedpathway != 'all' && $selectedactivity == 'all'){
+        $businesses =  business::
+          whereIn('business.id',business_pathway::where('pathway_id',$selectedpathway)->pluck('business_id'))
+              ->join('business_pathways', 'business.id', '=', 'business_pathways.business_id')
+              ->select( 'business.*')
+              ->distinct()
+              ->orderBy('business.name', 'asc')
+              ->get();
+      }else if($selectedpathway == 'all' && $selectedcluster == 'all' && $selectedactivity != 'all'){
+        $businesses =  business::
+        whereIn('business.id',business_activity::where('activity_id',$selectedactivity)->pluck('business_id'))
+              ->join('business_activities', 'business.id', '=', 'business_activities.business_id')
+              ->select( 'business.*')
+              ->distinct()
+              ->orderBy('business.name', 'asc')
+              ->get();
+      }
+      else{
+        $businesses =  business::where('name','like','%')->orderBy('name', 'asc')->get();
+        //
+      // $businesses =  business::
+      // whereIn('business.id',business_pathway::where('pathway_id','like',$selectedpathway=='all'||$selectedpathway==NULL?'%':$selectedpathway)->pluck('business_id'))
+      // ->whereIn('business.id',business_activity::where('activity_id', $selectedactivity=='all'||$selectedactivity==NULL?'%':$selectedactivity)->pluck('business_id'))
+      //       ->join('business_pathways', 'business.id', '=', 'business_pathways.business_id')
+      //       ->select( 'business.*')
+      //       ->distinct()
+      //       ->orderBy('business.name', 'asc')
+      //       ->get();
+          }
+
+      if($selectedcluster==NULL || $selectedcluster=='all')
+        $pathways = pathway::where('pathway_desc','like','%')->orderBy('pathway_desc')->get();
+      else
+        $pathways = pathway::where('cluster_id',$selectedcluster)->orderBy('pathway_desc')->get();
+
+      $clusters = array();
+      foreach (cluster::all() as $key => $value) {
+        $clusters[$value->id] =  $value;
+      }
+
+      $data = array(
+                  'selectedCluster'=> $selectedcluster,
+                  'selectedPathway'=> $selectedpathway,
+                  'selectedActivity'=> $selectedactivity,
+                  'clusters'=> $clusters,
+                  'pathways'=> $pathways,
+                  'activitys'=> activity::all(),
+                 'businesses'=> $businesses,
+               );
+        return view('business')->with($data);
+    }
+    public function allpocs($selectedcluster = NULL, $selectedpathway= NULL, $selectedactivity = NULL)
     {
 
 
@@ -71,19 +140,22 @@ class BusinessController extends Controller
       else
         $pathways = pathway::where('cluster_id',$selectedcluster)->orderBy('pathway_desc')->get();
 
+      $clusters = array();
+      foreach (cluster::all() as $key => $value) {
+        $clusters[$value->id] =  $value;
+      }
 
       $data = array(
                   'selectedCluster'=> $selectedcluster,
                   'selectedPathway'=> $selectedpathway,
                   'selectedActivity'=> $selectedactivity,
-                  'clusters'=> cluster::all(),
+                  'clusters'=> $clusters,
                   'pathways'=> $pathways,
                   'activitys'=> activity::all(),
                  'businesses'=> $businesses,
                );
-        return view('business')->with($data);
+        return view('allContacts')->with($data);
     }
-
     public function address($selectedcluster = NULL, $selectedpathway= NULL, $selectedactivity = NULL)
     {
 
@@ -218,7 +290,7 @@ class BusinessController extends Controller
         $newinternship->entry_point = $request->entry_point;
         $newinternship->intern_length = $request->length;
         $newinternship->contact_method = $request->contact_method;
-        $newinternship->notes = $request->notes;
+        $newinternship->notes = $request->internshipnotes;
         $newinternship->save();
 
 

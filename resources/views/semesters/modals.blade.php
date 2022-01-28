@@ -8,15 +8,16 @@
       <div class="modal-body">
         <form method="post" action="/semesteradd" id="semesterform" >
           @csrf
-            <div class="form-group">
-              <label for="recipient-name" class="col-form-label">Year:</label>
-              <input type="text" class="form-control fscode" id="school_year" name="school_year" placeholder="Semester Year" required>
-            </div>
+
             <div class="form-group">
               <label for="message-text" class="col-form-label">Semester Description:</label>
               <input class="form-control semester_desc" id="semester_desc" name="semester_desc" placeholder="Semester Description" required>
               <input type="hidden" class="form-control " id="semester_id" name="semester_id" value="0">
 
+            </div>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">School Year:</label>
+              <input type="text" class="form-control fscode" id="school_year" name="school_year" placeholder="Semester Year" required>
             </div>
             <div class="form-group">
               <label for="message-text" class="col-form-label">Semester End Date:</label>
@@ -27,8 +28,8 @@
               <label for="message-text" class="col-form-label">Status:</label>
               <div class="form-group">
             <select class="form-select status" id="semester_status" name="semester_status">
-              <option value="inactive" selected>Inactive</option>
               <option value="active">Active</option>
+              <option value="inactive" >Inactive</option>
             </select>
 
           </div>
