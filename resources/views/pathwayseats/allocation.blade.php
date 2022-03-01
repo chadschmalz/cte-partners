@@ -92,9 +92,7 @@
           <div class="card-body">
             <div class="row">
 
-              <form method="post" action="/updatepathwayseats" id="updateseatsform" >
-                @csrf<input type="hidden" name="activesemester" value="{{$activesemester}}">
-
+<?php $allocation= 0; $assigned=0;?>
                       <table class="table table-sm table-striped "  id="" >
                                           <thead>
                                               <tr>
@@ -106,19 +104,22 @@
                                               <tbody >
                             @if(count($pathwayseats) > 0)
                                @foreach($pathwayseats as $pathwayseat)
-                               <tr>
+                               <tr @if($pathwayseat->seats < $pathwayseat->allocation) style="color:red;font-weight:bold" @endif>
                                  <td>{{$pathwayseat->pathway_desc}} (id: {{$pathwayseat->pathway->id}})</td>
                                  <td>{{$pathwayseat->seats}}</td>
-                                 <td>{{$pathwayseat->allocation}}</td>
+                                 <td >{{$pathwayseat->allocation}}</td>
 
                                   </tr>
+                                  <?php $allocation += $pathwayseat->seats; $assigned+=$pathwayseat->allocation;?>
+
                                @endforeach
                              @endif
+
+                             <tr style="font-weight:bold"><td>Total Seats:</td><td> {{$allocation}}</td><td> {{$assigned}}</td></tr>
 
                               </tbody>
                           </table>
 
-                          <button class="col-3  btn btn-success" >Save Changes</button>
                         </form>
 
 

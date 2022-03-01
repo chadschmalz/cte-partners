@@ -3,6 +3,25 @@
 @section('content')
 
 @include('student.add')
+<!-- Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">ERROR UPDATING</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body ">
+        <div class="errorbody alert alert-danger">
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="container-fluid">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -70,17 +89,7 @@
           <div class="card-body">
             <div class="row">
 
-                      <div class="databuttons mb-1">
-                        Toggle column:
-                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="0"> Student</a>
-                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column=$selectedSemester>Location</a>
-                      					<a class="toggle-vis btn btn-sm btn-outline-primary" data-column="2">Pathway</a>
-                                <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="3">Employer</a>
-                                <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="4">Semester</a>
-                                <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="5">Phone</a>
-                                <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="6">Mentor</a>
-                                <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="7">Mentor Phone</a>
-                      				</div>
+
 
                       <table class="table table-sm table-striped display allStudentDataTable" id="allStudentDataTable" >
                                           <thead>
@@ -88,12 +97,20 @@
                                                 <th scope="col" >Student</th>
                                                 <th scope="col" >Location</th>
                                                 <th scope="col" >Pathway</th>
-
                                                 <th scope="col" >Employer</th>
                                                 <th scope="col" >Semester</th>
                                                 <th scope="col" >Mentor</th>
                                                 <th scope="col" >Mentor Phone</th>
-
+                                                <th scope="col" style="text-align:center">LA</th>
+                                                <th scope="col" style="text-align:center">RESUME</th>
+                                                <th scope="col"style="text-align:center" >MOCK</th>
+                                                <th scope="col" style="text-align:center">TA</th>
+                                                <th scope="col" style="text-align:center">LA Data</th>
+                                                <th scope="col" style="text-align:center">RESUME Data</th>
+                                                <th scope="col"style="text-align:center" >MOCK Data</th>
+                                                <th scope="col" style="text-align:center">TA Data</th>
+                                                <th scope="col" style="text-align:center">WS1</th>
+                                                <th scope="col" style="text-align:center">WS2</th>
                                               </tr>
                                               </thead>
                                               <tbody >
@@ -126,15 +143,28 @@
                                           {{$student->internships->where('semester_id',$selectedSemester)[0]->employer->pocs[0]->phone}}
                                         @endif
                                        </td>
-                                  
-                                       @else
-                                     <td></td>
-                                     <td></td>
-                                     <td></td>
-                                     <td></td>
+
+                                       @elseif(count($student->internships->where('semester_id',$selectedSemester)) == 0 && $selectedSemester == 'all')
+                                       <td></td>
+                                       <td></td>
+                                       <td></td>
+                                       <td></td>
+                                       @elseif(count($student->internships->where('semester_id',$selectedSemester)) == 0 && $selectedSemester != 'all')
+                                       <td></td>
+                                       <td></td>
+                                       <td></td>
+                                       <td></td>
                                      @endif
-
-
+                                     <td style="text-align:center"><input class="updateTracking" id="la{{$student->id}}" type="checkbox" class="form-check-input"  data-studentid="{{$student->id}}"  {{$student->la == 'Y'?'checked':''}}></td>
+                                     <td style="text-align:center"><input class="updateTracking " id="resume{{$student->id}}" type="checkbox" class="form-check-input"  data-studentid="{{$student->id}}" {{$student->resume == 'Y'?'checked':''}}></td>
+                                     <td style="text-align:center"><input class="updateTracking " id="mock{{$student->id}}" type="checkbox" class="form-check-input"  data-studentid="{{$student->id}}" {{$student->mock == 'Y'?'checked':''}}></td>
+                                     <td style="text-align:center"><input class="updateTracking " id="ta{{$student->id}}" data-studentid="{{$student->id}}" type="checkbox" class="form-check-input"  {{$student->ta == 'Y'?'checked':''}}></td>
+                                     <td>{{$student->la}}</td>
+                                     <td>{{$student->resume}}</td>
+                                     <td>{{$student->mock}}</td>
+                                     <td>{{$student->ta}}</td>
+                                     <td>{{$student->ws1}}</td>
+                                     <td>{{$student->ws2}}</td>
                                   </tr>
                                @endforeach
                              @endif

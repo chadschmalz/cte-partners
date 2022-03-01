@@ -150,7 +150,9 @@ class StudentController extends Controller
     {
       // return $request;
       $student = new student;
-      $student->name = $request->stname;
+      $student->name = $request->lname.",".$request->fname;
+      $student->fname = $request->fname;
+      $student->lname = $request->lname;
       $student->phone = $request->stphone;
       $student->email = $request->stemail;
       $student->location_id = $request->stlocation_id;
@@ -158,19 +160,14 @@ class StudentController extends Controller
       $student->emerg_email = $request->stemgemail;
       $student->emerg_contact = $request->stemgname;
       $student->notes = $request->stnotes;
+      $student->school_name = location::find($request->stlocation_id)->location_desc;
+      $student->grad_year = $request->grad_year;
+      $student->semester_apply = semester::find($request->semester_apply)->semester_desc;
+      $student->onboarding = "Y";
+      $student->career_interest = pathway::find($request->stpathway)->pathway_desc;
 
       $student->save();
 
-      if($request->employer != "")
-      {
-            $internship = new student_internship;
-            $internship->business_id = $request->stemployer;
-            $internship->semester_id = $request->stsemester;
-            $internship->student_id = $student->id;
-
-            $internship->save();
-
-      }
 
       return redirect('/students');
 
@@ -220,7 +217,9 @@ class StudentController extends Controller
 {
 
       $student = student::find($request->studentid);
-      $student->name = $request->stname;
+      $student->name = $request->lname.", ".$request->fname;
+      $student->fname = $request->fname;
+      $student->lname = $request->lname;
       $student->phone = $request->stphone;
       $student->email = $request->stemail;
       $student->location_id = $request->stlocation_id;
@@ -299,9 +298,9 @@ class StudentController extends Controller
 
       $counselor = counselor::find($request->counselor_id);
 
+      $v = "/[a-zA-Z0-9_\-.+]+@[a-zA-Z0-9\-]+.[a-zA-Z]+/";
 
-
-      if($student->emerg_email != NULL && $counselor->email != NULL && isset($request->includecounselor) ){
+      if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
         \Mail::to(array('email'=>$student->email))
         ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email))
         ->send(new ApplicationMail($student));
@@ -309,7 +308,7 @@ class StudentController extends Controller
         \Mail::to(array('email'=>$student->email))
         ->cc(array('cemail'=>$counselor->email))
         ->send(new ApplicationMail($student));
-      }else if($student->emerg_email != NULL  ){
+      }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
         \Mail::to(array('email'=>$student->email))
         ->cc(array('pemail'=>$student->emerg_email))
         ->send(new ApplicationMail($student));
@@ -348,4 +347,102 @@ class StudentController extends Controller
 
 
     }
+
+    public function updatestudentws(Request $request)
+    {
+
+      $student = student::find($request->id);
+
+      if(isset($request->ws1)){
+        $student->ws1 = $request->ws1;
+        $student->save();
+      }
+      if(isset($request->ws2)){
+        $student->ws2 = $request->ws2;
+        $student->save();
+      }
+
+                $result = array(
+                  'success' => 'Student Updated ' ,
+                  'status' => 'success',
+                  'action' => 'update',
+                );
+
+              //ajaxResponse
+              return response()->json($result);
+
+
+    }
+
+    public function updatestudenttracking(Request $request)
+    {
+
+      $student = student::find($request->id);
+
+
+      if(isset($request->ta)){
+        $student->ta = 'Y';
+        $student->ta_at = date("Y-m-d");
+      }else if(isset($request->la)){
+        $student->la = 'Y';
+        $student->la_at = date("Y-m-d");
+      }else if(isset($request->mock)){
+        $student->mock = 'Y';
+        $student->mock_at = date("Y-m-d");
+      }else if(isset($request->resume)){
+        $student->resume = 'Y';
+        $student->resume_at = date("Y-m-d");
+      }
+
+      $student->save();
+
+      return redirect('/studentdetail/' . $request->id)->with(['success'=>'Student Response Updated']);
+
+
+    }
+    public function updatestudenttrackingAjax(Request $request)
+    {
+
+      $student = student::find($request->id);
+
+      if($request->ta == 'true' && $student->ta != 'Y'){
+        $student->ta = 'Y';
+        $student->ta_at = date("Y-m-d");
+      }else if($request->ta == 'false' && $student->ta == 'Y'){
+        $student->ta = 'N';
+      }
+      if($request->la == 'true' && $student->la != 'Y'){
+        $student->la = 'Y';
+        $student->la_at = date("Y-m-d");
+      }
+      else if($request->la == 'false' && $student->la == 'Y'){
+        $student->la = 'N';
+      }
+      if($request->mock == 'true' && $student->mock != 'Y'){
+        $student->mock = 'Y';
+        $student->mock_at = date("Y-m-d");
+      }else if($request->mock == 'false' && $student->mock == 'Y'){
+        $student->mock = 'N';
+      }
+      if($request->resume == 'true' && $student->resume != 'Y'){
+        $student->resume = 'Y';
+        $student->resume_at = date("Y-m-d");
+      } else if($request->resume == 'false' && $student->resume == 'Y'){
+        $student->resume = 'N';
+      }
+
+      $student->save();
+
+          $result = array(
+            'success' => 'Student Updated ' ,
+            'status' => 'success',
+            'action' => 'update',
+          );
+
+        //ajaxResponse
+        return response()->json($result);
+
+
+    }
+
 }

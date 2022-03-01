@@ -80,6 +80,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/appemail/{id?}', 'StudentController@applicationemail')->name('appemail');
 	Route::get('/appemailPreview/{id?}', 'StudentController@applicationemail')->name('appemail');
 	Route::get('/updatestudentresponse', 'StudentController@updatestudentresponse')->name('updatestudentresponse');
+	Route::get('/updatestudenttracking', 'StudentController@updatestudenttracking')->name('updatestudenttracking');
+	Route::get('/updatetrackingAjax', 'StudentController@updatestudenttrackingAjax')->name('updatestudenttrackingAjax');
+	Route::post('/updatestudentws', 'StudentController@updatestudentws')->name('updatestudentws');
 
 	Route::get('/acceptedPreview', function () {
 		    return view('email.applicationaccepted');

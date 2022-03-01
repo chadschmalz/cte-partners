@@ -12,10 +12,14 @@
           <div class="row">
             <input type="hidden" class="form-control studentid" name="studentid" value="" placeholder="Student Name">
 
-            <div class="col-md-12 col-lg-12">
-            <label for="recipient-name" class="col-form-label">Student Name:</label>
-            <input type="text" class="form-control stname" name="stname" value="" placeholder="Student Name">
+            <div class="col-md-6 col-lg-6">
+            <label for="recipient-name" class="col-form-label">Student First Name:</label>
+            <input type="text" class="form-control fname" name="fname" value="" placeholder="First Name">
           </div>
+          <div class="col-md-6 col-lg-6">
+          <label for="recipient-name" class="col-form-label">Student Last Name:</label>
+          <input type="text" class="form-control lname" name="lname" value="" placeholder="Last Name">
+        </div>
 
           <div class="col-md-6 col-lg-6">
             <label for="recipient-name" class="col-form-label">phone:</label>
@@ -59,17 +63,16 @@
           <input type="text"  class="form-control stemerg_email" id="emgemail" name="stemgemail" placeholder="Emergency Email">
 
       </div>
+      <div class="col-md-6 col-lg-6">
+        <label for="recipient-name" class="col-form-label">Grad Year:</label>
+        <input type="text"  class="form-control stemerg_email" id="grad_year" name="grad_year" placeholder="Emergency Email">
 
-          <div class="col-md-12 col-lg-12 employerfield">
-            <label for="recipient-name" class="col-form-label">Employer student is placed with:</label>
-          <select class="form-control employer_search" name='stemployer' id="erlookupName" >
-            <option value=""></option>
-          </select>
+      </div>
 
-        </div>
+
         <div class="col-md-12 col-lg-12 employerfield">
-          <label for="recipient-name" class="col-form-label">Semester:</label>
-          <select class="form-select" id="semester" name="stsemester" aria-label="Default select example" >
+          <label for="recipient-name" class="col-form-label">Semester Applying for:</label>
+          <select class="form-select" id="semester" name="semester_apply" aria-label="Default select example" >
             @if(isset($semesters))
               @foreach($semesters as $sem)
                       <option value="{{$sem->id}}" >{{$sem->semester_desc}}</option>

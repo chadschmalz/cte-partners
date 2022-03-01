@@ -69,7 +69,7 @@
             <div class=" col-md-1 col-lg-1 text-end">
               <div class="form-control btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#addStudentModal"
               data-bs-action="/studentupdate"
-                data-bs-studentid="{{$student->id}}" data-bs-name="{{$student->name}}" data-bs-phone="{{$student->phone}}" data-bs-email="{{$student->email}}" data-bs-locationid="{{$student->location_id}}" data-bs-pathway="{{$student->pathway_id}}"  data-bs-emerg_email="{{$student->emerg_email}}" data-bs-emerg_contact="{{$student->emerg_contact}}" data-bs-notes="{{$student->notes}}"
+                data-bs-studentid="{{$student->id}}" data-bs-fname="{{$student->fname}}" data-bs-lname="{{$student->lname}}" data-bs-phone="{{$student->phone}}" data-bs-email="{{$student->email}}" data-bs-locationid="{{$student->location_id}}" data-bs-pathway="{{$student->pathway_id}}"  data-bs-emerg_email="{{$student->emerg_email}}" data-bs-emerg_contact="{{$student->emerg_contact}}" data-bs-notes="{{$student->notes}}"
               >Edit</div>
             </div>
 
@@ -78,10 +78,20 @@
             </div>
           </div>
           <div class="row">
-             <div class="col-md-10 col-lg-10">
+             <div class="col-4">
                <h5><u>Pathway</u>: @if($student->pathway != NULL){{$student->pathway->pathway_desc}}@endif</h5>
             </div>
-
+            <div class="col-md-2 col-lg-2 form-group form-check">
+              <label class="form-check-label" for="lettersent">   <input class="updateTracking " id="ta{{$student->id}}" data-studentid="{{$student->id}}"  type="checkbox" name="ta" class="form-check-input" {{$student->ta == 'Y'?'checked':''}}>   &nbsp;&nbsp;TA @if($student->ta == 'Y') - {{date('m/d/y',strtotime($student->ta_at))}} @endif</label>
+            </div>
+            <div class="col-md-2 col-lg-2 form-group form-check">
+              <label class="form-check-label" for="lettersent">   <input class="updateTracking " id="la{{$student->id}}" data-studentid="{{$student->id}}"  type="checkbox" name="la" class="form-check-input" {{$student->la == 'Y'?'checked':''}}>   &nbsp;&nbsp;LA @if($student->la == 'Y') - {{date('m/d/y',strtotime($student->la_at))}} @endif</label>
+            </div>
+            <div class="col-md-2 col-lg-2 form-group form-check">
+              <label class="form-check-label" for="lettersent"> <input class="updateTracking " id="mock{{$student->id}}" data-studentid="{{$student->id}}"  type="checkbox" name="mock" class="form-check-input" {{$student->mock == 'Y'?'checked':''}}>   &nbsp;&nbsp;MOCK @if($student->mock == 'Y') - {{date('m/d/y',strtotime($student->mock_at))}} @endif</label>
+            </div><div class="col-md-2 col-lg-2 form-group form-check">
+              <label class="form-check-label" for="lettersent">   <input class="updateTracking " id="resume{{$student->id}}" data-studentid="{{$student->id}}"  type="checkbox" name="resume" class="form-check-input" {{$student->resume == 'Y'?'checked':''}}>   &nbsp;&nbsp;Resume @if($student->resume == 'Y') - {{date('m/d/y',strtotime($student->resume_at))}}@endif</label>
+            </div>
           </div>
             <div class="row">
                       <table class="table table-sm table-striped display" id="BizData" >
@@ -131,24 +141,24 @@
                               </table>
                         </div>
                         <div class="row mt-1">
-                          <div class="col-md-4 col-lg-4">
+                          <div class="col-sm-12 col-md-6 col-lg-4">
                             <div class="card">
                               <div class="card-header">
                                 <div class="row d-flex justify-content-between ">
-                                  <div class=" col-md-6 col-lg-6">
+                                  <div class="col-sm-8 col-md-9 col-lg-6">
                                       <div class="h5">Semesters</div>
                                     </div>
-                                    <div class="col-md-3 col-lg-3 ">
+                                    <div class="col-sm-2 col-md-3 col-lg-3 ">
                                     <div class=" btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#addStudentSemesterModal">Add</div>
                                   </div>
                                     </div>
                               </div>
                               <div class="card-body">
                                 <div class="row">
-                                  <div class="col-6">
+                                  <div class="col-sm-6 col-md-6 col-lg-4">
                                     Semester
                                   </div>
-                                    <div class="col-3">
+                                    <div class="col-5">
                                       Seats
                                     </div>
                                     <div class="col-1">
@@ -156,7 +166,7 @@
                                   </div>
                                 @foreach($student->semesters as $sem)
                                 <div class="row">
-                                  <div class="col-6">
+                                  <div class="col-sm-12 col-md-6 col-lg-4">
                                           {{$sem->semester->semester_desc}}
                                   </div>
                                   <div class="col-3">
@@ -170,9 +180,28 @@
                               </div>
                             </div>
                           </div>
-                        </div>
-                          <div class="row mt-2">
-                            <div class="col-md-12 col-lg-12">
+                          <div class="col-sm-12 col-md-6 col-lg-4">
+                            <div class="card">
+                              <div class="card-header">
+                                <div class="h5">Workshops</div>
+                              </div>
+                              <div class="card-body">
+                                <div class="form-group row"><meta name="csrf-token" content="{{ csrf_token() }}">
+                                    <label for="ws1" class="col-sm-2 col-form-label">WS1</label>
+                                    <div class="col-sm-10">
+                                      <input type="text" class="form-control updateWS" data-studentid="{{$student->id}}" id="ws1" name="ws1" value="{{$student->ws1}}">
+                                    </div>
+                                  </div>
+                                  <div class="form-group row">
+                                      <label for="ws2" class="col-sm-2 col-form-label">WS2</label>
+                                      <div class="col-sm-10">
+                                        <input type="text" class="form-control updateWS" data-studentid="{{$student->id}}" id="ws2" name="ws2" value="{{$student->ws2}}">
+                                      </div>
+                                    </div>
+                              </div>
+                            </div>
+                          </div>
+                            <div class="col-sm-12 col-md-6 col-lg-4">
                               <div class="card">
                                 <div class="card-header">
                                   <div class="h5">Notes</div>

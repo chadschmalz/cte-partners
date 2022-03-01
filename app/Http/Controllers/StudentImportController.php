@@ -136,7 +136,7 @@ class StudentImportController extends Controller
               $student->onboarding = "Y";
 
               if(count(location::where('location_desc','like',substr($row[8],0,10).'%' )->get()) == 1){
-                $student->location_id = location::where('location_desc','like',substr($row[8],0,10).'%' )->get()[0]->id;
+                $student->location_id = location::where('location_desc','like',substr($row[8],0,10).'%' )->orWhere('notes','like',$row[8].'%' )->get()[0]->id;
               }
 
               $student->save();

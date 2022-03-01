@@ -168,7 +168,8 @@ $app.studentdetail = function(){
           // Button that triggered the modal
           document.getElementById('studentaddform').action = '/studentupdate'
           $('.studentid').val(button.getAttribute('data-bs-studentid'));
-          $('.stname').val(button.getAttribute('data-bs-name'));
+          $('.fname').val(button.getAttribute('data-bs-fname'));
+          $('.lname').val(button.getAttribute('data-bs-lname'));
           $('.stphone').val(button.getAttribute('data-bs-phone'));
           $('.stemail').val(button.getAttribute('data-bs-email'));
           $('.stpathway').val(button.getAttribute('data-bs-pathway'));
@@ -207,9 +208,89 @@ $app.studentdetail = function(){
         }
       });
 
+
+
+
+
+      $('.updateTracking').on('change',function(){
+        console.log(document.getElementById('ta'+$(this).data('studentid')).checked+ ' ' +document.getElementById('la'+$(this).data('studentid')).checked+ ' ' +document.getElementById('mock'+$(this).data('studentid')).checked + ' ' +document.getElementById('resume'+$(this).data('studentid')).checked);
+      $.ajax({
+          url: '/updatetrackingAjax',
+          type: 'GET',
+          headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+          data: {id:$(this).data('studentid'),ta:document.getElementById('ta'+$(this).data('studentid')).checked,la:document.getElementById('la'+$(this).data('studentid')).checked,mock:document.getElementById('mock'+$(this).data('studentid')).checked,resume:document.getElementById('resume'+$(this).data('studentid')).checked},
+          dataType: 'json',
+          success:function(data, textStatus, jqXHR){
+            if(data.success){
+              console.log(data.success);
+              location.reload();
+            }
+            else if(data.error)
+            {
+              $('#errorModal').modal('show');
+              $.each(data.success, function(key, value){
+                $('.errorbody').append(`<div class="row">TEST</div>`);
+              });
+            }
+          },
+          error: function(jqXHR, status, error) {
+            console.log(status + ": " + error);
+            $('#errorModal').modal('show');
+              $('.errorbody').append(`<div class="row">${error}</div>`);
+          }
+        });
+      });
+
+
+      $('.updateWS').on('change',function(){
+      $.ajax({
+          url: '/updatestudentws',
+          type: 'POST',
+          headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+          data: {id:$(this).data('studentid'),ws1:$('#ws1').val(),ws2:$('#ws2').val()},
+          dataType: 'json',
+          success:function(data, textStatus, jqXHR){
+            if(data.success){
+              console.log(data.success);
+            }
+            else if(data.error)
+            {
+              $('#errorModal').modal('show');
+              $.each(data.success, function(key, value){
+                $('.errorbody').append(`<div class="row">TEST</div>`);
+              });
+            }
+          },
+          error: function(jqXHR, status, error) {
+            console.log(status + ": " + error);
+              $('.errorbody').append(`<div class="row">${error}</div>`);
+          }
+        });
+      });
+
+
+
 }
 $app.student = function(){
 
+
+    var allStudentDataTable = $('#allStudentDataTable').DataTable( {
+      "scrollY": "400px",
+      "paging": false,
+      buttons: [
+        {
+          extend: 'csv',
+          text: 'Download CSV',
+          "className": 'btn btn-primary btn-sm mx-2',
+      }
+          ]
+
+    } );
+    $('#allStudentDataTable_filter').append(allStudentDataTable.buttons().container());
+    allStudentDataTable.column( 11 ).visible( false );
+    allStudentDataTable.column( 12 ).visible( false );
+    allStudentDataTable.column( 13 ).visible( false );
+    allStudentDataTable.column( 14).visible( false );
 
   $.fn.select2.defaults.set("width", "100%");
 
@@ -268,6 +349,38 @@ function formatBusinessSelection (employers) {
 
   return  employers.text ;
 }
+
+
+$('.updateTracking').on('change',function(){
+  console.log(document.getElementById('ta'+$(this).data('studentid')).checked+ ' ' +document.getElementById('la'+$(this).data('studentid')).checked+ ' ' +document.getElementById('mock'+$(this).data('studentid')).checked + ' ' +document.getElementById('resume'+$(this).data('studentid')).checked);
+$.ajax({
+    url: '/updatetrackingAjax',
+    type: 'GET',
+    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+    data: {id:$(this).data('studentid'),ta:document.getElementById('ta'+$(this).data('studentid')).checked,la:document.getElementById('la'+$(this).data('studentid')).checked,mock:document.getElementById('mock'+$(this).data('studentid')).checked,resume:document.getElementById('resume'+$(this).data('studentid')).checked},
+    dataType: 'json',
+    success:function(data, textStatus, jqXHR){
+      if(data.success){
+        console.log(data.success);
+      }
+      else if(data.error)
+      {
+        $('#errorModal').modal('show');
+        $.each(data.success, function(key, value){
+          $('.errorbody').append(`<div class="row">TEST</div>`);
+        });
+      }
+    },
+    error: function(jqXHR, status, error) {
+      console.log(status + ": " + error);
+      $('#errorModal').modal('show');
+        $('.errorbody').append(`<div class="row">${error}</div>`);
+    }
+  });
+});
+
+
+
 }
 
 
