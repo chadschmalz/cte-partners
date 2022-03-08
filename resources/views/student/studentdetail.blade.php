@@ -12,7 +12,7 @@
 <div class="container-fluid">
 
 
-
+<div class="row">
 @if(session('success'))
 <div class="container pt-1 message">
       <div class="alert alert-success">
@@ -39,62 +39,64 @@
         </div>
 
 @endif
+</div>
 
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <div class=" col-md-10 col-lg-10">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
+      </div>
+        <div class="row py-3 mb-3 border-bottom">
+        <div class=" col-md-7 col-lg-7">
         <h1 class="h5">Student Detail</h1>
       </div>
-        <div class=" col-md-2 col-lg-2 text-end">
-        <div class="form-control btn btn-sm btn-success " data-bs-toggle="modal" data-bs-target="#letterEmailModal">Send Acceptance Email</div>
+      <div class=" col-md-3 col-lg-3 p-1">
+        @if($student->onboarding == 'Y')<a href="/onboardingComplete/{{$student->id}}"><div class="form-control btn btn-sm btn-info " >Remove from Unassigned</div></a>@endif
+      </div>
+        <div class=" col-md-2 col-lg-2 text-end p-1" >
+        <div class="form-control btn btn-sm btn-success " data-bs-toggle="modal" data-bs-target="#letterEmailModal">Send Application Email</div>
         </div>
+        <div class=" col-md-1 col-lg-1 text-end p-1" style="display:none;">
+        <div href="/deferemail/{{$student->id}}"><div class="form-control btn btn-sm btn-secondary " data-bs-toggle="modal" data-bs-target="#letterEmailModal" data-bs-mode="deferemail">Defer Email</div></div>
+      </div>
+
       </div>
       <div class="row">
       <div class="col-md-12 col-lg-12">
         <div class="card">
           <div class="card-body">
 
-            <div class="row">
-              <div class="col-md-4 col-lg-4">
+            <div class="row ">
+              <div class="col-4">
             <div class="h2">{{$student->name}}</div>
           </div>
           <div class="col-md-2 col-lg-2 form-group form-check">
-            <label class="form-check-label" for="lettersent">  <input type="checkbox" class="form-check-input" {{$student->lettersent == 'Y'?'checked':''}}>   &nbsp;&nbsp;Letter Sent @if($student->lettersent == 'Y') <br />{{$student->lettersent_at}} @endif</label>
+            <label class="form-check-label" for="lettersent"><input type="checkbox" class="form-check-input" {{$student->lettersent == 'Y'?'checked':''}}>   Letter Sent @if($student->lettersent == 'Y') <br />{{date('m/d/y',strtotime($student->lettersent_at))}}@endif</label>
           </div>
-          <div class="col-2 form-group form-check">
-            <label class="form-check-label" for="lettersent"><form action="/updatestudentresponse" method="get"><input type="hidden" name="id" value="{{$student->id}}"> <input onchange="this.form.submit()" type="checkbox" class="form-check-input"  name="studentresponse" {{$student->studentresponse == 'Y'?'checked':''}}></form> &nbsp;&nbsp;Student Response @if($student->studentresponse == 'Y') <br />{{$student->studentresponse_at}} @endif</label>
+          <div class="col-md-2 col-lg-2 form-group form-check">
+            <label class="form-check-label" for="studentresponse"><form action="/updatestudentresponse" method="get"><input type="hidden" name="id" value="{{$student->id}}"> <input onchange="this.form.submit()" type="checkbox" class="form-check-input"  name="studentresponse" {{$student->studentresponse == 'Y'?'checked':''}}></form> Student Response @if($student->studentresponse == 'Y') <br />{{date('m/d/y',strtotime($student->studentresponse_at))}} @endif</label>
           </div>
-          <div class=" col-md-2 col-lg-2 text-end">
-            @if($student->onboarding == 'Y')<a href="/onboardingComplete/{{$student->id}}"><div class="form-control btn btn-sm btn-success " >Remove from Unassigned</div></a>@endif
+          <div class="col-md-2 col-lg-2 form-group form-check">
+            <label class="form-check-label" for="dropped">   <input class="updateTracking " id="dropped{{$student->id}}" data-studentid="{{$student->id}}"  type="checkbox" name="dropped" class="form-check-input" {{$student->dropped == 'Y'?'checked':''}}>   &nbsp;&nbsp;Dropped @if($student->dropped == 'Y') <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{date('m/d/y',strtotime($student->dropped_at))}}@endif</label>
           </div>
-            <div class=" col-md-1 col-lg-1 text-end">
-              <div class="form-control btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#addStudentModal"
-              data-bs-action="/studentupdate"
-                data-bs-studentid="{{$student->id}}" data-bs-fname="{{$student->fname}}" data-bs-lname="{{$student->lname}}" data-bs-phone="{{$student->phone}}" data-bs-email="{{$student->email}}" data-bs-locationid="{{$student->location_id}}" data-bs-pathway="{{$student->pathway_id}}"  data-bs-emerg_email="{{$student->emerg_email}}" data-bs-emerg_contact="{{$student->emerg_contact}}" data-bs-notes="{{$student->notes}}"
-              >Edit</div>
-            </div>
 
-            <div class=" col-md-1 col-lg-1 text-end">
-              <div class="form-control btn btn-sm btn-danger " data-bs-toggle="modal" data-bs-target="#studentremoveModal">Remove</div>
-            </div>
+
           </div>
-          <div class="row">
-             <div class="col-4">
+          <div class="row ">
+             <div class="col-4 ">
                <h5><u>Pathway</u>: @if($student->pathway != NULL){{$student->pathway->pathway_desc}}@endif</h5>
             </div>
-            <div class="col-md-2 col-lg-2 form-group form-check">
-              <label class="form-check-label" for="lettersent">   <input class="updateTracking " id="ta{{$student->id}}" data-studentid="{{$student->id}}"  type="checkbox" name="ta" class="form-check-input" {{$student->ta == 'Y'?'checked':''}}>   &nbsp;&nbsp;TA @if($student->ta == 'Y') - {{date('m/d/y',strtotime($student->ta_at))}} @endif</label>
+            <div class="col-md-2 col-lg-2 form-group form-check p-0">
+              <label class="form-check-label" for="ta"><input class="updateTracking " id="ta{{$student->id}}" data-studentid="{{$student->id}}"  type="checkbox" name="ta" class="form-check-input" {{$student->ta == 'Y'?'checked':''}}>   &nbsp;&nbsp;TA @if($student->ta == 'Y') - {{date('m/d/y',strtotime($student->ta_at))}} @endif</label>
+            </div>
+            <div class="col-md-2 col-lg-2 form-group form-check p-0">
+              <label class="form-check-label" for="la">   <input class="updateTracking " id="la{{$student->id}}" data-studentid="{{$student->id}}"  type="checkbox" name="la" class="form-check-input" {{$student->la == 'Y'?'checked':''}}>   &nbsp;&nbsp;LA @if($student->la == 'Y') - {{date('m/d/y',strtotime($student->la_at))}} @endif</label>
             </div>
             <div class="col-md-2 col-lg-2 form-group form-check">
-              <label class="form-check-label" for="lettersent">   <input class="updateTracking " id="la{{$student->id}}" data-studentid="{{$student->id}}"  type="checkbox" name="la" class="form-check-input" {{$student->la == 'Y'?'checked':''}}>   &nbsp;&nbsp;LA @if($student->la == 'Y') - {{date('m/d/y',strtotime($student->la_at))}} @endif</label>
-            </div>
-            <div class="col-md-2 col-lg-2 form-group form-check">
-              <label class="form-check-label" for="lettersent"> <input class="updateTracking " id="mock{{$student->id}}" data-studentid="{{$student->id}}"  type="checkbox" name="mock" class="form-check-input" {{$student->mock == 'Y'?'checked':''}}>   &nbsp;&nbsp;MOCK @if($student->mock == 'Y') - {{date('m/d/y',strtotime($student->mock_at))}} @endif</label>
+              <label class="form-check-label" for="mock"> <input class="updateTracking " id="mock{{$student->id}}" data-studentid="{{$student->id}}"  type="checkbox" name="mock" class="form-check-input" {{$student->mock == 'Y'?'checked':''}}>   &nbsp;&nbsp;MOCK @if($student->mock == 'Y') - {{date('m/d/y',strtotime($student->mock_at))}} @endif</label>
             </div><div class="col-md-2 col-lg-2 form-group form-check">
-              <label class="form-check-label" for="lettersent">   <input class="updateTracking " id="resume{{$student->id}}" data-studentid="{{$student->id}}"  type="checkbox" name="resume" class="form-check-input" {{$student->resume == 'Y'?'checked':''}}>   &nbsp;&nbsp;Resume @if($student->resume == 'Y') - {{date('m/d/y',strtotime($student->resume_at))}}@endif</label>
+              <label class="form-check-label" for="resume">   <input class="updateTracking " id="resume{{$student->id}}" data-studentid="{{$student->id}}"  type="checkbox" name="resume" class="form-check-input" {{$student->resume == 'Y'?'checked':''}}>   &nbsp;&nbsp;Resume @if($student->resume == 'Y') - {{date('m/d/y',strtotime($student->resume_at))}}@endif</label>
             </div>
           </div>
             <div class="row">
-                      <table class="table table-sm table-striped display" id="BizData" >
+                      <table class="table table-sm table-striped display" id="StudentData" >
                                           <thead>
                                               <tr>
                                                 <th scope="col" >Student Phone</th>
@@ -140,7 +142,7 @@
                                   </tbody>
                               </table>
                         </div>
-                        <div class="row mt-1">
+                        <div class="row my-1">
                           <div class="col-sm-12 col-md-6 col-lg-4">
                             <div class="card">
                               <div class="card-header">
@@ -283,12 +285,22 @@
                         </div>
 
                         </div>
+                        <div class="row mt-2"><div class="col-8"></div>
+                        <div class=" col-md-2 col-lg-2 ml-auto">
+                          <div class="form-control btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#addStudentModal"
+                          data-bs-action="/studentupdate"
+                            data-bs-studentid="{{$student->id}}" data-bs-fname="{{$student->fname}}" data-bs-lname="{{$student->lname}}" data-bs-phone="{{$student->phone}}" data-bs-email="{{$student->email}}" data-bs-locationid="{{$student->location_id}}" data-bs-pathway="{{$student->pathway_id}}"  data-bs-emerg_email="{{$student->emerg_email}}" data-bs-emerg_contact="{{$student->emerg_contact}}" data-bs-notes="{{$student->notes}}"
+                          >Edit</div>
+                        </div>
+                          <div class=" col-md-2 col-lg-2 text-end">
+                            <div class="form-control btn btn-sm btn-danger " data-bs-toggle="modal" data-bs-target="#studentremoveModal">Remove Student</div>
+                          </div>
+                      </div>
             </div>
 
 
 
-
-          </div>
+        </div>
         </div>
       </div>
 

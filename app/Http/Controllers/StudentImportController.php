@@ -110,7 +110,7 @@ class StudentImportController extends Controller
         }
 
       foreach ($csv_data as $rowindex => $row) {
-          if($request->has('header') && $rowindex == 0 || count(student::where('email',$row[1])->get()) == 1 || $row[1] == '')
+          if($request->has('header') && $rowindex == 0 || count($row) < 15 || count(student::where('email',$row[1])->get()) == 1 || $row[1] == '')
             continue;
 
 

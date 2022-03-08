@@ -4,7 +4,7 @@
 Hello {{$student->fname." ".$student->lname}},
 
 
-Congratulations! Your online internship application has been accepted and is being processed. We are excited to meet you and help you achieve your goals.<br /></br>Once we receive your email confirming you want to accept the terms of enrollment, we will send you a list of training workshops dates to choose from.
+Congratulations! Your online internship application has been accepted and is being processed. We are excited to meet you and help you achieve your goals.<br /><br />Once we receive your email confirming you want to accept the terms of enrollment, we will send you a list of training workshops dates to choose from.
 <div style="text-align:center">
 <strong>Terms of Enrollment(time sensitive next steps to begin):</strong>
 <br />
@@ -22,10 +22,10 @@ Congratulations! Your online internship application has been accepted and is bei
 <u>Internship Contacts</u>:<br /><br />
 <strong> Sophia Ford | Career Coach</strong><br />
 sophia.ford@washk12.org | (435) 656-1076<br />
-Schools: Desert Hills, Dixie, Millcreek & Snow Canyon<br /><br />
+Schools: Desert Hills, Dixie, & Snow Canyon<br /><br />
 <strong>Mike Hassler - Work-Based Learning Coordinator</strong><br />
 mike.hassler@washk12.org | 435-817-5714<br />
-School: Crimson Cliffs, Pineview, Hurricane & Water Canyon, Enterprise<br /><br />
+School: Enterprise, Crimson Cliffs, Millcreek, Pineview, Hurricane, & Water Canyon<br /><br />
 </div>
 
 You will be receiving more communication as we get closer. Work hard, keep your G.P.A. high, and continue to be engaged in your classes. If you have any questions please feel free to contact the appropriate contact listed above.<br />
@@ -35,6 +35,6 @@ Thank you for applying to the CTE Washk12 Internship Program!
 
 
 
-Sincerly,<br />
+Sincerely,<br />
 Washk12Internship Team
 @endcomponent

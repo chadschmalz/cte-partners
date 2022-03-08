@@ -104,7 +104,7 @@
                                               <tbody >
                             @if(count($pathwayseats) > 0)
                                @foreach($pathwayseats as $pathwayseat)
-                               <tr @if($pathwayseat->seats < $pathwayseat->allocation) style="color:red;font-weight:bold" @endif>
+                               <tr style="@if($pathwayseat->seats < $pathwayseat->allocation) color:red;font-weight:bold @endif @if($pathwayseat->seats == $pathwayseat->allocation && $pathwayseat->seats != 0 && $pathwayseat->allocation != 0) color:blue;font-weight:bold @endif">
                                  <td>{{$pathwayseat->pathway_desc}} (id: {{$pathwayseat->pathway->id}})</td>
                                  <td>{{$pathwayseat->seats}}</td>
                                  <td >{{$pathwayseat->allocation}}</td>
@@ -130,6 +130,17 @@
     </div>
 
       <div class="col-md-3 col-lg-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="row" style="color:red;font-weight:bold">
+             Red = Overallocated<br />
+             <div>
+               <div class="row" style="color:blue;font-weight:bold">
+              Blue = Pathway Full<br />
+              <div>
+
+          </div>
+        </div>
       </div>
 </div>
 

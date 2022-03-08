@@ -44,6 +44,7 @@
           <label for="recipient-name" class="col-form-label">Semester:</label>
           <select class="form-select" id="studentSemester" aria-label="Default select example" onchange=" return refreshStudentList()">
             @if(isset($semesters))
+            <option value="dropped">Dropped</option>
             <option value="unassigned" {{ $selectedSemester=='unassigned'?'selected':''}}>Unassigned</option>
             <option value="all" {{ $selectedSemester=='all'?'selected':''}}>All</option>
               @foreach($semesters as $semester)

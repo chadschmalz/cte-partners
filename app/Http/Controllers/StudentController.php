@@ -21,6 +21,7 @@ use App\Models\semester;
 use App\Models\counselor;
 
 use App\Mail\ApplicationMail;
+use App\Mail\DeferMail;
 
 
 class StudentController extends Controller
@@ -30,7 +31,7 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($selectedSemester = 'unassigned',$selectedLocation = 'all', $selectedPathway= 'all' )
+    public function index($selectedSemester = 'unassigned',$selectedLocation = 'all', $selectedPathway= 'all', Request $request )
     {
         $students = [];
         if($selectedSemester== NULL){
@@ -44,6 +45,12 @@ class StudentController extends Controller
            else if($selectedSemester == 'unassigned' && $selectedLocation != 'all' &&  $selectedPathway == 'all'){
              $students =  student::where('location_id',$selectedLocation)->where('onboarding', 'Y')->get();
            }
+           else if($selectedSemester == 'dropped' && $selectedLocation == 'all' &&  $selectedPathway == 'all') {
+              $students =  student::where('dropped', 'Y')->get();
+            }
+            else if($selectedSemester == 'dropped' && $selectedLocation != 'all' &&  $selectedPathway == 'all'){
+              $students =  student::where('location_id',$selectedLocation)->where('dropped', 'Y')->get();
+            }
            else if( $selectedSemester == 'all' &&  $selectedLocation != 'all' &&  $selectedPathway == 'all') {
               $students =  student::where('location_id',$selectedLocation)->orderBy('name','asc')->get();
             }
@@ -69,6 +76,11 @@ class StudentController extends Controller
 
             }else if($selectedSemester == 'all' && $selectedLocation != 'all' && $selectedPathway!= 'all' ){
               $students =     student::where('location_id',$selectedLocation)->where('pathway_id',$selectedPathway)
+                            ->select('students.*')->orderBy('students.name','asc')->get();
+
+            }else if($selectedSemester != 'all' && $selectedLocation == 'all' && $selectedPathway!= 'all' ){
+              $students =     student::where('pathway_id',$selectedPathway)->join('student_semesters','student_semesters.student_id','students.id')->whereNULL('student_semesters.deleted_at')
+              ->where('student_semesters.semester_id',$selectedSemester)
                             ->select('students.*')->orderBy('students.name','asc')->get();
 
             }else if($selectedPathway!= 'all' && $selectedLocation != 'all' && $selectedSemester != 'all'){
@@ -299,35 +311,60 @@ class StudentController extends Controller
       $counselor = counselor::find($request->counselor_id);
 
       $v = "/[a-zA-Z0-9_\-.+]+@[a-zA-Z0-9\-]+.[a-zA-Z]+/";
+      if($request->emailtype == 'acceptance'){
+            if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
+              \Mail::to(array('email'=>$student->email))
+              ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email))
+              ->send(new ApplicationMail($student));
+            }else if($counselor->email != NULL && isset($request->includecounselor)){
+              \Mail::to(array('email'=>$student->email))
+              ->cc(array('cemail'=>$counselor->email))
+              ->send(new ApplicationMail($student));
+            }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
+              \Mail::to(array('email'=>$student->email))
+              ->cc(array('pemail'=>$student->emerg_email))
+              ->send(new ApplicationMail($student));
+              return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and parent email)']);
 
-      if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
-        \Mail::to(array('email'=>$student->email))
-        ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email))
-        ->send(new ApplicationMail($student));
-      }else if($counselor->email != NULL && isset($request->includecounselor)){
-        \Mail::to(array('email'=>$student->email))
-        ->cc(array('cemail'=>$counselor->email))
-        ->send(new ApplicationMail($student));
-      }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
-        \Mail::to(array('email'=>$student->email))
-        ->cc(array('pemail'=>$student->emerg_email))
-        ->send(new ApplicationMail($student));
-        return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent(sent to student and parent email)']);
+            }else if($student->emerg_email == NULL ){
+              \Mail::to(array('email'=>$student->email))
+              ->send(new ApplicationMail($student));
+              return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent (only sent to student - missing parent email)']);
 
-      }else if($student->emerg_email == NULL ){
-        \Mail::to(array('email'=>$student->email))
-        ->send(new ApplicationMail($student));
-        return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent (only sent to student - missing parent email)']);
+            }else{
+                    return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
+            }
 
-      }else{
-              return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
-      }
+            return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent']);
+        }else if($request->emailtype == 'defer'){
+              if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
+                \Mail::to(array('email'=>$student->email))
+                ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email))
+                ->send(new DeferMail($student));
+              }else if($counselor->email != NULL && isset($request->includecounselor)){
+                \Mail::to(array('email'=>$student->email))
+                ->cc(array('cemail'=>$counselor->email))
+                ->send(new DeferMail($student));
+              }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
+                \Mail::to(array('email'=>$student->email))
+                ->cc(array('pemail'=>$student->emerg_email))
+                ->send(new DeferMail($student));
+                return redirect('/studentdetail/' . $id)->with(['success'=>'Defer Email Sent(sent to student and parent email)']);
 
-      return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent']);
+              }else if($student->emerg_email == NULL ){
+                \Mail::to(array('email'=>$student->email))
+                ->send(new DeferMail($student));
+                return redirect('/studentdetail/' . $id)->with(['success'=>'Defer Email Sent (only sent to student - missing parent email)']);
 
+              }else{
+                      return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
+              }
+
+              return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent']);
+          }
 
     }
-
+    
     public function updatestudentresponse(Request $request)
     {
 
@@ -430,6 +467,14 @@ class StudentController extends Controller
       } else if($request->resume == 'false' && $student->resume == 'Y'){
         $student->resume = 'N';
       }
+
+      if($request->dropped == 'true' && $student->dropped != 'Y'){
+        $student->dropped = 'Y';
+        $student->dropped_at = date("Y-m-d");
+      } else if($request->dropped == 'false' && $student->dropped == 'Y'){
+        $student->dropped = 'N';
+      }
+
 
       $student->save();
 

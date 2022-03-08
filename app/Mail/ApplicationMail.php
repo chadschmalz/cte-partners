@@ -35,6 +35,6 @@ class ApplicationMail extends Mailable
      */
     public function build()
     {
-        return $this->from('washk12internships@washk12.org')->subject('Intership Application Accepted')->markdown('emails.applicationaccepted');
+        return $this->from('washk12internships@washk12.org')->subject('Intership Application (Response Required)')->markdown('emails.applicationaccepted');
     }
 }

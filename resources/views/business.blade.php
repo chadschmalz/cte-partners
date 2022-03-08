@@ -43,7 +43,7 @@
         @endif
       </select>
     </div>
-    <div class="col-md-3 col-lg-3">
+    <div class="col-md-2 col-lg-2">
       <label for="recipient-name" class="col-form-label">Involvement:</label>
       <select class="form-select" id="businessInvolve" aria-label="Default select example" onchange=" return refreshBusinessList()">
         <option value="all" {{!isset($selectedActivity)?'selected':''}}></option>
@@ -52,6 +52,16 @@
                   <option value="{{$activity->id}}" {{ $selectedActivity==$activity->id?'selected':''}}>{{$activity->activity_desc}}</option>
           @endforeach
         @endif
+      </select>
+    </div>
+    <div class="col-md-1 col-lg-1">
+      <label for="recipient-name" class="col-form-label">Status:</label>
+      <select class="form-select" id="businessStatus" aria-label="Default select example" onchange=" return refreshBusinessList()">
+        <option value="" {{!isset($selectedStatus)?'selected':''}}></option>
+        <option value="Green" {{$selectedStatus=="Green"?'selected':''}} >Green</option>
+        <option value="Yellow" {{$selectedStatus=="Yellow"?'selected':''}}>Yellow</option>
+        <option value="Red" {{$selectedStatus=="Red"?'selected':''}}>Red</option>
+
       </select>
     </div>
     <div class="col-md-1 col-lg-1">
@@ -77,6 +87,7 @@
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="7">Note</a>
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="8">Involvement</a>
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="9">ID</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="10">Status</a>
                                        </div>
 
                       <table class="table table-sm table-striped display allBizDataTable" id="allBizDataTable" w>
@@ -92,6 +103,7 @@
                                              <th scope="col" >Note</th>
                                              <th scope="col" >Involvement</th>
                                              <th scope="col" > ID</th>
+                                             <th scope="col" style="text-align:center"> Status</th>
                                            </tr>
                                               </thead>
                                               <tbody >
@@ -127,6 +139,7 @@
                                      <td>{{$activities}}</td>
 
                                      <td><a   href="/businessdetail/{{$biz->id}}">{{$biz->id}}</a></td>
+                                     <td style="text-align:center"><div class=" btn btn-sm @if($biz->next_internship=='Yellow')btn-warning @elseif($biz->next_internship=='Red') btn-danger @elseif($biz->next_internship=='Green') btn-success @endif"> {{$biz->next_internship}}</div></td>
 
                                   </tr>
                                @endforeach

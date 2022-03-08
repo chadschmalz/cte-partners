@@ -218,7 +218,7 @@ $app.studentdetail = function(){
           url: '/updatetrackingAjax',
           type: 'GET',
           headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-          data: {id:$(this).data('studentid'),ta:document.getElementById('ta'+$(this).data('studentid')).checked,la:document.getElementById('la'+$(this).data('studentid')).checked,mock:document.getElementById('mock'+$(this).data('studentid')).checked,resume:document.getElementById('resume'+$(this).data('studentid')).checked},
+          data: {id:$(this).data('studentid'),ta:document.getElementById('ta'+$(this).data('studentid')).checked,la:document.getElementById('la'+$(this).data('studentid')).checked,mock:document.getElementById('mock'+$(this).data('studentid')).checked,resume:document.getElementById('resume'+$(this).data('studentid')).checked,dropped:document.getElementById('dropped'+$(this).data('studentid')).checked},
           dataType: 'json',
           success:function(data, textStatus, jqXHR){
             if(data.success){
@@ -683,7 +683,7 @@ $app.route = function(){
     }
 }
 function refreshBusinessList() {
-      location = '/business/'+$('#businessCluster option:selected').val()+'/'+$('#businessPathway option:selected').val()+'/'+$('#businessInvolve option:selected').val(); // 'right.html';
+      location = '/business/'+$('#businessCluster option:selected').val()+'/'+$('#businessPathway option:selected').val()+'/'+$('#businessInvolve option:selected').val()+'?Status='+$('#businessStatus option:selected').val(); // 'right.html';
     // return false;
 }
 function refreshPathwaySeatList() {

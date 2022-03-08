@@ -20,19 +20,20 @@ class BusinessController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($selectedcluster = 1, $selectedpathway= 'all', $selectedactivity = 'all')
+    public function index($selectedcluster = 1, $selectedpathway= 'all', $selectedactivity = 'all',Request $request)
     {
-
+      if($request->Status == '')
+        $request->Status = '%';
 
       if($selectedpathway!='all' && $selectedcluster == 'all'){
           $selectedcluster = pathway::find($selectedpathway)->cluster_id;
         }
 
       if($selectedcluster == NULL  && $selectedpathway== NULL && $selectedactivity == NULL){
-        $businesses =  business::where('name','like','%')->orderBy('name', 'asc')->get();
+        $businesses =  business::where('name','like','%')->where('next_internship','like',$request->Status)->orderBy('name', 'asc')->get();
       }else if($selectedcluster != NULL && $selectedcluster != 'all' && $selectedpathway== 'all' && $selectedactivity == 'all'){
         $businesses =  business::
-          whereIn('business.id',business_pathway::where('cluster_id',$selectedcluster)->pluck('business_id'))
+          whereIn('business.id',business_pathway::where('cluster_id',$selectedcluster)->pluck('business_id'))->where('next_internship','like',$request->Status)
               ->join('business_pathways', 'business.id', '=', 'business_pathways.business_id')
               ->select( 'business.*')
               ->distinct()
@@ -40,7 +41,7 @@ class BusinessController extends Controller
               ->get();
       }else if($selectedpathway != 'all' && $selectedactivity == 'all'){
         $businesses =  business::
-          whereIn('business.id',business_pathway::where('pathway_id',$selectedpathway)->pluck('business_id'))
+          whereIn('business.id',business_pathway::where('pathway_id',$selectedpathway)->pluck('business_id'))->where('next_internship','like',$request->Status)
               ->join('business_pathways', 'business.id', '=', 'business_pathways.business_id')
               ->select( 'business.*')
               ->distinct()
@@ -48,7 +49,7 @@ class BusinessController extends Controller
               ->get();
       }else if($selectedpathway == 'all' && $selectedcluster == 'all' && $selectedactivity != 'all'){
         $businesses =  business::
-        whereIn('business.id',business_activity::where('activity_id',$selectedactivity)->pluck('business_id'))
+        whereIn('business.id',business_activity::where('activity_id',$selectedactivity)->pluck('business_id'))->where('next_internship','like',$request->Status)
               ->join('business_activities', 'business.id', '=', 'business_activities.business_id')
               ->select( 'business.*')
               ->distinct()
@@ -56,7 +57,7 @@ class BusinessController extends Controller
               ->get();
       }
       else{
-        $businesses =  business::where('name','like','%')->orderBy('name', 'asc')->get();
+        $businesses =  business::where('name','like','%')->where('next_internship','like',$request->Status)->orderBy('name', 'asc')->get();
         //
       // $businesses =  business::
       // whereIn('business.id',business_pathway::where('pathway_id','like',$selectedpathway=='all'||$selectedpathway==NULL?'%':$selectedpathway)->pluck('business_id'))
@@ -82,6 +83,7 @@ class BusinessController extends Controller
                   'selectedCluster'=> $selectedcluster,
                   'selectedPathway'=> $selectedpathway,
                   'selectedActivity'=> $selectedactivity,
+                  'selectedStatus'=> $request->Status,
                   'clusters'=> $clusters,
                   'pathways'=> $pathways,
                   'activitys'=> activity::all(),

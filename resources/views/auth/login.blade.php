@@ -9,8 +9,8 @@
   <link href="https://coreui.io/docs/assets/css/coreui-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 
-  <link href="{{asset('css/app.css')}}" rel="stylesheet">
-  <link href="{{asset('css/typeahead.css')}}" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link href="{{asset('css/typeahead.css')}}" rel="stylesheet">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css">
   <link rel="stylesheet" href="https://select2.github.io/select2-bootstrap-theme/css/select2-bootstrap.css">
@@ -19,17 +19,17 @@
   <link rel="icon" href="{{asset('favicon.ico')}}">
 
 </head>
-<body class="app flex-row align-items-center">
-<div class="container" id="app">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
+<body class="app">
+<div class="container h-100 " id="app">
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-8 ">
       @if(Session::has('logged_out'))
       <div class="alert alert-primary" role="alert">
         {{ Session::get('logged_out') }}
       </div>
       @endif
       <div class="card-group">
-        <div class="card p-4">
+        <div class="card p-4 ">
           <div class="card-body">
             <h1>Partners Login</h1>
             <p class="text-muted">Click the button below to log in</p>

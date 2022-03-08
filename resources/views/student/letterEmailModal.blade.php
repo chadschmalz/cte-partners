@@ -23,8 +23,16 @@
           @csrf
 
           <div class="row">
+            <div class=" col-lg-6 ">
+              <label for="recipient-name" class="col-form-label">Email Type:</label>
+              <select class="form-select" id="emailtype" name="emailtype" aria-label="Default select example" >
 
-            <div class="col-md-12 col-lg-12 employerfield">
+                <option value="acceptance" >Acceptance Letter Email</option>
+                <option value="defer" >Semester Deferral Email</option>
+
+              </select>
+            </div>
+            <div class=" col-lg-6">
               <label for="recipient-name" class="col-form-label">Counselor:</label>
               <select class="form-select" id="counselor" name="counselor_id" aria-label="Default select example" >
                 @if(isset($counselors))
@@ -35,9 +43,11 @@
               </select>
             </div>
             </div>
-            <div class="row m-2">
-              <div class="form-check col-3 ">
-                <input class="form-check-input" type="checkbox"  name="includecounselor" value="Yes" id="includecounselor1">
+            <div class="row ">
+              <div class="col-md-1 col-lg-6 ">
+              </div>
+              <div class="form-check col-4 mt-2 mx-3">
+                <input class="form-check-input " type="checkbox"  name="includecounselor" value="Yes" id="includecounselor1">
                 <label class="form-check-label" for="includecounselor1">
                   Send copy to Counselor
                 </label>
