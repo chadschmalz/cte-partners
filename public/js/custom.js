@@ -407,10 +407,10 @@ console.log(button.getAttribute('data-bs-enddt'));
 
     switch(button.getAttribute('data-bs-status')){
       case 'inactive':
-        document.getElementById("semester_status").selectedIndex = "0";
-            break;
-        case 'active':
         document.getElementById("semester_status").selectedIndex = "1";
+            break;
+      case 'active': console.log('Active');
+        document.getElementById("semester_status").selectedIndex = "0";
             break;
           }
 
@@ -521,6 +521,8 @@ $app.businessdetail = function(){
                   $('.bizstate').val(button.getAttribute('data-bs-state'));
                   $('.bizzip').val(button.getAttribute('data-bs-zip'));
                   $('.biznotes').val(button.getAttribute('data-bs-notes'));
+                  $('.next_internship').val(button.getAttribute('data-bs-next_internship'));
+
                   if(button.getAttribute('data-bs-agreement') == 'Y'){
                     document.getElementById('bizAgreement').checked = true;
                   }

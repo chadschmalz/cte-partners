@@ -44,11 +44,15 @@
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
       </div>
         <div class="row py-3 mb-3 border-bottom">
-        <div class=" col-md-7 col-lg-7">
+        <div class=" col-md-8 col-lg-8">
         <h1 class="h5">Student Detail</h1>
       </div>
-      <div class=" col-md-3 col-lg-3 p-1">
-        @if($student->onboarding == 'Y')<a href="/onboardingComplete/{{$student->id}}"><div class="form-control btn btn-sm btn-info " >Remove from Unassigned</div></a>@endif
+      <div class=" col-md-2 col-lg-2 p-1">
+        @if($student->onboarding == 'Y')
+        <a href="/onboardingComplete/{{$student->id}}"><div class="form-control btn btn-sm btn-info " >Remove from Unassigned</div></a>
+        @else
+        <a href="/backtounassigned/{{$student->id}}"><div class="form-control btn btn-sm btn-warning " >Push back to Unassigned</div></a>
+        @endif
       </div>
         <div class=" col-md-2 col-lg-2 text-end p-1" >
         <div class="form-control btn btn-sm btn-success " data-bs-toggle="modal" data-bs-target="#letterEmailModal">Send Application Email</div>

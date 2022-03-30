@@ -70,6 +70,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/students/{semester?}/{location?}/{pathway?}', 'StudentController@index')->name('students');
 	Route::get('/studentdetail/{id}', 'StudentController@studentdetail')->name('studentdetail');
 	Route::get('/onboardingComplete/{id}', 'StudentController@onboardingComplete')->name('onboardingComplete');
+	Route::get('/backtounassigned/{id}', 'StudentController@backtounassigned')->name('backtounassigned');
 	Route::post('/studentadd', 'StudentController@create')->name('studentsadd');
 	Route::post('/studentupdate', 'StudentController@update')->name('studentsupdate');
 	Route::post('/studentinternshipadd', 'StudentController@addinternship')->name('addinternship');

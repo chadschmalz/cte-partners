@@ -12,6 +12,7 @@ use App\Models\student;
 use App\Models\student_semester;
 
 use DB;
+use Auth;
 
 class PathwaySeatController extends Controller
 {
@@ -166,6 +167,22 @@ class PathwaySeatController extends Controller
 
         $pathwayseats =  pathway_seat::where('semester_id',$activesemester)->join('pathways','pathways.id','pathway_seats.pathway_id')->select('pathway_seats.*','pathways.pathway_desc')->orderBy('pathways.pathway_desc')->get();
 
+        //Add any pathways that are missing
+        if($pathwayseats->count() > 0 ){
+          $curPathways =  pathway_seat::where('semester_id',$activesemester)->join('pathways','pathways.id','pathway_seats.pathway_id')->select('pathways.id')->orderBy('pathways.pathway_desc')->pluck('id');
+          $missingPathways =  pathway::whereNotIn('id',$curPathways)->get();
+
+          foreach ($missingPathways as $key => $pathway) {
+            $newseat = new pathway_seat;
+            $newseat->pathway_id = $pathway->id;
+            $newseat->seats = 0;
+            $newseat->semester_id = $activesemester;
+            $newseat->save();
+          }
+
+          $pathwayseats =  pathway_seat::where('semester_id',$activesemester)->join('pathways','pathways.id','pathway_seats.pathway_id')->select('pathway_seats.*','pathways.pathway_desc')->orderBy('pathways.pathway_desc')->get();
+
+        }
 
         foreach ($pathwayseats as $key => $pathwayseat) {
           $pathwayseat->allocation = 0;

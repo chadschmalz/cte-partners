@@ -4,15 +4,15 @@
 Hello {{$student->fname." ".$student->lname}},
 
 
-Congratulations! Your online internship application has been accepted and is being processed. We are excited to meet you and help you achieve your goals.<br /><br />Once we receive your email confirming you want to accept the terms of enrollment, we will send you a list of training workshops dates to choose from.
+Congratulations! Your online internship application has been accepted and is being processed. We are excited to meet you and help you achieve your goals.<br />
+<br />If your situation has changed, and you are no longer able to pursue the internship, let us know as soon as possible.  Otherwise, follow the steps below to reserve your spot.
 <div style="text-align:center">
 <strong>Terms of Enrollment(time sensitive next steps to begin):</strong>
 <br />
 </div>
 <br />
 <ol type="1">
-  <li>Email your school's internship contact <strong>within 7 days</strong> to accept or decline your internship. We cannot guarantee your spot after the initial 7 days.</li>
-  <li>Choose your training workshops from the dates we send.</li>
+  <li>Choose your training workshops <strong>within 7 days</strong>, or we cannot guarantee your spot. <a href="https://www.washk12internships.org/uploads/2/9/9/6/29960495/linkedin_policy_w_form_final.pdf">Click Here to Select Workshops</a></li>
   <li>Print, sign & return the LinkedIn parental consent form. Click <a href="https://www.washk12internships.org/uploads/2/9/9/6/29960495/linkedin_policy_w_form_final.pdf">HERE</a>.</li>
   <li>Add the CTE Internship class to your schedule (must be either the first two periods or last two periods).</li>
 </ol>

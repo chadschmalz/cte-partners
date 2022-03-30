@@ -32,7 +32,7 @@
                  Safety Agreement&nbsp;&nbsp;&#10060;
                @endif</div>
                <div class="col-md-8 col-lg-8">
-                <span style="text-decoration-line: underline;">Next Internship:</span> {{$business->next_internship}}
+                <span style="text-decoration-line: underline;">Next Internship:</span> <div class=" btn btn-sm @if($business->next_internship=='Yellow')btn-warning @elseif($business->next_internship=='Red') btn-danger @elseif($business->next_internship=='Green') btn-success @endif"> {{$business->next_internship}}</div>
               </div>
             </div>
             <div class="row">
@@ -44,7 +44,7 @@
             <div class=" col-md-1 col-lg-1 text-end">
               <div class="form-control btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#editBizModal"
               data-bs-action="/bizupdate"
-                data-bs-bizid="{{$business->id}}" data-bs-name="{{$business->name}}" data-bs-address="{{$business->address}}" data-bs-city="{{$business->city}}" data-bs-state="{{$business->state}}" data-bs-zip="{{$business->zip}}" data-bs-notes="{{$business->notes}}" data-bs-agreement="{{$business->safety_agreement}}"
+                data-bs-bizid="{{$business->id}}" data-bs-name="{{$business->name}}" data-bs-address="{{$business->address}}" data-bs-city="{{$business->city}}" data-bs-state="{{$business->state}}" data-bs-zip="{{$business->zip}}" data-bs-next_internship="{{$business->next_internship}}" data-bs-notes="{{$business->notes}}" data-bs-agreement="{{$business->safety_agreement}}"
               >Edit</div>
             </div>
             <div class=" col-md-1 col-lg-1 text-end">

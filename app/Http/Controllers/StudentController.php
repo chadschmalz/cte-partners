@@ -255,6 +255,16 @@ class StudentController extends Controller
       return redirect('students/unassigned/'.$student->location_id );
 
     }
+    public function backtounassigned($id)
+    {
+      $student = student::find($id);
+
+      $student->onboarding = 'Y';
+      $student->save();
+
+      return redirect('students/unassigned/'.$student->location_id );
+
+    }
     public function addsemester(Request $request)
     {
 
@@ -364,7 +374,7 @@ class StudentController extends Controller
           }
 
     }
-    
+
     public function updatestudentresponse(Request $request)
     {
 

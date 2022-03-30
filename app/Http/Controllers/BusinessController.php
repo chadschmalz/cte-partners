@@ -29,8 +29,8 @@ class BusinessController extends Controller
           $selectedcluster = pathway::find($selectedpathway)->cluster_id;
         }
 
-      if($selectedcluster == NULL  && $selectedpathway== NULL && $selectedactivity == NULL){
-        $businesses =  business::where('name','like','%')->where('next_internship','like',$request->Status)->orderBy('name', 'asc')->get();
+      if(($selectedcluster == NULL  && $selectedpathway== NULL && $selectedactivity == NULL) or ($selectedcluster == 'all'  && $selectedpathway== 'all' && $selectedactivity == 'all')){
+        $businesses =  business::where('name','like','%')->orderBy('name', 'asc')->get();
       }else if($selectedcluster != NULL && $selectedcluster != 'all' && $selectedpathway== 'all' && $selectedactivity == 'all'){
         $businesses =  business::
           whereIn('business.id',business_pathway::where('cluster_id',$selectedcluster)->pluck('business_id'))->where('next_internship','like',$request->Status)
