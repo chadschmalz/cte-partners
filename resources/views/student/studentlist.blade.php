@@ -99,9 +99,11 @@
                                                 <th scope="col" >Location</th>
                                                 <th scope="col" >Pathway</th>
                                                 <th scope="col" >Employer</th>
+                                                <th scope="col" >EmployerAddress</th>
                                                 <th scope="col" >Semester</th>
                                                 <th scope="col" >Mentor</th>
                                                 <th scope="col" >Mentor Phone</th>
+                                                <th scope="col" >LetterSent</th>
                                                 <th scope="col" style="text-align:center">LA</th>
                                                 <th scope="col" style="text-align:center">RESUME</th>
                                                 <th scope="col"style="text-align:center" >MOCK</th>
@@ -126,8 +128,10 @@
                                      @endif
                                    </td>
                                      @if(count($student->internships->where('semester_id',$selectedSemester)) > 0 && $selectedSemester != 'all')
-                                       <td>{{$student->internships->where('semester_id',$selectedSemester)[0]->employer->name}}</td>
+                                     <td>{{$student->internships->where('semester_id',$selectedSemester)[0]->employer->name}}</td>
+                                       <td>{{$student->internships->where('semester_id',$selectedSemester)[0]->employer->address}}, {{$student->internships->where('semester_id',$selectedSemester)[0]->employer->city}}, {{$student->internships->where('semester_id',$selectedSemester)[0]->employer->state}} {{$student->internships->where('semester_id',$selectedSemester)[0]->employer->zip}}</td>
                                        <td>{{$student->internships->where('semester_id',$selectedSemester)[0]->semester->semester_desc}}</td>
+
                                        <td>
                                          @if(count($student->internships->where('semester_id',$selectedSemester)[0]->employer->pocs) > 1 && $student->internships->where('semester_id',$selectedSemester)[0]->employer->pocs->where('mentor','Y')!=NULL)
                                            @foreach($student->internships->where('semester_id',$selectedSemester)[0]->employer->pocs->where('mentor','Y') as $s)
@@ -150,12 +154,15 @@
                                        <td></td>
                                        <td></td>
                                        <td></td>
+                                       <td></td>
                                        @elseif(count($student->internships->where('semester_id',$selectedSemester)) == 0 && $selectedSemester != 'all')
                                        <td></td>
                                        <td></td>
                                        <td></td>
                                        <td></td>
+                                       <td></td>
                                      @endif
+                                     <td>@if($student->lettersent_at != NULL){{date('m/d/Y',strtotime($student->lettersent_at))}}@endif</td>
                                      <td style="text-align:center"><input class="updateTracking" id="la{{$student->id}}" type="checkbox" class="form-check-input"  data-studentid="{{$student->id}}"  {{$student->la == 'Y'?'checked':''}}></td>
                                      <td style="text-align:center"><input class="updateTracking " id="resume{{$student->id}}" type="checkbox" class="form-check-input"  data-studentid="{{$student->id}}" {{$student->resume == 'Y'?'checked':''}}></td>
                                      <td style="text-align:center"><input class="updateTracking " id="mock{{$student->id}}" type="checkbox" class="form-check-input"  data-studentid="{{$student->id}}" {{$student->mock == 'Y'?'checked':''}}></td>

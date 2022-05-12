@@ -122,6 +122,17 @@
               <label for="recipient-name" class="col-form-label">Seats:</label>
               <input type="input" class="form-control" name="seats" value="2">
             </div>
+            <div class="col-4" >
+              <label for="recipient-name" class="col-form-label">Pathway:</label>
+            <select class="form-select stpathway" id="stpathway" name="pathway_id" aria-label="Default select example" >
+              <option value="" ></option>
+              @if(isset($pathways))
+                @foreach($pathways as $path)
+                        <option value="{{$path->id}}" {{$student->pathway_id == $path->id ? "selected" :""}}>{{$path->pathway_desc}}</option>
+                @endforeach
+              @endif
+            </select>
+            </div>
             <input type="hidden" name="student_id" value="{{$student->id}}">
           </div>
       </div>

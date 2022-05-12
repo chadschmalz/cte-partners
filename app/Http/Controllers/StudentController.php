@@ -60,7 +60,7 @@ class StudentController extends Controller
                           ->select('students.*')->orderBy('students.name','asc')->get();
             }
             else if($selectedSemester != 'all' && $selectedPathway != 'all' && $selectedLocation != 'all'){
-              $students =     student::where('location_id',$selectedLocation)->where('pathway_id',$selectedPathway)
+              $students =     student::where('location_id',$selectedLocation)->where('students.pathway_id',$selectedPathway)
                             ->join('student_semesters','student_semesters.student_id','students.id')->whereNULL('student_semesters.deleted_at')
                             ->where('student_semesters.semester_id',$selectedSemester)
                             ->select('students.*')->orderBy('students.name','asc')->get();
@@ -71,20 +71,20 @@ class StudentController extends Controller
 
             }
             else if($selectedPathway!= 'all' && $selectedLocation == 'all' && $selectedSemester == 'all'){
-              $students =   student::where('pathway_id',$selectedPathway)
+              $students =   student::where('students.pathway_id',$selectedPathway)
                             ->select('students.*')->orderBy('students.name','asc')->get();
 
             }else if($selectedSemester == 'all' && $selectedLocation != 'all' && $selectedPathway!= 'all' ){
-              $students =     student::where('location_id',$selectedLocation)->where('pathway_id',$selectedPathway)
+              $students =     student::where('location_id',$selectedLocation)->where('students.pathway_id',$selectedPathway)
                             ->select('students.*')->orderBy('students.name','asc')->get();
 
             }else if($selectedSemester != 'all' && $selectedLocation == 'all' && $selectedPathway!= 'all' ){
-              $students =     student::where('pathway_id',$selectedPathway)->join('student_semesters','student_semesters.student_id','students.id')->whereNULL('student_semesters.deleted_at')
+              $students =     student::where('students.pathway_id',$selectedPathway)->join('student_semesters','student_semesters.student_id','students.id')->whereNULL('student_semesters.deleted_at')
               ->where('student_semesters.semester_id',$selectedSemester)
                             ->select('students.*')->orderBy('students.name','asc')->get();
 
             }else if($selectedPathway!= 'all' && $selectedLocation != 'all' && $selectedSemester != 'all'){
-              $students =     student::where('location_id',$selectedLocation)->where('pathway_id',$selectedPathway)
+              $students =     student::where('location_id',$selectedLocation)->where('students.pathway_id',$selectedPathway)
                             ->join('student_semesters','student_semesters.student_id','students.id')->whereNULL('student_semesters.deleted_at')
                             ->where('student_semesters.semester_id',$selectedSemester)
                             ->select('students.*')->orderBy('students.name','asc')->get();
@@ -273,6 +273,7 @@ class StudentController extends Controller
             $studentSem = new student_semester;
             $studentSem->semester_id =  $request->semester_id;
             $studentSem->seats =  $request->seats;
+            $studentSem->pathway_id =  $request->pathway_id;
             $studentSem->student_id = $request->student_id;
             $studentSem->save();
       }
@@ -313,6 +314,7 @@ class StudentController extends Controller
     }
     public function applicationemail(Request $request,$id)
     {
+
       $student = student::find($id);
       $student->lettersent = 'Y';
       $student->lettersent_at = date('Y-m-d');
@@ -324,11 +326,11 @@ class StudentController extends Controller
       if($request->emailtype == 'acceptance'){
             if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
               \Mail::to(array('email'=>$student->email))
-              ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email))
+              ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
               ->send(new ApplicationMail($student));
             }else if($counselor->email != NULL && isset($request->includecounselor)){
               \Mail::to(array('email'=>$student->email))
-              ->cc(array('cemail'=>$counselor->email))
+              ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
               ->send(new ApplicationMail($student));
             }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
               \Mail::to(array('email'=>$student->email))

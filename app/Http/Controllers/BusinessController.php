@@ -12,6 +12,7 @@ use App\Models\poc;
 use App\Models\business_activity;
 use App\Models\business_pathway;
 use App\Models\business_internship;
+use App\Models\semester;
 
 class BusinessController extends Controller
 {
@@ -67,6 +68,88 @@ class BusinessController extends Controller
       //       ->distinct()
       //       ->orderBy('business.name', 'asc')
       //       ->get();
+          }
+
+      if($selectedcluster==NULL || $selectedcluster=='all')
+        $pathways = pathway::where('pathway_desc','like','%')->orderBy('pathway_desc')->get();
+      else
+        $pathways = pathway::where('cluster_id',$selectedcluster)->orderBy('pathway_desc')->get();
+
+      $clusters = array();
+      foreach (cluster::all() as $key => $value) {
+        $clusters[$value->id] =  $value;
+      }
+
+      $data = array(
+                  'selectedCluster'=> $selectedcluster,
+                  'selectedPathway'=> $selectedpathway,
+                  'selectedActivity'=> $selectedactivity,
+                  'selectedStatus'=> $request->Status,
+                  'clusters'=> $clusters,
+                  'pathways'=> $pathways,
+                  'activitys'=> activity::all(),
+                 'businesses'=> $businesses,
+               );
+        return view('business')->with($data);
+    }
+    public function businessActivePathway($selectedcluster = 1, $selectedpathway= 'all', $selectedactivity = 'all',$semester = NULL,Request $request)
+    {
+      if($request->Status == '')
+        $request->Status = '%';
+
+      if($selectedpathway!='all' && $selectedcluster == 'all'){
+          $curPathway = pathway::find($selectedpathway);
+          $selectedcluster = $curPathway->cluster_id;
+        }
+
+        if($semester ==  NULL)
+          $semester = semester::where('status','active')->get();
+        else {
+          $semester = semester::find($semester);
+          // code...
+        }
+
+      if(($selectedcluster == NULL  && $selectedpathway== NULL && $selectedactivity == NULL) or ($selectedcluster == 'all'  && $selectedpathway== 'all' && $selectedactivity == 'all')){
+        $businesses =  business::where('name','like','%')->orderBy('name', 'asc')->get();
+      }else if($selectedcluster != NULL && $selectedcluster != 'all' && $selectedpathway== 'all' && $selectedactivity == 'all'){
+        $businesses =  business::
+          whereIn('business.id',business_pathway::where('cluster_id',$selectedcluster)->pluck('business_id'))->where('next_internship','like',$request->Status)
+              ->join('business_pathways', 'business.id', '=', 'business_pathways.business_id')
+              ->where('business_pathways.begdt','<=',$semester->semester_enddt)
+              ->where('business_pathways.enddt','>=',$semester->semester_enddt)
+              ->where('business_pathways.seats','<>',NULL)
+              ->where('business_pathways.seats','<>',0)
+              ->select( 'business.*')
+              ->distinct()
+              ->orderBy('business.name', 'asc')
+              ->get();
+      }else if($selectedpathway != 'all' && $selectedactivity == 'all'){
+        $businesses =  business::
+          whereIn('business.id',business_pathway::where('pathway_id',$selectedpathway)->pluck('business_id'))->where('next_internship','like',$request->Status)
+              ->join('business_pathways', 'business.id', '=', 'business_pathways.business_id')
+              ->where('business_pathways.begdt','<=',$semester->semester_enddt)
+              ->where('business_pathways.enddt','>=',$semester->semester_enddt)
+              ->where('business_pathways.seats','<>',NULL)
+              ->where('business_pathways.seats','<>',0)
+              ->select( 'business.*')
+              ->distinct()
+              ->orderBy('business.name', 'asc')
+              ->get();
+      }else if($selectedpathway == 'all' && $selectedcluster == 'all' && $selectedactivity != 'all'){
+        $businesses =  business::
+        whereIn('business.id',business_activity::where('activity_id',$selectedactivity)->pluck('business_id'))->where('next_internship','like',$request->Status)
+              ->join('business_activities', 'business.id', '=', 'business_activities.business_id')
+              ->where('business_pathways.begdt','<=',$semester->semester_enddt)
+              ->where('business_pathways.enddt','>=',$semester->semester_enddt)
+              ->where('business_pathways.seats','<>',NULL)
+              ->where('business_pathways.seats','<>',0)
+              ->select( 'business.*')
+              ->distinct()
+              ->orderBy('business.name', 'asc')
+              ->get();
+      }
+      else{
+        $businesses =  business::where('name','like','%')->orderBy('name', 'asc')->get();
           }
 
       if($selectedcluster==NULL || $selectedcluster=='all')
@@ -233,9 +316,45 @@ class BusinessController extends Controller
       $data = array(
         'pathways'=> $pathways,
         'activitys'=> $activitys,
-                 'business'=> $business,
+        'business'=> $business,
+                 'pathways'=> pathway::where('id','like','%')->orderBy('pathway_desc')->get(),
                );
         return view('businessdetail')->with($data);
+    }
+    public function addpathway(Request $request)
+    {
+      $business =  business::find($request->bizid);
+
+        $clusterid = pathway::find($request->pathway_id)->cluster->id;
+
+        $newpath = new business_pathway;
+        $newpath->business_id = $request->bizid;
+        $newpath->cluster_id = $clusterid;
+        $newpath->begdt = date('Y-m-d',strtotime($request->begdt));
+        $newpath->enddt = date('Y-m-d',strtotime($request->enddt));
+        $newpath->seats = $request->seats;
+        $newpath->pathway_id = $request->pathway_id;
+        $newpath->save();
+
+      $data = array(
+                 'business'=> $business,
+               );
+        return redirect('/businessdetail/'.$request->bizid);
+    }
+    public function updatepathway(Request $request)
+    {
+
+        $clusterid = pathway::find($request->pathway_id)->cluster->id;
+
+        $path = business_pathway::find($request->pathwayRecordid);
+        $path->cluster_id = $clusterid;
+        $path->begdt = date('Y-m-d',strtotime($request->begdt));
+        $path->enddt = date('Y-m-d',strtotime($request->enddt));
+        $path->seats = $request->seats;
+        $path->pathway_id = $request->pathway_id;
+        $path->save();
+
+        return redirect('/businessdetail/'.$request->bizid);
     }
     public function pathwayupdate(Request $request)
     {

@@ -97,25 +97,26 @@
                                           <thead>
                                               <tr>
                                                 <th scope="col" >Pathway Desc</th>
-                                                <th scope="col" >Seats</th>
+                                                <th scope="col" >Business Seats</th>
                                                 <th scope="col" >Assigned</th>
                                               </tr>
                                               </thead>
                                               <tbody >
                             @if(count($pathwayseats) > 0)
                                @foreach($pathwayseats as $pathwayseat)
-                               <tr style="@if($pathwayseat->seats < $pathwayseat->allocation) color:red;font-weight:bold @endif @if($pathwayseat->seats == $pathwayseat->allocation && $pathwayseat->seats != 0 && $pathwayseat->allocation != 0) color:blue;font-weight:bold @endif">
-                                 <td>{{$pathwayseat->pathway_desc}} (id: {{$pathwayseat->pathway->id}})</td>
-                                 <td>{{$pathwayseat->seats}}</td>
-                                 <td >{{$pathwayseat->allocation}}</td>
-
+                               <tr  style="@if($businesspathwayseats[$pathwayseat->pathway_id] < $pathwayseat->allocation) color:red;font-weight:bold @endif @if($businesspathwayseats[$pathwayseat->pathway_id] == $pathwayseat->allocation && $businesspathwayseats[$pathwayseat->pathway_id] != 0 && $pathwayseat->allocation != 0) color:blue;font-weight:bold @endif">
+                                 <td onclick="return location = this.getAttribute('href');" href="/business/all/{{$pathwayseat->pathway->id}}/all?Status=">{{$pathwayseat->pathway_desc}} (id: {{$pathwayseat->pathway->id}})</td>
+                                 <td style="text-align:center" onclick="return location = this.getAttribute('href');" href="/businessActivePathway/all/{{$pathwayseat->pathway->id}}/all/{{$activesemester}}">{{$businesspathwayseats[$pathwayseat->pathway_id]}}</td>
+                                 <td style="text-align:center" onclick="return location = this.getAttribute('href');" href="/students/{{$activesemester}}/all/{{$pathwayseat->pathway_id}}">{{$pathwayseat->allocation}}</td>
                                   </tr>
                                   <?php $allocation += $pathwayseat->seats; $assigned+=$pathwayseat->allocation;?>
 
                                @endforeach
                              @endif
 
-                             <tr style="font-weight:bold"><td>Total Seats:</td><td> {{$allocation}}</td><td> {{$assigned}}</td></tr>
+                             <tr style="font-weight:bold"><td>Total Seats:</td><td> {{$allocation}}</td><td> {{$assigned}}</td>
+
+                             </tr>
 
                               </tbody>
                           </table>
@@ -134,12 +135,16 @@
           <div class="card-body">
             <div class="row" style="color:red;font-weight:bold">
              Red = Overallocated<br />
-             <div>
+           </div>
                <div class="row" style="color:blue;font-weight:bold">
               Blue = Pathway Full<br />
-              <div>
-
-          </div>
+            </div>
+                <div class="row" style="color:#198754;font-weight:regular"><br />
+                Click assigned number to view student list.<br />
+              </div>
+              <div class="row" style="color:#198754;font-weight:regular"><br />
+              Click pathway to view business list.<br />
+            </div>
         </div>
       </div>
 </div>

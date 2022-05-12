@@ -164,10 +164,14 @@
                                   <div class="col-sm-6 col-md-6 col-lg-4">
                                     Semester
                                   </div>
-                                    <div class="col-5">
+                                    <div class="col-2">
                                       Seats
                                     </div>
+                                    <div class="col-3">
+                                      Pathway
+                                    </div>
                                     <div class="col-1">
+
                                     </div>
                                   </div>
                                 @foreach($student->semesters as $sem)
@@ -175,8 +179,15 @@
                                   <div class="col-sm-12 col-md-6 col-lg-4">
                                           {{$sem->semester->semester_desc}}
                                   </div>
-                                  <div class="col-3">
+                                  <div class="col-2">
                                     {{$sem->seats}}
+                                  </div>
+                                  <div class="col-4">
+                                    @if(isset($pathways))
+                                      @foreach($pathways as $path)
+                                               {{$sem->pathway_id == $path->id ? $path->pathway_desc :""}}
+                                      @endforeach
+                                    @endif
                                   </div>
                                   <div class="col-1">
                                     <div class=" btn btn-sm btn-danger m-1" data-bs-toggle="modal" data-bs-target="#removeStudentSemesterModal" data-semester="{{$sem->semester->semester_desc}}" data-semesterid="{{$sem->semester->id}}">X</div>

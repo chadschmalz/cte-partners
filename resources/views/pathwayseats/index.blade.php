@@ -108,7 +108,6 @@
                                  <td><input type="hidden" name="ids[]" value="{{$pathwayseat->id}}">
                                    <input type="text" name="seats[]" value="{{$pathwayseat->seats}}"></td>
 
-
                                   </tr>
                                @endforeach
                              @endif

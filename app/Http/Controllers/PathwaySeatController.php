@@ -184,13 +184,18 @@ class PathwaySeatController extends Controller
 
         }
 
+        $businesspathwayseats = array();
+        $aSemester = semester::find($activesemester);
         foreach ($pathwayseats as $key => $pathwayseat) {
           $pathwayseat->allocation = 0;
           $newCount = 0 ;
           $newCount = DB::table('student_semesters')
-              ->join('students','student_semesters.student_id','=','students.id')->where('students.pathway_id',$pathwayseat->pathway_id)->whereNULL('student_semesters.deleted_at')
+              ->join('students','student_semesters.student_id','=','students.id')->where('student_semesters.pathway_id',$pathwayseat->pathway_id)->whereNULL('student_semesters.deleted_at')
                           ->where('student_semesters.semester_id', '=', $activesemester)->sum('student_semesters.seats');
 
+
+          $businesspathwayseats[$pathwayseat->pathway_id] = DB::table('business_pathways')->where('pathway_id',$pathwayseat->pathway_id)->whereNULL('deleted_at')
+                          ->where('begdt', '<=', $aSemester->semester_enddt)->where('enddt', '>=', $aSemester->semester_enddt)->sum('seats');
 
           if($newCount != $pathwayseat->allocation){
              $pathwayseat->allocation = $newCount;
@@ -201,6 +206,7 @@ class PathwaySeatController extends Controller
 
 
       $data = array(
+        'businesspathwayseats'=> $businesspathwayseats,
                 'pathwayseats'=> $pathwayseats,
                 'activesemester'=> $activesemester,
                 'semesters'=> semester::whereIn('id',[$activesemester-1,$activesemester,$activesemester+1])->get(),

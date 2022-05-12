@@ -161,7 +161,7 @@ $app.studentdetail = function(){
       });
 
 
-  var studentUpdate = document.getElementById('addStudentModal')
+  var studentUpdate = document.getElementById('addStudentModal');
       studentUpdate.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget
         if(button.getAttribute('data-bs-action') == '/studentupdate'){
@@ -287,10 +287,11 @@ $app.student = function(){
 
     } );
     $('#allStudentDataTable_filter').append(allStudentDataTable.buttons().container());
-    allStudentDataTable.column( 11 ).visible( false );
-    allStudentDataTable.column( 12 ).visible( false );
+    allStudentDataTable.column( 4 ).visible( false );
     allStudentDataTable.column( 13 ).visible( false );
-    allStudentDataTable.column( 14).visible( false );
+    allStudentDataTable.column( 14 ).visible( false );
+    allStudentDataTable.column( 15 ).visible( false );
+    allStudentDataTable.column( 16).visible( false );
 
   $.fn.select2.defaults.set("width", "100%");
 
@@ -444,6 +445,42 @@ $app.restore = function(){
 }
 
 $app.businessdetail = function(){
+
+
+    var pathwayUpdate = document.getElementById('AddPathwaySemesterModal');
+        pathwayUpdate.addEventListener('show.bs.modal', function (event) {
+          var button = event.relatedTarget
+          if(button.getAttribute('data-bs-action') == 'edit'){
+            // Button that triggered the modal
+            document.getElementById('addbizpathwayform').action = '/bizpathwayupdate'
+
+            $('.pathwaybegdt').val(button.getAttribute('data-bs-begdt'));
+            $('.pathwayenddt').val(button.getAttribute('data-bs-enddt'));
+            $('.formseats').val(button.getAttribute('data-bs-seats'));
+            $('.pathwayRecordid').val(button.getAttribute('data-bs-recordid'));
+
+            var sel = document.getElementById('formpathway');
+            var opts = sel.options;
+            for (var opt, j = 0; opt = opts[j]; j++){
+            console.log(opt.value + " " + button.getAttribute('data-bs-pathway'));
+              if (opt.value == button.getAttribute('data-bs-pathway')) {
+                sel.selectedIndex = j;
+                break;
+              }
+            }
+
+          }
+          else{
+            $('.studentid').val();
+            $('.stname').val();
+            $('.stphone').val();
+            $('.stemail').val();
+            $('.stemerg_phone').val();
+            $('.stemerg_contact').val();
+            $('.stnotes').val();
+          }
+        });
+
 
   var allInternDataTable = $('#allInternshipsDataTable').DataTable( {
     "scrollY": "400px",

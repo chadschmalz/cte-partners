@@ -6,6 +6,7 @@
 @include('modals.business.edit')
 @include('modals.business.remove')
 @include('modals.business.addinternship')
+@include('modals.business.addpathwaysemester')
 @include('modals.business.removeInternship')
 @include('modals.poc.add')
 @include('modals.poc.remove')
@@ -108,11 +109,15 @@
                             <div class="card">
                             <div class="card-header">
                               <div class="row d-flex justify-content-between ">
-                                <div class="h6 col-md-8 col-lg-8">
+                                <div class="h6 col-md-6 col-lg-6">
                                     Clusters & Pathways
                                   </div>
-                                    <div class=" col-md-2 col-lg-2 text-end">
-                                      <div class="btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#pathwayModal">Edit</div>
+                                  <div class=" col-md-2 col-lg-2 text-end">
+                                    <div class="btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#AddPathwaySemesterModal">Add</div>
+
+                                  </div>
+                                    <div class=" col-md-3 col-lg-3 text-end">
+                                      <div class="btn btn-sm btn-danger " data-bs-toggle="modal" data-bs-target="#pathwayModal">DropAll/Add New</div>
 
                                     </div>
                                   </div>
@@ -120,14 +125,26 @@
                                     <div class="card-body">
                                       <?php $curCluster = 0;?>
                                       <div class="row">
+                                        <table class="table table-sm table-stripped">
+                                          <tr>
+                                            <th>Pathway</th>
+                                            <th>Cluster</th>
+                                            <th>BegDate</th>
+                                            <th>EndDate</th>
+                                            <th>Seats</th>
+                                            <th></th>
+                                          </tr>
                                         @foreach($business->pathways as $pathway)
-                                        @if($curCluster != $pathway->cluster_id)
-                                        <div class="h6 pt-1">{{$pathway->cluster->cluster_desc}}</div>
-                                            <?php $curCluster = $pathway->cluster_id?>
-                                        @endif
-                                            <div class="mx-3">-{{$pathway->pathway->pathway_desc}}</div>
+                                            <tr >
+                                              <td>{{$pathway->pathway->pathway_desc}}</td><td style="font-size: 0.65em;">({{$pathway->cluster->cluster_desc}})</td><td>{{$pathway->begdt <> NULL ? date('m/d/Y',strtotime($pathway->begdt)):''}}</td>
+                                              <td>{{$pathway->enddt <> NULL ? date('m/d/Y',strtotime($pathway->enddt)):''}}</td>
+                                              <td style="text-align:center">{{$pathway->seats}}</td>
+                                              <td><div class="btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#AddPathwaySemesterModal" data-bs-action="edit"
+                                                data-bs-begdt="{{$pathway->begdt <> NULL ? date('m/d/Y',strtotime($pathway->begdt)):''}}" data-bs-enddt="{{$pathway->enddt <> NULL ? date('m/d/Y',strtotime($pathway->enddt)):''}}"
+                                                data-bs-pathway="{{$pathway->pathway->id}}" data-bs-seats="{{$pathway->seats}}" data-bs-recordid="{{$pathway->id}}">Edit</div></td>
+                                            </tr >
                                        @endforeach
-
+                                     </table>
                               </div>
                             </div>
                           </div>

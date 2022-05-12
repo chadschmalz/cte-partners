@@ -12,7 +12,7 @@ Congratulations! Your online internship application has been accepted and is bei
 </div>
 <br />
 <ol type="1">
-  <li>Choose your training workshops <strong>within 7 days</strong>, or we cannot guarantee your spot. <a href="https://www.washk12internships.org/uploads/2/9/9/6/29960495/linkedin_policy_w_form_final.pdf">Click Here to Select Workshops</a></li>
+  <li>Choose your training workshops <strong>within 7 days</strong>, or we cannot guarantee your spot. <a href="https://docs.google.com/forms/d/e/1FAIpQLSdDkG6S6TcK21MdkkAX-_9eom649npAYaepJj611DY4eEuNnw/viewform">Click Here to Select Workshops</a></li>
   <li>Print, sign & return the LinkedIn parental consent form. Click <a href="https://www.washk12internships.org/uploads/2/9/9/6/29960495/linkedin_policy_w_form_final.pdf">HERE</a>.</li>
   <li>Add the CTE Internship class to your schedule (must be either the first two periods or last two periods).</li>
 </ol>
