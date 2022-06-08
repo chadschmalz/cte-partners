@@ -287,13 +287,24 @@ $app.student = function(){
 
     } );
     $('#allStudentDataTable_filter').append(allStudentDataTable.buttons().container());
-    allStudentDataTable.column( 4 ).visible( false );
-    allStudentDataTable.column( 13 ).visible( false );
+    allStudentDataTable.column( 6 ).visible( false );
     allStudentDataTable.column( 14 ).visible( false );
     allStudentDataTable.column( 15 ).visible( false );
-    allStudentDataTable.column( 16).visible( false );
+    allStudentDataTable.column( 16 ).visible( false );
+    allStudentDataTable.column( 1).visible( false );
+    allStudentDataTable.column( 2).visible( false );
 
   $.fn.select2.defaults.set("width", "100%");
+
+  $('a.toggle-vis').on( 'click', function (e) {
+    e.preventDefault();
+
+    // Get the column API object
+    var column = allStudentDataTable.column( $(this).attr('data-column') );
+
+    // Toggle the visibility
+    column.visible( ! column.visible() );
+  } );
 
 
 $(".employer_search").select2({

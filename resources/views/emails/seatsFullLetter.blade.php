@@ -1,15 +1,21 @@
 @component('mail::message')
-# Application Letter - Prerequisite Required
+# Application Deferral Letter
 
 Hello {{$student->fname." ".$student->lname}},
 
-Your online internship application is being processed. Due to the following reason, we couldn’t assign your first semester of choice.<br /><br />
+Your online internship application is being processed. Due to high demand in your pathway, we couldn’t assign your first semester of choice.<br /><br />
 
-You need to take a CTE pathway course to qualify for this capstone internship course.
+In the event a spot becomes available, in your semester of choice, students that have completed the training will get priority placement. <br /><br />
 
+<div style="text-align:center">
+<strong>Requirement for priority placement</strong>
 <br />
-
-Contact your career coach to discuss your options for taking this internship course. <br /><br />
+</div>
+<br />
+<ul type="1">
+  <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdDkG6S6TcK21MdkkAX-_9eom649npAYaepJj611DY4eEuNnw/viewform">Click Here to register</a> for training <strong>within 7 days</strong>, or we cannot place you on the priority list. </li>
+</ul>
+<br />
 
 <div style="text-align:center">
 <u>Internship Contacts</u>:<br /><br />

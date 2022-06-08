@@ -22,6 +22,8 @@ use App\Models\counselor;
 
 use App\Mail\ApplicationMail;
 use App\Mail\DeferMail;
+use App\Mail\SeatsFullMail;
+use App\Mail\L2AcceptanceMail;
 
 
 class StudentController extends Controller
@@ -348,7 +350,32 @@ class StudentController extends Controller
             }
 
             return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent']);
-        }else if($request->emailtype == 'defer'){
+        }else if($request->emailtype == 'l2accepted'){
+              if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
+                \Mail::to(array('email'=>$student->email))
+                ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email))
+                ->send(new L2AcceptanceMail($student));
+              }else if($counselor->email != NULL && isset($request->includecounselor)){
+                \Mail::to(array('email'=>$student->email))
+                ->cc(array('cemail'=>$counselor->email))
+                ->send(new L2AcceptanceMail($student));
+              }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
+                \Mail::to(array('email'=>$student->email))
+                ->cc(array('pemail'=>$student->emerg_email))
+                ->send(new L2AcceptanceMail($student));
+                return redirect('/studentdetail/' . $id)->with(['success'=>'L2 Acceptance Email Sent(sent to student and parent email)']);
+
+              }else if($student->emerg_email == NULL ){
+                \Mail::to(array('email'=>$student->email))
+                ->send(new L2AcceptanceMail($student));
+                return redirect('/studentdetail/' . $id)->with(['success'=>'L2 Acceptance Email Sent (only sent to student - missing parent email)']);
+
+              }else{
+                      return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
+              }
+
+              return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent']);
+          }else if($request->emailtype == 'defer'){
               if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
                 \Mail::to(array('email'=>$student->email))
                 ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email))
@@ -374,6 +401,32 @@ class StudentController extends Controller
 
               return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent']);
           }
+          else if($request->emailtype == 'seatsFull'){
+                if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
+                  \Mail::to(array('email'=>$student->email))
+                  ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email))
+                  ->send(new SeatsFullMail($student));
+                }else if($counselor->email != NULL && isset($request->includecounselor)){
+                  \Mail::to(array('email'=>$student->email))
+                  ->cc(array('cemail'=>$counselor->email))
+                  ->send(new SeatsFullMail($student));
+                }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
+                  \Mail::to(array('email'=>$student->email))
+                  ->cc(array('pemail'=>$student->emerg_email))
+                  ->send(new SeatsFullMail($student));
+                  return redirect('/studentdetail/' . $id)->with(['success'=>'Seats Full Email Sent(sent to student and parent email)']);
+
+                }else if($student->emerg_email == NULL ){
+                  \Mail::to(array('email'=>$student->email))
+                  ->send(new SeatsFullMail($student));
+                  return redirect('/studentdetail/' . $id)->with(['success'=>'Seats Full Email Sent (only sent to student - missing parent email)']);
+
+                }else{
+                        return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
+                }
+
+                return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent']);
+            }
 
     }
 

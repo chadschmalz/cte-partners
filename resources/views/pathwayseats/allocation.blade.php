@@ -19,12 +19,12 @@
           @endif
         </select>
       </div>
-      <div class="col-4 ">        <label for="recipient-name" class="col-form-label">&nbsp;</label>
+      <div class="col-4 " style="display:none">        <label for="recipient-name" class="col-form-label">&nbsp;</label>
 
         <a href="/pathwayseats/{{$activesemester}}"><div class="form-control  btn btn-secondary" >Edit Seats</div></a>
 
       </div>
-      <div class="col-2 ">
+      <div class="col-2 " >
 
         <!-- Location Remove Modal -->
         <div class="modal fade" id="copySeatsModal" tabindex="-1" aria-labelledby="copySeatsModalLabel" aria-hidden="true">

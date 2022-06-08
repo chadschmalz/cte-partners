@@ -1,19 +1,22 @@
 @component('mail::message')
-# Application Acceptance Letter
+# Lane 2 Application Letter
 
 Hello {{$student->fname." ".$student->lname}},
 
 
-Congratulations! Your online internship application has been accepted and is being processed. We are excited to meet you and help you achieve your goals.<br />
-<br />If your situation has changed, and you are no longer able to pursue the internship, let us know as soon as possible.  Otherwise, follow the steps below to reserve your spot.
+Your online internship application is being processed. If your situation has changed, and you are no longer able to pursue the internship, let us know as soon as possible.<br />
+<br />Otherwise, follow the steps below to reserve your spot.
 <div style="text-align:center">
 <strong>Terms of Enrollment(time sensitive next steps to begin):</strong>
 <br />
 </div>
 <br />
 <ol type="1">
-  <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdDkG6S6TcK21MdkkAX-_9eom649npAYaepJj611DY4eEuNnw/viewform">Click Here to choose your training preference</a> <strong>within 7 days</strong>, or we cannot guarantee your spot. </li>
-  <li>Add the CTE Internship class to your schedule (must be either the first two periods or last two periods).</li>
+<li>Complete your training agreement within 7 days, or we cannot guarantee your spot. (<a href="https://www.washk12internships.org/">Click Here </a>to select your <strong>school</strong> and print <strong>training agreement</strong>). </li>
+<li>Add the CTE Internship class to your schedule (must be two class periods in most cases). </li>
+<li>We will then set up a safety agreement with your internship employer. </li>
+<li>Once approved, we will send you the online self-paced Canvas Course to complete. </li>
+
 </ol>
 <br />
 

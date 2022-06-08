@@ -90,12 +90,32 @@
           <div class="card-body">
             <div class="row">
 
+              <div class="databuttons mb-1">
+               Toggle column:
+
+
+                 <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="1" style="text-align:center">email</a>
+               <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="2" style="text-align:center">phone</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="3">Location</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="4">Pathway</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="5">Employer</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="7">Semester</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="8">Mentor</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="9">Mentor Phone</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="10">LetterSent</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="11" style="text-align:center">RESUME</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="12" style="text-align:center">MOCK</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="13" style="text-align:center">TA</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="17" style="text-align:center">WS1</a>
+                                       </div>
 
 
                       <table class="table table-sm table-striped display allStudentDataTable" id="allStudentDataTable" >
                                           <thead>
                                               <tr>
                                                 <th scope="col" >Student</th>
+                                                <th scope="col" style="text-align:center">email</th>
+                                                <th scope="col" style="text-align:center">phone</th>
                                                 <th scope="col" >Location</th>
                                                 <th scope="col" >Pathway</th>
                                                 <th scope="col" >Employer</th>
@@ -104,16 +124,13 @@
                                                 <th scope="col" >Mentor</th>
                                                 <th scope="col" >Mentor Phone</th>
                                                 <th scope="col" >LetterSent</th>
-                                                <th scope="col" style="text-align:center">LA</th>
                                                 <th scope="col" style="text-align:center">RESUME</th>
                                                 <th scope="col"style="text-align:center" >MOCK</th>
                                                 <th scope="col" style="text-align:center">TA</th>
-                                                <th scope="col" style="text-align:center">LA Data</th>
                                                 <th scope="col" style="text-align:center">RESUME Data</th>
                                                 <th scope="col"style="text-align:center" >MOCK Data</th>
                                                 <th scope="col" style="text-align:center">TA Data</th>
                                                 <th scope="col" style="text-align:center">WS1</th>
-                                                <th scope="col" style="text-align:center">WS2</th>
                                               </tr>
                                               </thead>
                                               <tbody >
@@ -121,6 +138,9 @@
                                @foreach($students as $student)
                                <tr>
                                  <td><a   href="/studentdetail/{{$student->id}}">{{$student->name}}</a></td>
+
+                                 <td>{{$student->email}}</td>
+                                 <td>{{$student->phone}}</td>
                                      <td>@if($student->location_id != NULL){{$student->location->location_desc}}@else  {{$student->school_name }}  @endif</td>
                                      <td>
                                        @if(isset($student->pathway))
@@ -163,16 +183,13 @@
                                        <td></td>
                                      @endif
                                      <td>@if($student->lettersent_at != NULL){{date('m/d/Y',strtotime($student->lettersent_at))}}@endif</td>
-                                     <td style="text-align:center"><input class="updateTracking" id="la{{$student->id}}" type="checkbox" class="form-check-input"  data-studentid="{{$student->id}}"  {{$student->la == 'Y'?'checked':''}}></td>
                                      <td style="text-align:center"><input class="updateTracking " id="resume{{$student->id}}" type="checkbox" class="form-check-input"  data-studentid="{{$student->id}}" {{$student->resume == 'Y'?'checked':''}}></td>
                                      <td style="text-align:center"><input class="updateTracking " id="mock{{$student->id}}" type="checkbox" class="form-check-input"  data-studentid="{{$student->id}}" {{$student->mock == 'Y'?'checked':''}}></td>
                                      <td style="text-align:center"><input class="updateTracking " id="ta{{$student->id}}" data-studentid="{{$student->id}}" type="checkbox" class="form-check-input"  {{$student->ta == 'Y'?'checked':''}}></td>
-                                     <td>{{$student->la}}</td>
                                      <td>{{$student->resume}}</td>
                                      <td>{{$student->mock}}</td>
                                      <td>{{$student->ta}}</td>
                                      <td>{{$student->ws1}}</td>
-                                     <td>{{$student->ws2}}</td>
                                   </tr>
                                @endforeach
                              @endif
