@@ -14,8 +14,14 @@
           <input type="hidden" class="internid" name='internid' value="">
           <div class="row">
             <div class="col-md-8">
-              <label for="recipient-name" class="col-form-label">Position Title:</label>
-              <input type="text" class="form-control interntitle"  name='interntitle' value="" placeholder="Description">
+              <label for="recipient-name" class="col-form-label">Pathway:</label>
+              <select class="form-select " id="formpathway" name="pathway_id" aria-label="Default select example" >
+                @if(isset($pathways))
+                  @foreach($pathways as $pathway)
+                          <option value="{{$pathway->id}}" >{{$pathway->pathway_desc}}</option>
+                  @endforeach
+                @endif
+              </select>
             </div>
             <div class="col-md-4">
             </div>
@@ -31,12 +37,17 @@
             </div><div class="col-md-4">
             </div>
             <div class="col-md-8">
-              <label for="recipient-name" class="col-form-label">Entry Point:</label>
+              <label for="recipient-name" class="col-form-label">Schedule:</label>
               <select class="form-select" id="entry_point" name="entry_point" aria-label="Default select example"  >
-              <option value=""></option>
+              <option value="">No Preference</option>
+              <option value="A-am" >A-am</option>
+              <option value="A-pm" >A-pm</option>
+              <option value="B-am" >B-am</option>
+              <option value="B-pm" >B-pm</option>
+<!--
               <option value="Fall Semester" >Fall Semester</option>
               <option value="Spring Semester" >Spring Semester</option>
-                <option value="Either" >Either</option>
+                <option value="Either" >Either</option> -->
               </select>
 
 

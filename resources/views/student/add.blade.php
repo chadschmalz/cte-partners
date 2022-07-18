@@ -122,6 +122,17 @@
               <label for="recipient-name" class="col-form-label">Seats:</label>
               <input type="input" class="form-control" name="seats" value="2">
             </div>
+            <div class="col-2" >
+              <label for="recipient-name" class="col-form-label">Schedule:</label>
+              <select class="form-select stpathway" id="schedule" name="schedule" aria-label="Default select example" >
+                  <option value="A-am" {{$student->schedule == 'A-am' ? "selected" :""}}>A-am</option>
+                  <option value="A-pm" {{$student->schedule == 'A-am' ? "selected" :""}}>A-pm</option>
+                  <option value="B-am" {{$student->schedule == 'A-am' ? "selected" :""}}>B-am</option>
+                  <option value="B-pm" {{$student->schedule == 'A-am' ? "selected" :""}}>B-pm</option>
+
+
+              </select>
+            </div>
             <div class="col-4" >
               <label for="recipient-name" class="col-form-label">Pathway:</label>
             <select class="form-select stpathway" id="stpathway" name="pathway_id" aria-label="Default select example" >

@@ -148,26 +148,28 @@
                                      @endif
                                    </td>
                                      @if(count($student->internships->where('semester_id',$selectedSemester)) > 0 && $selectedSemester != 'all')
-                                     <td>{{$student->internships->where('semester_id',$selectedSemester)[0]->employer->name}}</td>
-                                       <td>{{$student->internships->where('semester_id',$selectedSemester)[0]->employer->address}}, {{$student->internships->where('semester_id',$selectedSemester)[0]->employer->city}}, {{$student->internships->where('semester_id',$selectedSemester)[0]->employer->state}} {{$student->internships->where('semester_id',$selectedSemester)[0]->employer->zip}}</td>
-                                       <td>{{$student->internships->where('semester_id',$selectedSemester)[0]->semester->semester_desc}}</td>
+                                     @foreach($student->internships->where('semester_id',$selectedSemester) as $internship)
+                                     <td>{{$internship->employer->name}}</td>
+                                       <td>{{$internship->employer->address}}, {{$internship->employer->city}}, {{$internship->employer->state}} {{$internship->employer->zip}}</td>
+                                       <td>{{$internship->semester->semester_desc}}</td>
 
                                        <td>
-                                         @if(count($student->internships->where('semester_id',$selectedSemester)[0]->employer->pocs) > 1 && $student->internships->where('semester_id',$selectedSemester)[0]->employer->pocs->where('mentor','Y')!=NULL)
-                                           @foreach($student->internships->where('semester_id',$selectedSemester)[0]->employer->pocs->where('mentor','Y') as $s)
+                                         @if(count($internship->employer->pocs) > 1 && $internship->employer->pocs->where('mentor','Y')!=NULL)
+                                           @foreach($internship->employer->pocs->where('mentor','Y') as $s)
                                             {{$s->name}}
                                            @endforeach
                                            @else
-                                           {{$student->internships->where('semester_id',$selectedSemester)[0]->employer->pocs[0]->name}}
+                                           {{$internship->employer->pocs[0]->name}}
                                          @endif</td>
-                                       <td> @if(count($student->internships->where('semester_id',$selectedSemester)[0]->employer->pocs) > 1 && $student->internships->where('semester_id',$selectedSemester)[0]->employer->pocs->where('mentor','Y')!=NULL)
-                                          @foreach($student->internships->where('semester_id',$selectedSemester)[0]->employer->pocs->where('mentor','Y') as $s)
+                                       <td> @if(count($internship->employer->pocs) > 1 && $internship->employer->pocs->where('mentor','Y')!=NULL)
+                                          @foreach($internship->employer->pocs->where('mentor','Y') as $s)
                                            {{$s->phone}}
                                           @endforeach
                                           @else
-                                          {{$student->internships->where('semester_id',$selectedSemester)[0]->employer->pocs[0]->phone}}
+                                          {{$internship->employer->pocs[0]->phone}}
                                         @endif
                                        </td>
+                                       @endforeach
 
                                        @elseif(count($student->internships->where('semester_id',$selectedSemester)) == 0 && $selectedSemester == 'all')
                                        <td></td>

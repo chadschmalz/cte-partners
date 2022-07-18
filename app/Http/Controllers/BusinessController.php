@@ -117,32 +117,31 @@ class BusinessController extends Controller
               ->join('business_pathways', 'business.id', '=', 'business_pathways.business_id')
               ->where('business_pathways.begdt','<=',$semester->semester_enddt)
               ->where('business_pathways.enddt','>=',$semester->semester_enddt)
-              ->where('business_pathways.seats','<>',NULL)
-              ->where('business_pathways.seats','<>',0)
+              ->whereNotNull('business_pathways.seats')
+              ->where('business_pathways.seats','>',0)
               ->select( 'business.*')
               ->distinct()
               ->orderBy('business.name', 'asc')
               ->get();
       }else if($selectedpathway != 'all' && $selectedactivity == 'all'){
-        $businesses =  business::
-          whereIn('business.id',business_pathway::where('pathway_id',$selectedpathway)->pluck('business_id'))->where('next_internship','like',$request->Status)
-              ->join('business_pathways', 'business.id', '=', 'business_pathways.business_id')
-              ->where('business_pathways.begdt','<=',$semester->semester_enddt)
-              ->where('business_pathways.enddt','>=',$semester->semester_enddt)
-              ->where('business_pathways.seats','<>',NULL)
-              ->where('business_pathways.seats','<>',0)
-              ->select( 'business.*')
-              ->distinct()
+        $businesses =  business::whereIn('business.id',
+          business_pathway::where('pathway_id',$selectedpathway)->where('business_pathways.seats','>',0)
+          ->where('business_pathways.begdt','<=',$semester->semester_enddt)
+          ->where('business_pathways.enddt','>=',$semester->semester_enddt)
+          ->pluck('business_id'))
+          ->where('next_internship','like',$request->Status)
               ->orderBy('business.name', 'asc')
               ->get();
+              // return $businesses;
+
       }else if($selectedpathway == 'all' && $selectedcluster == 'all' && $selectedactivity != 'all'){
         $businesses =  business::
         whereIn('business.id',business_activity::where('activity_id',$selectedactivity)->pluck('business_id'))->where('next_internship','like',$request->Status)
               ->join('business_activities', 'business.id', '=', 'business_activities.business_id')
               ->where('business_pathways.begdt','<=',$semester->semester_enddt)
               ->where('business_pathways.enddt','>=',$semester->semester_enddt)
-              ->where('business_pathways.seats','<>',NULL)
-              ->where('business_pathways.seats','<>',0)
+              ->whereNotNull('business_pathways.seats')
+              ->where('business_pathways.seats','>',0)
               ->select( 'business.*')
               ->distinct()
               ->orderBy('business.name', 'asc')

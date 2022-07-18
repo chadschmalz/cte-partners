@@ -275,6 +275,7 @@ class StudentController extends Controller
             $studentSem = new student_semester;
             $studentSem->semester_id =  $request->semester_id;
             $studentSem->seats =  $request->seats;
+            $studentSem->schedule =  $request->schedule;
             $studentSem->pathway_id =  $request->pathway_id;
             $studentSem->student_id = $request->student_id;
             $studentSem->save();

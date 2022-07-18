@@ -147,7 +147,7 @@
                               </table>
                         </div>
                         <div class="row my-1">
-                          <div class="col-sm-12 col-md-6 col-lg-4">
+                          <div class="col-sm-12 col-md-6 col-lg-6">
                             <div class="card">
                               <div class="card-header">
                                 <div class="row d-flex justify-content-between ">
@@ -161,11 +161,14 @@
                               </div>
                               <div class="card-body">
                                 <div class="row">
-                                  <div class="col-sm-6 col-md-6 col-lg-4">
+                                  <div class="col-sm-6 col-md-6 col-lg-2">
                                     Semester
                                   </div>
                                     <div class="col-2">
                                       Seats
+                                    </div>
+                                    <div class="col-2">
+                                      Sched
                                     </div>
                                     <div class="col-3">
                                       Pathway
@@ -176,11 +179,14 @@
                                   </div>
                                 @foreach($student->semesters as $sem)
                                 <div class="row">
-                                  <div class="col-sm-12 col-md-6 col-lg-4">
+                                  <div class="col-sm-12 col-md-6 col-lg-2">
                                           {{$sem->semester->semester_desc}}
                                   </div>
                                   <div class="col-2">
                                     {{$sem->seats}}
+                                  </div>
+                                  <div class="col-2">
+                                    {{$sem->schedule}}
                                   </div>
                                   <div class="col-4">
                                     @if(isset($pathways))
@@ -197,28 +203,28 @@
                               </div>
                             </div>
                           </div>
-                          <div class="col-sm-12 col-md-6 col-lg-4">
+                          <div class="col-sm-12 col-md-4 col-lg-3">
                             <div class="card">
                               <div class="card-header">
                                 <div class="h5">Workshops</div>
                               </div>
                               <div class="card-body">
                                 <div class="form-group row"><meta name="csrf-token" content="{{ csrf_token() }}">
-                                    <label for="ws1" class="col-sm-2 col-form-label">WS1</label>
-                                    <div class="col-sm-10">
+                                    <label for="ws1" class="col-3 col-form-label">WS1</label>
+                                    <div class="col-9">
                                       <input type="text" class="form-control updateWS" data-studentid="{{$student->id}}" id="ws1" name="ws1" value="{{$student->ws1}}">
                                     </div>
                                   </div>
                                   <div class="form-group row">
-                                      <label for="ws2" class="col-sm-2 col-form-label">WS2</label>
-                                      <div class="col-sm-10">
+                                      <label for="ws2" class="col-3 col-form-label">WS2</label>
+                                      <div class="col-9">
                                         <input type="text" class="form-control updateWS" data-studentid="{{$student->id}}" id="ws2" name="ws2" value="{{$student->ws2}}">
                                       </div>
                                     </div>
                               </div>
                             </div>
                           </div>
-                            <div class="col-sm-12 col-md-6 col-lg-4">
+                            <div class="col-sm-12 col-md-6 col-lg-3">
                               <div class="card">
                                 <div class="card-header">
                                   <div class="h5">Notes</div>
