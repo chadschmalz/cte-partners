@@ -310,7 +310,7 @@
                         <div class=" col-md-2 col-lg-2 ml-auto">
                           <div class="form-control btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#addStudentModal"
                           data-bs-action="/studentupdate"
-                            data-bs-studentid="{{$student->id}}" data-bs-fname="{{$student->fname}}" data-bs-lname="{{$student->lname}}" data-bs-phone="{{$student->phone}}" data-bs-email="{{$student->email}}" data-bs-locationid="{{$student->location_id}}" data-bs-pathway="{{$student->pathway_id}}"  data-bs-emerg_email="{{$student->emerg_email}}" data-bs-emerg_contact="{{$student->emerg_contact}}" data-bs-notes="{{$student->notes}}"
+                            data-bs-studentid="{{$student->id}}" data-bs-fname="{{$student->fname}}" data-bs-lname="{{$student->lname}}" data-bs-phone="{{$student->phone}}" data-bs-email="{{$student->email}}" data-bs-locationid="{{$student->location_id}}" data-bs-pathway="{{$student->pathway_id}}" data-bs-grad_year="{{$student->grad_year}}"  data-bs-emerg_email="{{$student->emerg_email}}" data-bs-emerg_contact="{{$student->emerg_contact}}" data-bs-notes="{{$student->notes}}"
                           >Edit</div>
                         </div>
                           <div class=" col-md-2 col-lg-2 text-end">

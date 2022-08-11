@@ -110,7 +110,7 @@ class StudentController extends Controller
                         'selectedLocation'=> $selectedLocation,
                         'clusters'=> cluster::all(),
                         'pathways'=> $pathways,
-                        'locations'=> location::all(),
+                        'locations'=> location::where('location_desc','like','%')->orderBy('location_desc')->get(),
                         'semesters'=> semester::where('id','like','%')->orderBy('semester_enddt')->get(),
                        'students'=> $students,
                      );
@@ -129,7 +129,7 @@ class StudentController extends Controller
       $data = array(
         'pathways'=> $pathways,
         'activitys'=> $activitys,
-        'locations'=> location::all(),
+        'locations'=> location::where('location_desc','like','%')->orderBy('location_desc')->get(),
          'student'=> $student,
          'counselors'=> counselor::where('location_id',$student->location_id)->get(),
          'semesters'=>semester::where('semester_enddt','>=',date("Y-m-d H:i:s"))->orderBy('semester_enddt')->get(),
@@ -337,12 +337,13 @@ class StudentController extends Controller
               ->send(new ApplicationMail($student));
             }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
               \Mail::to(array('email'=>$student->email))
-              ->cc(array('pemail'=>$student->emerg_email))
+              ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
               ->send(new ApplicationMail($student));
               return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and parent email)']);
 
             }else if($student->emerg_email == NULL ){
               \Mail::to(array('email'=>$student->email))
+              ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
               ->send(new ApplicationMail($student));
               return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent (only sent to student - missing parent email)']);
 
@@ -350,24 +351,25 @@ class StudentController extends Controller
                     return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
             }
 
-            return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent']);
+            return redirect('/studentdetail/' . $id)->with(['error'=>'Email Error']);
         }else if($request->emailtype == 'l2accepted'){
               if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
                 \Mail::to(array('email'=>$student->email))
-                ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email))
+                ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
                 ->send(new L2AcceptanceMail($student));
               }else if($counselor->email != NULL && isset($request->includecounselor)){
                 \Mail::to(array('email'=>$student->email))
-                ->cc(array('cemail'=>$counselor->email))
+                ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
                 ->send(new L2AcceptanceMail($student));
               }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
                 \Mail::to(array('email'=>$student->email))
-                ->cc(array('pemail'=>$student->emerg_email))
+                ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
                 ->send(new L2AcceptanceMail($student));
                 return redirect('/studentdetail/' . $id)->with(['success'=>'L2 Acceptance Email Sent(sent to student and parent email)']);
 
               }else if($student->emerg_email == NULL ){
                 \Mail::to(array('email'=>$student->email))
+                ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
                 ->send(new L2AcceptanceMail($student));
                 return redirect('/studentdetail/' . $id)->with(['success'=>'L2 Acceptance Email Sent (only sent to student - missing parent email)']);
 
@@ -379,20 +381,21 @@ class StudentController extends Controller
           }else if($request->emailtype == 'defer'){
               if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
                 \Mail::to(array('email'=>$student->email))
-                ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email))
+                ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
                 ->send(new DeferMail($student));
               }else if($counselor->email != NULL && isset($request->includecounselor)){
                 \Mail::to(array('email'=>$student->email))
-                ->cc(array('cemail'=>$counselor->email))
+                ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
                 ->send(new DeferMail($student));
               }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
                 \Mail::to(array('email'=>$student->email))
-                ->cc(array('pemail'=>$student->emerg_email))
+                ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
                 ->send(new DeferMail($student));
                 return redirect('/studentdetail/' . $id)->with(['success'=>'Defer Email Sent(sent to student and parent email)']);
 
               }else if($student->emerg_email == NULL ){
                 \Mail::to(array('email'=>$student->email))
+                ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
                 ->send(new DeferMail($student));
                 return redirect('/studentdetail/' . $id)->with(['success'=>'Defer Email Sent (only sent to student - missing parent email)']);
 
@@ -400,25 +403,26 @@ class StudentController extends Controller
                       return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
               }
 
-              return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent']);
+              return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
           }
           else if($request->emailtype == 'seatsFull'){
                 if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
                   \Mail::to(array('email'=>$student->email))
-                  ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email))
+                  ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
                   ->send(new SeatsFullMail($student));
                 }else if($counselor->email != NULL && isset($request->includecounselor)){
                   \Mail::to(array('email'=>$student->email))
-                  ->cc(array('cemail'=>$counselor->email))
+                  ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
                   ->send(new SeatsFullMail($student));
                 }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
                   \Mail::to(array('email'=>$student->email))
-                  ->cc(array('pemail'=>$student->emerg_email))
+                  ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
                   ->send(new SeatsFullMail($student));
                   return redirect('/studentdetail/' . $id)->with(['success'=>'Seats Full Email Sent(sent to student and parent email)']);
 
                 }else if($student->emerg_email == NULL ){
                   \Mail::to(array('email'=>$student->email))
+                  ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
                   ->send(new SeatsFullMail($student));
                   return redirect('/studentdetail/' . $id)->with(['success'=>'Seats Full Email Sent (only sent to student - missing parent email)']);
 

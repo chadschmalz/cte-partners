@@ -65,7 +65,7 @@
       </div>
       <div class="col-md-6 col-lg-6">
         <label for="recipient-name" class="col-form-label">Grad Year:</label>
-        <input type="text"  class="form-control stemerg_email" id="grad_year" name="grad_year" placeholder="Emergency Email">
+        <input type="text"  class="form-control stemerg_email" id="grad_year" name="grad_year" placeholder="Grad Year">
 
       </div>
 

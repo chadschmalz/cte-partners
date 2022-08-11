@@ -174,6 +174,7 @@ $app.studentdetail = function(){
           $('.stemail').val(button.getAttribute('data-bs-email'));
           $('.stpathway').val(button.getAttribute('data-bs-pathway'));
           $('.stemerg_email').val(button.getAttribute('data-bs-emerg_email'));
+          $('#grad_year').val(button.getAttribute('data-bs-grad_year'));
           $('.stemerg_contact').val(button.getAttribute('data-bs-emerg_contact'));
           $('.stnotes').val(button.getAttribute('data-bs-notes'));
 
@@ -288,9 +289,9 @@ $app.student = function(){
     } );
     $('#allStudentDataTable_filter').append(allStudentDataTable.buttons().container());
     allStudentDataTable.column( 6 ).visible( false );
-    allStudentDataTable.column( 14 ).visible( false );
-    allStudentDataTable.column( 15 ).visible( false );
-    allStudentDataTable.column( 16 ).visible( false );
+    allStudentDataTable.column( 17 ).visible( false );
+    allStudentDataTable.column( 18 ).visible( false );
+    allStudentDataTable.column( 19 ).visible( false );
     allStudentDataTable.column( 1).visible( false );
     allStudentDataTable.column( 2).visible( false );
 
@@ -470,12 +471,15 @@ $app.businessdetail = function(){
             $('.formseats').val(button.getAttribute('data-bs-seats'));
             $('.pathwayRecordid').val(button.getAttribute('data-bs-recordid'));
 
-            var sel = document.getElementById('formpathway');
+            document.getElementById('pathwaysel').value = button.getAttribute('data-bs-pathway');
+
+            var sel = document.getElementById('pathwaysel');
             var opts = sel.options;
             for (var opt, j = 0; opt = opts[j]; j++){
-            console.log(opt.value + " " + button.getAttribute('data-bs-pathway'));
+            console.log(j + " " + opt.value + " " + button.getAttribute('data-bs-pathway'));
               if (opt.value == button.getAttribute('data-bs-pathway')) {
                 sel.selectedIndex = j;
+                sel.value = opt.value;
                 break;
               }
             }

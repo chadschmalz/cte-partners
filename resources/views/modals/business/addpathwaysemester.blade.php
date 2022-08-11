@@ -11,7 +11,7 @@
           <div class="row">
             <div class="col-md-4 col-lg-4 employerfield">
               <label for="recipient-name" class="col-form-label">Pathway:</label>
-              <select class="form-select " id="formpathway" name="pathway_id" aria-label="Default select example" >
+              <select class="form-select " id="pathwaysel" name="pathway_id" aria-label="Default select example" >
                 @if(isset($pathways))
                   @foreach($pathways as $pathway)
                           <option value="{{$pathway->id}}" >{{$pathway->pathway_desc}}</option>

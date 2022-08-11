@@ -123,7 +123,7 @@
                                }
                                ?>
                                <tr>
-                                 <td><a   href="/businessdetail/{{$biz->id}}">{{$biz->name}}</a></td>
+                                 <td><a   href="/businessdetail/{{$biz->id}}" target="_blank">{{$biz->name}}</a></td>
                                  <td>{{$biz->address}} {{$biz->city}} {{$biz->state}} {{$biz->zip}}</td>
                                <td>{{$biz->safety_agreement}}</td>
                                      <td>{{$biz->pocs[0]->name}}</td>

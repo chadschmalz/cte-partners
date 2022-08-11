@@ -109,7 +109,7 @@
                                  <td style="text-align:center" onclick="return location = this.getAttribute('href');" href="/businessActivePathway/all/{{$pathwayseat->pathway->id}}/all/{{$activesemester}}">{{$businesspathwayseats[$pathwayseat->pathway_id]}}</td>
                                  <td style="text-align:center" onclick="return location = this.getAttribute('href');" href="/students/{{$activesemester}}/all/{{$pathwayseat->pathway_id}}">{{$pathwayseat->allocation}}</td>
                                   </tr>
-                                  <?php $allocation += $pathwayseat->seats; $assigned+=$pathwayseat->allocation;?>
+                                  <?php $allocation += $businesspathwayseats[$pathwayseat->pathway_id]; $assigned+=$pathwayseat->allocation;?>
 
                                @endforeach
                              @endif
