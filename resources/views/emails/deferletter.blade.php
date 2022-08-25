@@ -21,7 +21,6 @@ mike.hassler@washk12.org | 435-817-5714<br />
 School: Crimson Cliffs, Pineview, Hurricane, Water Canyon, Millcreek, & Enterprise<br /><br />
 </div>
 
-You will be receiving more communication as we get closer. Work hard, keep your G.P.A. high, and continue to be engaged in your classes. If you have any questions please feel free to contact the appropriate contact listed above.<br />
 <br />
 Thank you for applying to the CTE Washk12 Internship Program!
 

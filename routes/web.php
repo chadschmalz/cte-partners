@@ -104,6 +104,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/semesteradd', 'SemesterController@store')->name('semesteradd');
 	Route::post('/semesterupdate', 'SemesterController@update')->name('semesterupdate');
 
+	Route::get('/counselors/{location?}/{pathway?}', 'CounselorController@index')->name('counselors');
+	Route::post('/counseloradd', 'CounselorController@store')->name('counseloradd');
+	Route::post('/counselorupdate', 'CounselorController@update')->name('counselorupdate');
+	Route::get('/removecounselor/{id}', 'CounselorController@destroy')->name('removecounselor');
+
 	Route::get('/pathwayseats/{semester}/{location?}/{pathway?}', 'PathwaySeatController@pathwayseats')->name('pathwayseats');
 	Route::post('/updatepathwayseats', 'PathwaySeatController@update')->name('pathwayseatsupdate');
 	Route::post('/copypathwayseats', 'PathwaySeatController@copy')->name('pathwayseatscopy');

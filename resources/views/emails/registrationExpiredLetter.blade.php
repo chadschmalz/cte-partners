@@ -1,19 +1,20 @@
 @component('mail::message')
-# Application Deferral Letter
+# Priority Registration Expired
 
 Hello {{$student->fname." ".$student->lname}},
 
-Your online internship application is being processed. Due to high demand in your internship pathway, and based off the number of employers particiting this semester, we couldn’t assign your first semester of choice.<br /><br />
+We haven't received a confirmation of your registration for the worksop training courses within the 7 days time frame.<br /><br />
 
-In the event a spot becomes available, in your semester of choice, students that have completed the workshop training will get priority placement. <br /><br />
-<br/>To help prepare for this opportunity, we have two training workshops for you to complete.
+You may still complete the training courses, but will not receive priority placement.<br />
+In the event a spot becomes available, students that have completed the workshop training will get priority placement. <br /><br />
+
 <div style="text-align:center">
-<strong>Requirement for priority placement</strong>
+<strong>Registration for training within 7 days was required for priority placement</strong>
 <br />
 </div>
 <br />
 <ul type="1">
-  <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdDkG6S6TcK21MdkkAX-_9eom649npAYaepJj611DY4eEuNnw/viewform">Click Here to register</a> for training <strong>within 7 days</strong>, or we cannot place you on the priority list. </li>
+  <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdDkG6S6TcK21MdkkAX-_9eom649npAYaepJj611DY4eEuNnw/viewform">Click Here to register</a> for training. Since your 7 day window has lapsed, we cannot place you on the priority list. </li>
 </ul>
 <br />
 

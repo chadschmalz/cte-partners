@@ -31,6 +31,7 @@
                 <option value="l2accepted" >L2 Acceptance Letter</option>
                 <option value="seatsFull" >Deferral: Employer Seats Full</option>
                 <option value="defer" >Deferral: No CTE Course</option>
+                <option value="regExpired" >Priority Registration Expired</option>
 
               </select>
             </div>

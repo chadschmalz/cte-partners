@@ -94,11 +94,13 @@
                Toggle column:
 
 
+               <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="0" style="text-align:center">Name</a>
                  <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="1" style="text-align:center">email</a>
                <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="2" style="text-align:center">phone</a>
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="3">Location</a>
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="4">Pathway</a>
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="5">Employer</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="6">EmployerAddress</a>
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="7">Semester</a>
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="8">Mentor</a>
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="9">Mentor Phone</a>
@@ -109,6 +111,7 @@
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="14" style="text-align:center">RESUME</a>
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="15" style="text-align:center">MOCK</a>
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="16" style="text-align:center">TA</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="20">Schedule</a>
                                        </div>
 
 
@@ -135,6 +138,8 @@
                                                 <th scope="col" style="text-align:center">RESUME Data</th>
                                                 <th scope="col"style="text-align:center" >MOCK Data</th>
                                                 <th scope="col" style="text-align:center">TA Data</th>
+                                                <th scope="col" >Schedule</th>
+
                                               </tr>
                                               </thead>
                                               <tbody >
@@ -152,6 +157,8 @@
                                      @endif
                                    </td>
                                      @if(count($student->internships->where('semester_id',$selectedSemester)) > 0 && $selectedSemester != 'all')
+
+
                                      @foreach($student->internships->where('semester_id',$selectedSemester) as $internship)
                                      <td>{{$internship->employer->name}}</td>
                                        <td>{{$internship->employer->address}}, {{$internship->employer->city}}, {{$internship->employer->state}} {{$internship->employer->zip}}</td>
@@ -198,6 +205,11 @@
                                      <td>{{$student->resume}}</td>
                                      <td>{{$student->mock}}</td>
                                      <td>{{$student->ta}}</td>
+                                     @if(count($student->semesters->where('semester_id',$selectedSemester)) > 0 )
+                                     <td>@foreach($student->semesters->where('semester_id',$selectedSemester) as $sem) {{$sem->schedule}} @endforeach</td>
+                                     @else
+                                     <td></td>
+                                     @endif
                                   </tr>
                                @endforeach
                              @endif

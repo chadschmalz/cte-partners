@@ -74,6 +74,57 @@ $app.locations = function(){
           }
         });
 }
+$app.counselors= function(){
+
+var counselorUpdate = document.getElementById('addCounselorModal');
+    counselorUpdate.addEventListener('show.bs.modal', function (event) {
+      var button = event.relatedTarget;
+      console.log(button.getAttribute('data-bs-action'));
+      if(button.getAttribute('data-bs-action') == 'counselorupdate'){
+        // Button that triggered the modal
+        $('#counselorform').attr('action', '/counselorupdate');
+        $('#id').val(button.getAttribute('data-bs-id'));
+        $('#name').val(button.getAttribute('data-bs-name'));
+        $('#email').val(button.getAttribute('data-bs-email'));
+        $('#school').val(button.getAttribute('data-bs-school'));
+        $('#assignment').val(button.getAttribute('data-bs-assignment'));
+
+        var sel = document.getElementById('school');
+        var opts = sel.options;
+        for (var opt, j = 0; opt = opts[j]; j++) {
+          if (opt.value == button.getAttribute('data-bs-school')) {
+            sel.selectedIndex = j;
+            break;
+          }
+        }
+
+
+      }
+      else{
+        $('#counselorform').attr('action', '/counseloradd');
+        $('#id').val(0);
+        $('#name').val();
+        $('#email').val();
+        $('#school').val();
+        $('#assignment').val();
+
+      }
+    });
+
+    $('#counselorremoveModal').on('show.bs.modal', function (event) {
+      var button = event.relatedTarget;
+        // Button that triggered the modal
+        $('#counselorDestroyform').attr('action', '/removecounselor/'+button.getAttribute('data-bs-id'));
+        $('#counselorname').html(button.getAttribute('data-bs-name'));
+        $('#cid').val(button.getAttribute('data-bs-id'));
+
+
+
+    });
+
+
+}
+
 $app.studentdetail = function(){
 
     $('.message').delay(3000).fadeOut();
@@ -208,6 +259,8 @@ $app.studentdetail = function(){
           $('.stnotes').val();
         }
       });
+
+
 
 
 
@@ -719,7 +772,9 @@ $app.route = function(){
         case 'students':
             $app.student();
             break;
-
+        case 'counselors':
+            $app.counselors();
+            break;
         case 'studentdetail':
             $app.studentdetail();
             break;

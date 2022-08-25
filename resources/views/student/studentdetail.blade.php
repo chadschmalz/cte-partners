@@ -55,7 +55,7 @@
         @endif
       </div>
         <div class=" col-md-2 col-lg-2 text-end p-1" >
-        <div class="form-control btn btn-sm btn-success " data-bs-toggle="modal" data-bs-target="#letterEmailModal">Send Application Email</div>
+        <div class="form-control btn btn-sm btn-success " data-bs-toggle="modal" data-bs-target="#letterEmailModal">Send Student Email</div>
         </div>
         <div class=" col-md-1 col-lg-1 text-end p-1" style="display:none;">
         <div href="/deferemail/{{$student->id}}"><div class="form-control btn btn-sm btn-secondary " data-bs-toggle="modal" data-bs-target="#letterEmailModal" data-bs-mode="deferemail">Defer Email</div></div>

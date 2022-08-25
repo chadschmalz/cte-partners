@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\counselor;
+use App\Models\location;
 
 class CounselorController extends Controller
 {
@@ -14,8 +15,9 @@ class CounselorController extends Controller
      */
     public function index()
     {
+
       return view('counselors.index')->with([
-        'semesters'=>semester::where('id',">",0)->orderBy('school_year')->orderBy('semester_desc')->get(),
+        'counselors'=>counselor::where('id',">",0)->orderBy('school')->orderBy('assignment')->get(),'locations'=>location::where('id','>',0)->orderBy('location')->get(),
       ]);
 
     }
@@ -30,15 +32,15 @@ class CounselorController extends Controller
     public function store(Request $request)
     {
 
-        $semester = new semester;
+        $counselor = new counselor;
 
-        $semester->school_year = $request->school_year;
-        $semester->semester_desc = $request->semester_desc;
-        $semester->semester_enddt = $request->semester_enddt;
-        $semester->status = $request->semester_status;
-        $semester->save();
-        // $semester->school_year = $request->school_year;
-        return redirect('/semesters');
+        $counselor->name = $request->name;
+        $counselor->email = $request->email;
+        $counselor->school = $request->school;
+        $counselor->location_id = location::where('location',$request->school)->get()[0]->id;
+        $counselor->assignment = $request->assignment;
+        $counselor->save();
+        return redirect('/counselors');
     }
 
 
@@ -51,23 +53,17 @@ class CounselorController extends Controller
      */
     public function update(Request $request)
     {
-      if($request->semester_status == 'active')
-        {
-          foreach (semester::where('status','active')->where('id','<>',$request->semester_id)->get() as $key => $value) {
-            $value->status = "inactive";
-            $value->save();
-          }
-        }
 
-      $semester = semester::find($request->semester_id);
+      $counselor = counselor::find($request->id);
 
-      $semester->school_year = $request->school_year;
-      $semester->semester_desc = $request->semester_desc;
-      $semester->semester_enddt = $request->semester_enddt;
-      $semester->status = $request->semester_status;
-      $semester->save();
-      // $semester->school_year = $request->school_year;
-      return redirect('/semesters');
+      $counselor->name = $request->name;
+      $counselor->email = $request->email;
+      $counselor->school = $request->school;
+      $counselor->location_id = location::where('location',$request->school)->get()[0]->id;
+      $counselor->assignment = $request->assignment;
+      $counselor->save();
+      // $counselor->school_year = $request->school_year;
+      return redirect('/counselors');
     }
 
     /**
@@ -78,6 +74,7 @@ class CounselorController extends Controller
      */
     public function destroy($id)
     {
-        //
+      counselor::destroy($id);
+      return redirect('/counselors');
     }
 }

@@ -52,6 +52,7 @@
         <div class="collapse " id="system-collapse">
           <ul class="nav flex-column mx-1">
             <li class="nav-item mx-4 {{Request::is('/utils') ? 'active':''}}"><a href="/utils" class="nav-link">Utilities</a></li>
+            <li class="nav-item mx-4 {{Request::is('counselors') ? 'active':''}}"><a href="/counselors" class="nav-link">Manage Counselors</a></li>
             <li class="nav-item mx-4 {{Request::is('semesters') ? 'active':''}}"><a href="/semesters" class="nav-link">Manage Semesters</a></li>
             <li class="nav-item mx-4 {{Request::is('locations') ? 'active':''}}"><a href="/locations" class="nav-link">Manage Locations</a></li>
             <li class="nav-item mx-4 {{Request::is('pathways') ? 'active':''}}"><a href="/pathways" class="nav-link">Manage Pathways</a></li>
