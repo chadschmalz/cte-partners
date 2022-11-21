@@ -28,6 +28,7 @@
               <select class="form-select" id="emailtype" name="emailtype" aria-label="Default select example" >
 
                 <option value="acceptance" >L1 Acceptance Letter Email</option>
+                <option value="futureacceptance" >Future Student Acceptance Letter Email</option>
                 <option value="l2accepted" >L2 Acceptance Letter</option>
                 <option value="seatsFull" >Deferral: Employer Seats Full</option>
                 <option value="defer" >Deferral: No CTE Course</option>

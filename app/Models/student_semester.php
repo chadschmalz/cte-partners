@@ -23,6 +23,10 @@ class student_semester extends Model
        {
            return $this->belongsTo('App\Models\semester','semester_id');
        }
+       public function pathway()
+       {
+           return $this->belongsTo('App\Models\pathway','pathway_id');
+       }
        
 
 }

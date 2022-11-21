@@ -61,8 +61,10 @@ class StudentImportController extends Controller
           $student = new student();
 
         foreach ($request->fields as $index => $field) {
-
-              if($field == 'schoolname'){
+              if($field == 'schoolname' && left($row[$index],5) == 'OTHER'){
+                $student->location_id = 48;
+              }
+              else if($field == 'schoolname'){
                 $student->location_id = location::
                 where(function ($query) use ($request,$row,$index) {
                                               $query->where('location_desc$student->like$student->%'.$row[$index].'%')

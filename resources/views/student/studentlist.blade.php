@@ -48,7 +48,7 @@
             <option value="unassigned" {{ $selectedSemester=='unassigned'?'selected':''}}>Unassigned</option>
             <option value="all" {{ $selectedSemester=='all'?'selected':''}}>All</option>
               @foreach($semesters as $semester)
-                      <option value="{{$semester->id}}" {{ $selectedSemester==$semester->id?'selected':''}}>{{$semester->semester_desc}}</option>
+                      <option value="{{$semester->id}}" {{ $selectedSemester==$semester->id?'selected':''}}>{{ $semester->status=="active"  ?'Current: ':''}}{{$semester->semester_desc}}</option>
               @endforeach
 
             @endif
@@ -151,12 +151,12 @@
                                  <td>{{$student->email}}</td>
                                  <td>{{$student->phone}}</td>
                                      <td>@if($student->location_id != NULL){{$student->location->location_desc}}@else  {{$student->school_name }}  @endif</td>
-                                     <td>
-                                       @if(isset($student->pathway))
-                                       {{$student->pathway->pathway_desc}}
+                                     @if(count($student->semesters->where('semester_id',$selectedSemester)) > 0 )
+                                     <td>@foreach($student->semesters->where('semester_id',$selectedSemester) as $sem) {{$sem->pathway->pathway_desc}} @endforeach</td>
+                                     @else
+                                     <td>@foreach($student->semesters as $sem) {{$sem->pathway->pathway_desc}}, @endforeach</td>
                                      @endif
-                                   </td>
-                                     @if(count($student->internships->where('semester_id',$selectedSemester)) > 0 && $selectedSemester != 'all')
+                                    @if(count($student->internships->where('semester_id',$selectedSemester)) > 0 && $selectedSemester != 'all')
 
 
                                      @foreach($student->internships->where('semester_id',$selectedSemester) as $internship)
@@ -194,7 +194,7 @@
                                        <td></td>
                                        <td></td>
                                        <td></td>
-                                     @endif
+                                    @endif
                                      <td>@if($student->lettersent_at != NULL){{date('m/d/Y',strtotime($student->lettersent_at))}}@endif</td>
                                      <td style="text-align:center"><input class="updateTracking " id="la{{$student->id}}" type="checkbox" class="form-check-input"  data-studentid="{{$student->id}}" {{$student->la == 'Y'?'checked':''}}></td>
                                      <td>{{$student->ws1}}</td>

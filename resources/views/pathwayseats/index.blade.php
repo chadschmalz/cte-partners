@@ -14,7 +14,7 @@
           <option value="all" {{!isset($selectedCluster)?'selected':''}}></option>
           @if(isset($semesters))
             @foreach($semesters as $semester)
-              <option value="{{$semester->id}}" {{ $activesemester==$semester->id  ?'selected':''}}>{{$semester->semester_desc}}</option>
+              <option value="{{$semester->id}}" {{ $activesemester==$semester->id  ?'selected':''}}>{{ $semester->status=="active"  ?'Current: ':''}}{{$semester->semester_desc}}</option>
             @endforeach
           @endif
         </select>
