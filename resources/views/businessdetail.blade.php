@@ -10,11 +10,25 @@
 @include('modals.business.removeInternship')
 @include('modals.poc.add')
 @include('modals.poc.remove')
+@include('modals.business.businessEmailModal')
 
 <div class="container-fluid">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h5">Business Detail</h1>
-      </div>
+      
+@include('inc.results')
+
+        <div class="row py-3 mb-3 border-bottom">
+          <div class=" col-md-8 col-lg-8">
+            <h1 class="h5">Business Detail</h1>
+          </div>
+          <div class=" col-md-2 col-lg-2 p-1">
+          </div>
+          <div class=" col-md-2 col-lg-2 text-end p-1" >
+            @if(Auth::user()->name == 'Chad Schmalz')
+            <div class="form-control btn btn-sm btn-success " data-bs-toggle="modal" data-bs-target="#letterEmailModal">Send Business Email</div>
+            @endif
+          </div>
+        </div>
+      
       <div class="row">
       <div class="col-md-12 col-lg-12">
         <div class="card">
@@ -92,97 +106,110 @@
                         </div>
                         </div>
 
-                          <div class="row mt-2">
-                            <div class="col-md-12 col-lg-12">
-                              <div class="card">
-                                <div class="card-header">
-                                  <div class="h5">Notes</div>
-                                </div>
-                                <div class="card-body">
-                                            {{$business->notes}}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row mt-2">
-                          <div class=" col-md-6 col-lg-6">
+                        <div class="row mt-2">
+                          <div class="col-md-8 col-lg-8">
                             <div class="card">
-                            <div class="card-header">
-                              <div class="row d-flex justify-content-between ">
-                                <div class="h6 col-md-6 col-lg-6">
-                                    Clusters & Pathways
-                                  </div>
-                                  <div class=" col-md-2 col-lg-2 text-end">
-                                    <div class="btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#AddPathwaySemesterModal">Add</div>
-
-                                  </div>
-                                    <div class=" col-md-3 col-lg-3 text-end">
-                                      <div class="btn btn-sm btn-danger " data-bs-toggle="modal" data-bs-target="#pathwayModal">DropAll/Add New</div>
-
-                                    </div>
-                                  </div>
-                                </div>
-                                    <div class="card-body">
-                                      <?php $curCluster = 0;?>
-                                      <div class="row">
-                                        <table class="table table-sm table-stripped">
-                                          <tr>
-                                            <th>Pathway</th>
-                                            <th>Cluster</th>
-                                            <th>BegDate</th>
-                                            <th>EndDate</th>
-                                            <th>Seats</th>
-                                            <th></th>
-                                          </tr>
-                                        @foreach($business->pathways as $pathway)
-                                            <tr >
-                                              <td>{{$pathway->pathway->pathway_desc}}</td><td style="font-size: 0.65em;">({{$pathway->cluster->cluster_desc}})</td><td>{{$pathway->begdt <> NULL ? date('m/d/Y',strtotime($pathway->begdt)):''}}</td>
-                                              <td>{{$pathway->enddt <> NULL ? date('m/d/Y',strtotime($pathway->enddt)):''}}</td>
-                                              <td style="text-align:center">{{$pathway->seats}}</td>
-                                              <td><div class="btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#AddPathwaySemesterModal" data-bs-action="edit"
-                                                data-bs-begdt="{{$pathway->begdt <> NULL ? date('m/d/Y',strtotime($pathway->begdt)):''}}" data-bs-enddt="{{$pathway->enddt <> NULL ? date('m/d/Y',strtotime($pathway->enddt)):''}}"
-                                                data-bs-pathway="{{$pathway->pathway->id}}" data-bs-seats="{{$pathway->seats}}" data-bs-recordid="{{$pathway->id}}">Edit</div></td>
-                                            </tr >
-                                       @endforeach
-                                     </table>
+                              <div class="card-header">
+                                <div class="h5">Notes</div>
+                              </div>
+                              <div class="card-body">
+                                          {{$business->notes}}
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div class=" col-md-6 col-lg-6">
-                          <div class="card">
-                          <div class="card-header">
-
+                          <div class=" col-md-4 col-lg-4">
+                            <div class="card">
+                              <div class="card-header">
                                 <div class="row d-flex justify-content-between ">
                                   <div class="h6 col-md-8 col-lg-8">
-                                      Program Involvement
-                                    </div>
-                                      <div class=" col-md-2 col-lg-2 text-end">
-                                        <div class="btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#involveModal">Edit</div>
-
-                                      </div>
-                                    </div>
+                                      Students Assigned
+                                  </div>
+                                  <div class=" col-md-2 col-lg-2 text-end">
+                                  </div>
+                                </div>
                               </div>
-                                  <div class="card-body">
-                                    <div class="row">
-                                      @foreach($business->activities as $activity)
-                                          <div class="mx-3">-{{$activity->activity->activity_desc}}</div>
-                                     @endforeach
-
-
+                              <div class="card-body">
+                                <div class="row ">
+                                  @foreach($business->studentinternships as $intern)
+                                      <div class="mx-1"><a   href="/studentdetail/{{$intern->student->id}}" target="_blank">{{$intern->student->name}}</a> Semester:{{$intern->semester->semester_desc}}</div>
+                                  @endforeach
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                        </div>
-            </div>
-
-
-
+                        
+<div class="row mt-2">
+  <div class=" col-md-8 col-lg-8">
+    <div class="card">
+      <div class="card-header">
+        <div class="row d-flex justify-content-between ">
+          <div class="h6 col-md-6 col-lg-6">
+              Clusters & Pathways
+          </div>
+          <div class=" col-md-2 col-lg-2 text-end">
+            <div class="btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#AddPathwaySemesterModal">Add</div>
+          </div>
+          <div class=" col-md-3 col-lg-3 text-end">
+            <div class="btn btn-sm btn-danger " data-bs-toggle="modal" data-bs-target="#pathwayModal">DropAll/Add New</div>
 
           </div>
         </div>
       </div>
+      <div class="card-body">
+        <?php $curCluster = 0;?>
+        <div class="row">
+          <table class="table table-sm table-stripped">
+            <tr>
+              <th>Pathway</th>
+              <th>Cluster</th>
+              <th>BegDate</th>
+              <th>EndDate</th>
+              <th>Seats</th>
+              <th></th>
+            </tr>
+            @foreach($business->pathways as $pathway)
+                <tr >
+                  <td>{{$pathway->pathway->pathway_desc}}</td><td style="font-size: 0.65em;">({{$pathway->cluster->cluster_desc}})</td><td>{{$pathway->begdt <> NULL ? date('m/d/Y',strtotime($pathway->begdt)):''}}</td>
+                  <td>{{$pathway->enddt <> NULL ? date('m/d/Y',strtotime($pathway->enddt)):''}}</td>
+                  <td style="text-align:center">{{$pathway->seats}}</td>
+                  <td><div class="btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#AddPathwaySemesterModal" data-bs-action="edit"
+                    data-bs-begdt="{{$pathway->begdt <> NULL ? date('m/d/Y',strtotime($pathway->begdt)):''}}" data-bs-enddt="{{$pathway->enddt <> NULL ? date('m/d/Y',strtotime($pathway->enddt)):''}}"
+                    data-bs-pathway="{{$pathway->pathway->id}}" data-bs-seats="{{$pathway->seats}}" data-bs-recordid="{{$pathway->id}}">Edit</div></td>
+                </tr >
+            @endforeach
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class=" col-md-4 col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="row  ">
+          <div class="h6 col-md-9 col-lg-9">
+            Program Involvement
+          </div>
+          <div class=" col-md-2 col-lg-2 text-end">
+            <div class="btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#involveModal">Edit</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          @foreach($business->activities as $activity)
+              <div class="mx-3">-{{$activity->activity->activity_desc}}</div>
+          @endforeach
+        </div>
+      </div>                          
+    </div>
+  </div>
+</div>
+
+
+
+
 
 
       <div class="row mt-2">

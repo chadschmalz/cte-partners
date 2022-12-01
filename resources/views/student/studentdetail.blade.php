@@ -11,55 +11,27 @@
 
 <div class="container-fluid">
 
-
-<div class="row">
-@if(session('success'))
-<div class="container pt-1 message">
-      <div class="alert alert-success">
-      {{session('success')}}
-      </div>
-    </div>
-@elseif(session('error'))
-    <div class="container pt-1 message">
-          <div class="alert alert-danger">
-          {{session('error')}}
-          </div>
-        </div>
-@elseif(isset($success))
-    <div class="container pt-1 message">
-          <div class="alert alert-success">
-          {{$success}}
-          </div>
-        </div>
-@elseif(session('info'))
-    <div class="container pt-1 message">
-          <div class="alert alert-warning">
-          {{session('info')}}
-          </div>
-        </div>
-
-@endif
-</div>
+@include('inc.results')
 
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center ">
       </div>
-        <div class="row py-3 mb-3 border-bottom">
+      <div class="row py-3 mb-3 border-bottom">
         <div class=" col-md-8 col-lg-8">
-        <h1 class="h5">Student Detail</h1>
-      </div>
-      <div class=" col-md-2 col-lg-2 p-1">
-        @if($student->onboarding == 'Y')
-        <a href="/onboardingComplete/{{$student->id}}"><div class="form-control btn btn-sm btn-info " >Remove from Unassigned</div></a>
-        @else
-        <a href="/backtounassigned/{{$student->id}}"><div class="form-control btn btn-sm btn-warning " >Push back to Unassigned</div></a>
-        @endif
-      </div>
+          <h1 class="h5">Student Detail</h1>
+        </div>
+        <div class=" col-md-2 col-lg-2 p-1">
+          @if($student->onboarding == 'Y')
+            <a href="/onboardingComplete/{{$student->id}}"><div class="form-control btn btn-sm btn-info " >Remove from Unassigned</div></a>
+          @else
+            <a href="/backtounassigned/{{$student->id}}"><div class="form-control btn btn-sm btn-warning " >Push back to Unassigned</div></a>
+           @endif
+        </div>
         <div class=" col-md-2 col-lg-2 text-end p-1" >
-        <div class="form-control btn btn-sm btn-success " data-bs-toggle="modal" data-bs-target="#letterEmailModal">Send Student Email</div>
+          <div class="form-control btn btn-sm btn-success " data-bs-toggle="modal" data-bs-target="#letterEmailModal">Send Student Email</div>
         </div>
         <div class=" col-md-1 col-lg-1 text-end p-1" style="display:none;">
-        <div href="/deferemail/{{$student->id}}"><div class="form-control btn btn-sm btn-secondary " data-bs-toggle="modal" data-bs-target="#letterEmailModal" data-bs-mode="deferemail">Defer Email</div></div>
-      </div>
+          <div href="/deferemail/{{$student->id}}"><div class="form-control btn btn-sm btn-secondary " data-bs-toggle="modal" data-bs-target="#letterEmailModal" data-bs-mode="deferemail">Defer Email</div></div>
+        </div>
 
       </div>
       <div class="row">

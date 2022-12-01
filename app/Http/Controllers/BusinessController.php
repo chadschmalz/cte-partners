@@ -14,6 +14,8 @@ use App\Models\business_pathway;
 use App\Models\business_internship;
 use App\Models\semester;
 
+use App\Mail\BusinessMail;
+
 class BusinessController extends Controller
 {
     /**
@@ -59,15 +61,7 @@ class BusinessController extends Controller
       }
       else{
         $businesses =  business::where('name','like','%')->where('next_internship','like',$request->Status)->orderBy('name', 'asc')->get();
-        //
-      // $businesses =  business::
-      // whereIn('business.id',business_pathway::where('pathway_id','like',$selectedpathway=='all'||$selectedpathway==NULL?'%':$selectedpathway)->pluck('business_id'))
-      // ->whereIn('business.id',business_activity::where('activity_id', $selectedactivity=='all'||$selectedactivity==NULL?'%':$selectedactivity)->pluck('business_id'))
-      //       ->join('business_pathways', 'business.id', '=', 'business_pathways.business_id')
-      //       ->select( 'business.*')
-      //       ->distinct()
-      //       ->orderBy('business.name', 'asc')
-      //       ->get();
+        
           }
 
       if($selectedcluster==NULL || $selectedcluster=='all')
@@ -550,14 +544,7 @@ class BusinessController extends Controller
              // $poc->notes = $pocNotes;
              // $poc->mentor = $pocMentor;
              $poc->save();
-             //
-             // $clusterid = pathway::find($pathway)->cluster->id;
-             //
-             // $newpath = new business_pathway;
-             // $newpath->business_id = $business->id;
-             // $newpath->cluster_id = $clusterid;
-             // $newpath->pathway_id = $pathway;
-             // $newpath->save();
+             
 
       }
       $clusters =  cluster::all();
@@ -618,8 +605,14 @@ class BusinessController extends Controller
      */
     public function destroy($id)
     {
+      $biz = business::find($id);
+      
+      if(count($biz->studentinternships) > 0)
+        return redirect('/businessdetail/'.$id)->with(['error'=>'Unable to delete: Business is assigned to one or more students.']); 
+      
       business::destroy($id);
-       return redirect('/');
+      
+      return redirect('/')->with(['success'=>'Business Removed Successfully.']);
     }
     public function restore(Request $request)
     {
@@ -735,6 +728,53 @@ class BusinessController extends Controller
 
 
               return response()->json($result);
+    }
+
+    public function businessemail($id,Request $request)
+    {
+return $request;
+      $business = business::find($id);
+ 
+      $v = "/[a-zA-Z0-9_\-.+]+@[a-zA-Z0-9\-]+.[a-zA-Z]+/";
+      if($request->emailtype == 'placement'){
+            if($business->pocs->where('mentor','Y')->email != NULL && (bool)preg_match($v, $business->pocs->where('mentor','Y')->email)){
+              \Mail::to(array('email'=>'chad.schmalz@washk12.org'))
+              ->send(new BusinessMail($business));
+              return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and parent and councilor email)']);
+            }
+
+            return redirect('/studentdetail/' . $id)->with(['error'=>'Email Error']);
+        }else if($request->emailtype == 'futureacceptance'){
+              }else if($request->emailtype == 'l2accepted'){
+              if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
+                \Mail::to(array('email'=>$student->email))
+                ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
+                ->send(new L2AcceptanceMail($student));
+                return redirect('/studentdetail/' . $id)->with(['success'=>'L2 Acceptance Email Sent(sent to student and parent and councilor email)']);
+              }else if(isset($counselor) && $counselor->email != NULL && isset($request->includecounselor)){
+                \Mail::to(array('email'=>$student->email))
+                ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
+                ->send(new L2AcceptanceMail($student));
+                return redirect('/studentdetail/' . $id)->with(['success'=>'L2 Acceptance Email Sent(sent to student and councilor email)']);
+              }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
+                \Mail::to(array('email'=>$student->email))
+                ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
+                ->send(new L2AcceptanceMail($student));
+                return redirect('/studentdetail/' . $id)->with(['success'=>'L2 Acceptance Email Sent(sent to student and parent email)']);
+
+              }else if($student->emerg_email == NULL ){
+                \Mail::to(array('email'=>$student->email))
+                ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
+                ->send(new L2AcceptanceMail($student));
+                return redirect('/studentdetail/' . $id)->with(['success'=>'L2 Acceptance Email Sent (only sent to student - missing parent email)']);
+
+              }else{
+                      return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
+              }
+
+              return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent']);
+          }
+
     }
 
 }

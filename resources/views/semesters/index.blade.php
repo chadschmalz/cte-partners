@@ -42,7 +42,7 @@
                                      <td>{{$semester->semester_enddt}}</td>
                                      <td>{{$semester->status=='active'?$semester->status:''}}</td>
                                      <td>              <div class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSemesterModal" data-bs-id="{{$semester->id}}" data-bs-year="{{$semester->school_year}}"
-                                                             data-bs-desc="{{$semester->semester_desc}}" data-bs-enddt="{{$semester->semester_enddt}}" data-bs-status="{{$semester->status}}"
+                                                             data-bs-desc="{{$semester->semester_desc}}" data-bs-enddt='{{date_format(date_create($semester->semester_enddt),"Y-m-d")}}' data-bs-status="{{$semester->status}}"
                                                               data-bs-action="semesterupdate">Edit</div></td>
 
                                   </tr>

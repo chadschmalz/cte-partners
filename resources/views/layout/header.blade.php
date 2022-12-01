@@ -6,7 +6,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
     <ul class="nav navbar-nav px-3 "><li class="nav-item text-light ">
-<h5>WBL Partners</h5></li>
+<h5>{{env('APP_TITLE','WBL')}}</h5></li>
 </ul>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">

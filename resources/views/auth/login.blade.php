@@ -31,7 +31,7 @@
       <div class="card-group">
         <div class="card p-4 ">
           <div class="card-body">
-            <h1>Partners Login</h1>
+            <h1>{{env('APP_TITLE','WBL System')}} Login</h1>
             <p class="text-muted">Click the button below to log in</p>
             <a href="{{ url('/googlelogin') }}"><img src="/img/btn_google_signin_dark_normal_web.png"></a>
           </div>

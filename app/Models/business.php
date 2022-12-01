@@ -29,7 +29,11 @@ class business extends Model
      {
          return $this->hasMany('App\Models\business_activity');
      }
-     public function internships()
+     public function studentinternships()
+      {
+          return $this->hasMany('App\Models\student_internship','business_id');
+      }
+      public function internships()
       {
           return $this->hasMany('App\Models\business_internship');
       }

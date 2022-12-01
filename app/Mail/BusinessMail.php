@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 use App\Models\student;
 
-class ApplicationMail extends Mailable
+class BusinessMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -35,7 +35,7 @@ class ApplicationMail extends Mailable
      */
     public function build()
     {
-        return $this->from('washk12internships@washk12.org')->subject('Internship Application (Response Required)')->markdown('emails.applicationaccepted');
+        return $this->from('mike.hassler@washk12.org')->subject('Washk12Internships - Partner Update')->markdown('emails.businessnotify');
     }
 
     public function setmarkdown($markdown){

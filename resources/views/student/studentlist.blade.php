@@ -48,7 +48,7 @@
             <option value="unassigned" {{ $selectedSemester=='unassigned'?'selected':''}}>Unassigned</option>
             <option value="all" {{ $selectedSemester=='all'?'selected':''}}>All</option>
               @foreach($semesters as $semester)
-                      <option value="{{$semester->id}}" {{ $selectedSemester==$semester->id?'selected':''}}>{{ $semester->status=="active"  ?'Current: ':''}}{{$semester->semester_desc}}</option>
+                      <option value="{{$semester->id}}" {{ $selectedSemester==$semester->id?'selected':''}}>{{ $semester->status=="active"  ?'Current: ':($semester->semester_enddt < now()  ?'Prev: ':'')}}{{$semester->semester_desc}}</option>
               @endforeach
 
             @endif
@@ -152,9 +152,11 @@
                                  <td>{{$student->phone}}</td>
                                      <td>@if($student->location_id != NULL){{$student->location->location_desc}}@else  {{$student->school_name }}  @endif</td>
                                      @if(count($student->semesters->where('semester_id',$selectedSemester)) > 0 )
-                                     <td>@foreach($student->semesters->where('semester_id',$selectedSemester) as $sem) {{$sem->pathway->pathway_desc}} @endforeach</td>
+                                     <td>@foreach($student->semesters->where('semester_id',$selectedSemester) as $sem) @if(isset($sem->pathway)) {{$sem->pathway->pathway_desc}} @endif @endforeach</td>
+                                     @elseif($selectedSemester == 'all' )
+                                     <td>@foreach($student->semesters as $sem) @if(isset($sem->pathway)) {{$sem->pathway->pathway_desc}}@endif, @endforeach</td>
                                      @else
-                                     <td>@foreach($student->semesters as $sem) {{$sem->pathway->pathway_desc}}, @endforeach</td>
+                                     <td></td>
                                      @endif
                                     @if(count($student->internships->where('semester_id',$selectedSemester)) > 0 && $selectedSemester != 'all')
 

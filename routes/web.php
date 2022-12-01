@@ -52,6 +52,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/bizpathwayupdate', 'BusinessController@updatepathway')->name('bizpathwayupdate');
 	Route::get('/businessActivePathway/{cluster}/{pathway}/{activity}/{semester}', 'BusinessController@businessActivePathway')->name('businessActivePathway');
 
+	Route::post('/businessemail/{id}', 'BusinessController@businessemail')->name('businessemail');
+
 	Route::post('/internshipupdate', 'BusinessController@internshipupdate')->name('internshipupdate');
 	Route::get('/internshipdestroy/{id}', 'BusinessController@internshipdestroy')->name('internshipdestroy');
 	Route::post('/businessinvolvementupdate', 'BusinessController@involvementupdate')->name('businessinvolvementupdate');

@@ -331,6 +331,17 @@ class StudentController extends Controller
 
       $v = "/[a-zA-Z0-9_\-.+]+@[a-zA-Z0-9\-]+.[a-zA-Z]+/";
       if($request->emailtype == 'acceptance'){
+
+        if(Auth::user()->nam == 'Chad Schmalz'){
+                Mail::raw([], function($message) {
+                  $message->from('washk12internships@washk12.org', 'WCSD WBL');
+                  $message->to('chad.schmalz@washk12.org');
+                  $message->subject('Internship Update');
+                  $message->setBody( '5% off its awesome Go get it now !' );
+                  $message->addPart("5% off its awesome\n\nGo get it now!", 'text/plain');
+              });
+                      return redirect('/studentdetail/' . $id)->with(['success'=>'Simple Text Email Sent']);
+        }
             if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
               \Mail::to(array('email'=>$student->email))
               ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))

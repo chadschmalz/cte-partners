@@ -1,7 +1,7 @@
 @component('mail::message')
-# Application Acceptance Letter
+# Partner Update
 
-Hello {{$student->fname." ".$student->lname}},
+Hello {{$business->pocs[0]->name}},
 
 
 Congratulations! Your online internship application has been accepted and is being processed. We are excited to meet you and help you achieve your goals.<br />
@@ -15,6 +15,7 @@ Congratulations! Your online internship application has been accepted and is bei
   <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdDkG6S6TcK21MdkkAX-_9eom649npAYaepJj611DY4eEuNnw/viewform">Click Here to choose your training preference</a> <strong>within 7 days</strong>, or we cannot guarantee your spot. </li>
   <li>Add the CTE Internship class to your schedule (must be either the first two periods or last two periods). (You can earn up to one full credit per semester.)</li>
 </ol>
+<br />
 
 <br />If your situation has changed, and you are no longer able to pursue the internship, let us know as soon as possible.
 <div style="text-align:center">

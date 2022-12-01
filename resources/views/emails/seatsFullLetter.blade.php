@@ -18,13 +18,10 @@ In the event a spot becomes available, in your semester of choice, students that
 <br />
 
 <div style="text-align:center">
-<u>Internship Contacts</u>:<br /><br />
-<strong> Sophia Ford | Career Coach</strong><br />
-sophia.ford@washk12.org | (435) 656-1076<br />
-Schools: Desert Hills, Dixie,  & Snow Canyon<br /><br />
-<strong>Mike Hassler - Work-Based Learning Coordinator</strong><br />
-mike.hassler@washk12.org | 435-817-5714<br />
-School: Crimson Cliffs, Pineview, Hurricane, Water Canyon, Millcreek, & Enterprise<br /><br />
+<u>Please contact us with the following</u>:<br /><br />
+washk12internships@washk12.org | (435)673-3553 x5162<br /><br />
+<strong>Jessica Hogan | WBL Office Secretary</strong><br /><br />
+
 </div>
 
 You will be receiving more communication as we get closer. Work hard, keep your G.P.A. high, and continue to be engaged in your classes. If you have any questions please feel free to contact the appropriate contact listed above.<br />
