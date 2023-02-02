@@ -20,18 +20,21 @@
           <h1 class="h5">Student Detail</h1>
         </div>
         <div class=" col-md-2 col-lg-2 p-1">
-          @if($student->onboarding == 'Y')
-            <a href="/onboardingComplete/{{$student->id}}"><div class="form-control btn btn-sm btn-info " >Remove from Unassigned</div></a>
-          @else
-            <a href="/backtounassigned/{{$student->id}}"><div class="form-control btn btn-sm btn-warning " >Push back to Unassigned</div></a>
-           @endif
+          @if(Auth::user()->hasAnyRole(['superuser','fulledit','studenteditor']))
+
+            @if($student->onboarding == 'Y')
+              <a href="/onboardingComplete/{{$student->id}}"><div class="form-control btn btn-sm btn-info " >Remove from Unassigned</div></a>
+            @else
+              <a href="/backtounassigned/{{$student->id}}"><div class="form-control btn btn-sm btn-warning  " >Push back to Unassigned</div></a>
+            @endif
+          @endif
         </div>
         <div class=" col-md-2 col-lg-2 text-end p-1" >
+        @if(Auth::user()->hasAnyRole(['superuser','fulledit','studenteditor','studentnotify']))
           <div class="form-control btn btn-sm btn-success " data-bs-toggle="modal" data-bs-target="#letterEmailModal">Send Student Email</div>
+        @endif
         </div>
-        <div class=" col-md-1 col-lg-1 text-end p-1" style="display:none;">
-          <div href="/deferemail/{{$student->id}}"><div class="form-control btn btn-sm btn-secondary " data-bs-toggle="modal" data-bs-target="#letterEmailModal" data-bs-mode="deferemail">Defer Email</div></div>
-        </div>
+        
 
       </div>
       <div class="row">
@@ -127,7 +130,9 @@
                                       <div class="h5">Semesters</div>
                                     </div>
                                     <div class="col-sm-2 col-md-3 col-lg-3 ">
-                                    <div class=" btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#addStudentSemesterModal">Add</div>
+                                    @if(Auth::user()->hasAnyRole(['superuser','fulledit','studenteditor']))
+                                      <div class=" btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#addStudentSemesterModal">Add</div>
+                                    @endif
                                   </div>
                                     </div>
                               </div>
@@ -168,7 +173,10 @@
                                     @endif
                                   </div>
                                   <div class="col-1">
+                                  @if(Auth::user()->hasAnyRole(['superuser','fulledit','studenteditor']))
+
                                     <div class=" btn btn-sm btn-danger m-1" data-bs-toggle="modal" data-bs-target="#removeStudentSemesterModal" data-semester="{{$sem->semester->semester_desc}}" data-semesterid="{{$sem->semester->id}}">X</div>
+                                    @endif
                                     </div>
                                   </div>
                                 @endforeach
@@ -216,7 +224,9 @@
                                     Employer/Internship  Assignment
                                   </div>
                                   <div class="col-md-2 col-lg-2 text-end">
+                                  @if(Auth::user()->hasAnyRole(['superuser','fulledit','studenteditor']))
                                   <div class="btn btn-sm btn-success ml-auto" data-bs-toggle="modal" data-bs-target="#InternshipAddModal">Add</div>
+                                  @endif
                                 </div>
                                   </div>
                                 </div>
@@ -264,7 +274,9 @@
                                                            @endif</div>
                                                          </td>
                                                       <td>
+                                                        @if(Auth::user()->hasAnyRole(['superuser','fulledit','studenteditor']))
                                                         <div class=" btn btn-sm btn-danger " data-bs-toggle="modal" data-bs-target="#internshipRemoveModal" data-bs-action="/removeInternship" data-bs-name="{{$student->name}}" data-bs-internshipid="{{$internship->id}}" data-bs-employername="{{$internship->employer->name}}">Remove</div>
+                                                        @endif
                                                        </td>
                                                    </tr>
                                                    @endforeach
@@ -280,13 +292,18 @@
                         </div>
                         <div class="row mt-2"><div class="col-8"></div>
                         <div class=" col-md-2 col-lg-2 ml-auto">
-                          <div class="form-control btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#addStudentModal"
+                        @if(Auth::user()->hasAnyRole(['superuser','fulledit','studenteditor']))
+
+                          <div class="form-control btn btn-sm btn-primary  " data-bs-toggle="modal" data-bs-target="#addStudentModal"
                           data-bs-action="/studentupdate"
                             data-bs-studentid="{{$student->id}}" data-bs-fname="{{$student->fname}}" data-bs-lname="{{$student->lname}}" data-bs-phone="{{$student->phone}}" data-bs-email="{{$student->email}}" data-bs-locationid="{{$student->location_id}}" data-bs-pathway="{{$student->pathway_id}}" data-bs-grad_year="{{$student->grad_year}}"  data-bs-emerg_email="{{$student->emerg_email}}" data-bs-emerg_contact="{{$student->emerg_contact}}" data-bs-notes="{{$student->notes}}"
                           >Edit</div>
+                          @endif
                         </div>
                           <div class=" col-md-2 col-lg-2 text-end">
-                            <div class="form-control btn btn-sm btn-danger " data-bs-toggle="modal" data-bs-target="#studentremoveModal">Remove Student</div>
+                        @if(Auth::user()->hasAnyRole(['superuser','fulledit','studenteditor']))
+                            <div class="form-control btn btn-sm btn-danger  " data-bs-toggle="modal" data-bs-target="#studentremoveModal">Remove Student</div>
+                            @endif
                           </div>
                       </div>
             </div>

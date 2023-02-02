@@ -113,7 +113,7 @@
               <select class="form-select" id="semester" name="semester_id" aria-label="Default select example" >
                 @if(isset($semesters))
                   @foreach($semesters as $sem)
-                          <option value="{{$sem->id}}" >{{$sem->semester_desc}}</option>
+                          <option value="{{$sem->id}}" @if($sem->status=='active') selected @endif>@if($sem->status=='active')Current: @endif{{$sem->semester_desc}}</option>
                   @endforeach
                 @endif
               </select>

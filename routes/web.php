@@ -28,10 +28,19 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
 // Any route within this group will redirect to the login page if called while logged out
 // For testing or to allow a route to be public, just move it out of this group.
-Route::group(['middleware' => 'auth'], function () {
+	// Route::get('/', function(){return abort(404);})->middleware(['auth', 'roles:404,systemerror,noaccess']);
+	Route::group(['middleware' => 'auth'], function () {
   // Route::get('/', function () {
   //     return view('layout/app');
   // });
+	
+  Route::group(['middleware' => 'roles:404,error,noaccess'], function (){
+	Route::get('/access', function(){ return abort(404);});
+	Route::get('/noaccess', function(){ return abort(404);});
+  
+	});
+  Route::group(['middleware' => 'roles:fulledit,fullaccess,superuser'], function (){
+
 	Route::get('/testSelect', function(){return view('modals.sample.testSelect');});
 	Route::get('/downloadSamplePartner', 'BusinessController@downloadsamplepartner')->name('samplepartner');
 	Route::post('/addPartners', 'BusinessController@uploadpartners')->name('uploadpartners');
@@ -132,6 +141,7 @@ Route::group(['middleware' => 'auth'], function () {
       return view('samples.dashboardTemplate');
   });
 
+});
 
 
 });

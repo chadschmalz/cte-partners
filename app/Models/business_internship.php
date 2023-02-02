@@ -18,5 +18,9 @@ class business_internship extends Model
         {
             return $this->belongsto('App\Models\business');
         }
+        public function pathway()
+        {
+            return $this->belongsto('App\Models\pathway');
+        }
 
 }

@@ -83,6 +83,7 @@ class BusinessController extends Controller
                   'pathways'=> $pathways,
                   'activitys'=> activity::all(),
                  'businesses'=> $businesses,
+                 'page'=> 'WBL Business Partners',
                );
         return view('business')->with($data);
     }
@@ -231,6 +232,7 @@ class BusinessController extends Controller
                   'pathways'=> $pathways,
                   'activitys'=> activity::all(),
                  'businesses'=> $businesses,
+                 'page'=> 'WBL ALL POCs',
                );
         return view('allContacts')->with($data);
     }
@@ -310,6 +312,8 @@ class BusinessController extends Controller
         'pathways'=> $pathways,
         'activitys'=> $activitys,
         'business'=> $business,
+        'page'=> 'WBL '.$business->name,
+
                  'pathways'=> pathway::where('id','like','%')->orderBy('pathway_desc')->get(),
                );
         return view('businessdetail')->with($data);
@@ -414,7 +418,8 @@ class BusinessController extends Controller
     {
 
         $internship = business_internship::find($request->internid);
-        $internship->position_title = $request->interntitle;
+        $internship->position_title = $request->position_title;
+        $internship->pathway_id = $request->pathway_id;
         $internship->tier = $request->tier;
         $internship->entry_point = $request->entry_point;
         $internship->intern_length = $request->length;
@@ -735,6 +740,18 @@ class BusinessController extends Controller
 return $request;
       $business = business::find($id);
  
+
+   // if(Auth::user()->name == 'Chad Schmalz'){
+        //         Mail::raw([], function($message) {
+        //           $message->from('washk12internships@washk12.org', 'WCSD WBL');
+        //           $message->to('chad.schmalz@washk12.org');
+        //           $message->subject('Internship Update');
+        //           $message->setBody( '5% off its awesome Go get it now !' );
+        //           $message->addPart("5% off its awesome\n\nGo get it now!", 'text/plain');
+        //       });
+        //               return redirect('/studentdetail/' . $id)->with(['success'=>'Simple Text Email Sent']);
+        // }
+
       $v = "/[a-zA-Z0-9_\-.+]+@[a-zA-Z0-9\-]+.[a-zA-Z]+/";
       if($request->emailtype == 'placement'){
             if($business->pocs->where('mentor','Y')->email != NULL && (bool)preg_match($v, $business->pocs->where('mentor','Y')->email)){

@@ -43,6 +43,7 @@
           Integrations
         </a>
       </li>
+      @if(Auth::user()->hasAnyRole(['superuser','fulledit']))
 
       <li class="nav-item">
         <a class="nav-link  d-inline-flex align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#system-collapse" aria-expanded="false" href="/utils">
@@ -60,6 +61,8 @@
           </ul>
         </div>
       </li>
+    @endif
+
 
     </ul>
 

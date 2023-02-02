@@ -671,10 +671,31 @@ $app.businessdetail = function(){
                       if(button.getAttribute('data-bs-action') == '/internshipupdate'){
                         // Button that triggered the modal
                         document.getElementById('InternshipAddform').action = '/internshipupdate'
-                        $('.InternshipAddModalLabel').html('Edit Opportunity: '+ button.getAttribute('data-bs-interntitle'));
+                        $('.InternshipAddModalLabel').html('Edit Opportunity: '+ button.getAttribute('data-bs-position_title'));
+                        $('.position_title').val(button.getAttribute('data-bs-position_title'));
                         $('.internid').val(button.getAttribute('data-bs-internid'));
                         $('.interntitle').val(button.getAttribute('data-bs-interntitle'));
                         $('.internnotes').val(button.getAttribute('data-bs-notes'));
+                        var sel = document.getElementById('pathway_id');
+                        var opts = sel.options;
+                        for (var opt, j = 0; opt = opts[j]; j++) {
+                          console.log(opt.value + ' ' + button.getAttribute('data-bs-pathwayid') )
+                          if (opt.value == button.getAttribute('data-bs-pathwayid')) {
+                            sel.selectedIndex = j;
+                            break;
+                          }
+                        }
+                        switch(button.getAttribute('data-bs-pathway_id')) {
+                          case 'Tier 1':
+                          document.getElementById("internTier").selectedIndex = "1";
+                              break;
+                          case 'Tier 2':
+                          document.getElementById("internTier").selectedIndex = "2";
+                              break;
+                          case 'Tier 3':
+                          document.getElementById("internTier").selectedIndex = "3";
+                              break;
+                            }
                         switch(button.getAttribute('data-bs-tier')) {
                             case 'Tier 1':
                             document.getElementById("internTier").selectedIndex = "1";

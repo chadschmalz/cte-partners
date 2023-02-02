@@ -21,7 +21,7 @@ Congratulations! Your online internship application has been accepted and is bei
 <div style="text-align:center">
 <u>Please contact us with the following</u>:<br /><br />
 washk12internships@washk12.org | (435)673-3553 x5162<br /><br />
-<strong>Jessica Hogan | WBL Office Secretary</strong><br /><br />
+<strong>Mike Hassler | WBL Coordinator</strong><br /><br />
 
 </div>
 

@@ -13,9 +13,13 @@
           <input type="hidden" name='bizid' value="{{$business->id}}">
           <input type="hidden" class="internid" name='internid' value="">
           <div class="row">
+          <div class="col-8">
+              <label for="recipient-name" class="col-form-label">Opportunity Desc:</label>
+          <input type="text" class="form-control  position_title" name='position_title' value="">
+            </div>
             <div class="col-md-8">
               <label for="recipient-name" class="col-form-label">Pathway:</label>
-              <select class="form-select " id="formpathway" name="pathway_id" aria-label="Default select example" >
+              <select class="form-select " id="pathway_id" name="pathway_id" aria-label="Default select example" >
                 @if(isset($pathways))
                   @foreach($pathways as $pathway)
                           <option value="{{$pathway->id}}" >{{$pathway->pathway_desc}}</option>

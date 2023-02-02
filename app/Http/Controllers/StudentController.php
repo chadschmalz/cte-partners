@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 
+use Auth;
+
 use App\Models\student;
 use App\Models\business;
 use App\Models\cluster;
@@ -117,7 +119,8 @@ class StudentController extends Controller
                         'locations'=> location::where('location_desc','like','%')->orderBy('location_desc')->get(),
                         'semesters'=> semester::where('id','like','%')->orderBy('semester_enddt')->get(),
                        'students'=> $students,
-                     );
+                'page'=> 'WBL Students',
+              );
               return view('student.studentlist')->with($data);
     }
 
@@ -136,8 +139,10 @@ class StudentController extends Controller
         'locations'=> location::where('location_desc','like','%')->orderBy('location_desc')->get(),
          'student'=> $student,
          'counselors'=> counselor::where('location_id',$student->location_id)->get(),
-         'semesters'=>semester::where('semester_enddt','>=',date("Y-m-d H:i:s"))->orderBy('semester_enddt')->get(),
-               );
+        //  'semesters'=>semester::where('semester_enddt','>=',date("Y-m-d H:i:s"))->orderBy('semester_enddt')->get(),
+         'semesters'=>semester::where('semester_enddt','like','%')->orderBy('semester_enddt')->get(),
+        'page'=> 'WBL Student '.$student->name,
+      );
         return view('student.studentdetail')->with($data);
     }
     public function addinternship(Request $request)
@@ -239,7 +244,7 @@ class StudentController extends Controller
       $student->fname = $request->fname;
       $student->lname = $request->lname;
       $student->phone = $request->stphone;
-      $student->email = $request->stemail;
+      $student->email = trim($request->stemail);
       $student->location_id = $request->stlocation_id;
       $student->school_name = location::find($request->stlocation_id)->location_desc;
       $student->pathway_id = $request->stemgname;
@@ -329,22 +334,15 @@ class StudentController extends Controller
 
       $counselor = counselor::find($request->counselor_id);
 
-      $v = "/[a-zA-Z0-9_\-.+]+@[a-zA-Z0-9\-]+.[a-zA-Z]+/";
+      $v = "/[a-zA-Z0-9_\-\..+]+@[a-zA-Z0-9\-]+.[a-zA-Z]+/";
       if($request->emailtype == 'acceptance'){
+        if (!(bool)preg_match($v, $student->emerg_email))
+          return redirect('/studentdetail/' . $id)->with(['error'=>'Student email Error. Email not sent']);
 
-        if(Auth::user()->nam == 'Chad Schmalz'){
-                Mail::raw([], function($message) {
-                  $message->from('washk12internships@washk12.org', 'WCSD WBL');
-                  $message->to('chad.schmalz@washk12.org');
-                  $message->subject('Internship Update');
-                  $message->setBody( '5% off its awesome Go get it now !' );
-                  $message->addPart("5% off its awesome\n\nGo get it now!", 'text/plain');
-              });
-                      return redirect('/studentdetail/' . $id)->with(['success'=>'Simple Text Email Sent']);
-        }
+     
             if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
               \Mail::to(array('email'=>$student->email))
-              ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
+              ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org','coder'=>'chad.schmalz@washk12.org'))
               ->send(new ApplicationMail($student));
               return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and parent and councilor email)']);
             }else if(isset($counselor) && $counselor->email != NULL && isset($request->includecounselor)){

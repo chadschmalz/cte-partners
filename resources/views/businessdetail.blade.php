@@ -56,14 +56,20 @@
               </div>
             </div>
           </div>
+
             <div class=" col-md-1 col-lg-1 text-end">
+          @if(Auth::user()->hasAnyRole(['superuser','fulledit','businesseditor']))
+
               <div class="form-control btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#editBizModal"
               data-bs-action="/bizupdate"
                 data-bs-bizid="{{$business->id}}" data-bs-name="{{$business->name}}" data-bs-address="{{$business->address}}" data-bs-city="{{$business->city}}" data-bs-state="{{$business->state}}" data-bs-zip="{{$business->zip}}" data-bs-next_internship="{{$business->next_internship}}" data-bs-notes="{{$business->notes}}" data-bs-agreement="{{$business->safety_agreement}}"
               >Edit</div>
+              @endif
             </div>
             <div class=" col-md-1 col-lg-1 text-end">
-              <div class=" btn btn-sm btn-danger " data-bs-toggle="modal" data-bs-target="#bizremoveModal">Remove</div>
+          @if(Auth::user()->hasAnyRole(['superuser','fulledit','businesseditor']))
+                <div class=" btn btn-sm btn-danger " data-bs-toggle="modal" data-bs-target="#bizremoveModal">Remove</div>
+              @endif
             </div>
           </div>
 
@@ -89,10 +95,14 @@
                                      <td>{{$poc->notes}}</td>
                                      <td>{{$poc->mentor}}</td>
                                      <td>
-                                       <div class=" btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addPOCModal" data-bs-action="/pocupdate"
-                                         data-bs-pocid="{{$poc->id}}" data-bs-name="{{$poc->name}}" data-bs-email="{{$poc->email}}" data-bs-phone="{{$poc->phone}}" data-bs-notes="{{$poc->notes}}" data-bs-mentor="{{$poc->mentor}}"
-                                         >Edit</div>
-                                       <div class=" btn btn-sm btn-danger " data-bs-toggle="modal" data-bs-target="#POCremoveModal" data-bs-pocname="{{$poc->name}}" data-bs-pocid="{{$poc->id}}">Remove</div>
+                                      @if(Auth::user()->hasAnyRole(['superuser','fulledit','businesseditor']))
+
+                                            <div class=" btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addPOCModal" data-bs-action="/pocupdate"
+                                              data-bs-pocid="{{$poc->id}}" data-bs-name="{{$poc->name}}" data-bs-email="{{$poc->email}}" data-bs-phone="{{$poc->phone}}" data-bs-notes="{{$poc->notes}}" data-bs-mentor="{{$poc->mentor}}"
+                                              >Edit</div>
+                                            <div class=" btn btn-sm btn-danger " data-bs-toggle="modal" data-bs-target="#POCremoveModal" data-bs-pocname="{{$poc->name}}" data-bs-pocid="{{$poc->id}}">Remove</div>
+                                        @endif
+
                                       </td>
                                   </tr>
                                   @endforeach
@@ -130,7 +140,7 @@
                               </div>
                               <div class="card-body">
                                 <div class="row ">
-                                  @foreach($business->studentinternships as $intern)
+                                  @foreach($business->studentinternships->where('deleted_at',NULL) as $intern)
                                       <div class="mx-1"><a   href="/studentdetail/{{$intern->student->id}}" target="_blank">{{$intern->student->name}}</a> Semester:{{$intern->semester->semester_desc}}</div>
                                   @endforeach
                                 </div>
@@ -147,13 +157,15 @@
           <div class="h6 col-md-6 col-lg-6">
               Clusters & Pathways
           </div>
+          @if(Auth::user()->hasAnyRole(['superuser','fulledit','businesseditor']))
           <div class=" col-md-2 col-lg-2 text-end">
             <div class="btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#AddPathwaySemesterModal">Add</div>
           </div>
           <div class=" col-md-3 col-lg-3 text-end">
-            <div class="btn btn-sm btn-danger " data-bs-toggle="modal" data-bs-target="#pathwayModal">DropAll/Add New</div>
-
+            <div class="btn btn-sm btn-danger  " data-bs-toggle="modal" data-bs-target="#pathwayModal">DropAll/Add New</div>
           </div>
+          @endif
+
         </div>
       </div>
       <div class="card-body">
@@ -173,9 +185,13 @@
                   <td>{{$pathway->pathway->pathway_desc}}</td><td style="font-size: 0.65em;">({{$pathway->cluster->cluster_desc}})</td><td>{{$pathway->begdt <> NULL ? date('m/d/Y',strtotime($pathway->begdt)):''}}</td>
                   <td>{{$pathway->enddt <> NULL ? date('m/d/Y',strtotime($pathway->enddt)):''}}</td>
                   <td style="text-align:center">{{$pathway->seats}}</td>
-                  <td><div class="btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#AddPathwaySemesterModal" data-bs-action="edit"
+                  <td>
+                   @if(Auth::user()->hasAnyRole(['superuser','fulledit','businesseditor']))
+                    <div class="btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#AddPathwaySemesterModal" data-bs-action="edit"
                     data-bs-begdt="{{$pathway->begdt <> NULL ? date('m/d/Y',strtotime($pathway->begdt)):''}}" data-bs-enddt="{{$pathway->enddt <> NULL ? date('m/d/Y',strtotime($pathway->enddt)):''}}"
-                    data-bs-pathway="{{$pathway->pathway->id}}" data-bs-seats="{{$pathway->seats}}" data-bs-recordid="{{$pathway->id}}">Edit</div></td>
+                    data-bs-pathway="{{$pathway->pathway->id}}" data-bs-seats="{{$pathway->seats}}" data-bs-recordid="{{$pathway->id}}">Edit</div>
+                  @endif
+                  </td>
                 </tr >
             @endforeach
           </table>
@@ -192,7 +208,9 @@
             Program Involvement
           </div>
           <div class=" col-md-2 col-lg-2 text-end">
+          @if(Auth::user()->hasAnyRole(['superuser','fulledit','businesseditor']))
             <div class="btn btn-sm btn-primary " data-bs-toggle="modal" data-bs-target="#involveModal">Edit</div>
+            @endif
           </div>
         </div>
       </div>
@@ -218,11 +236,13 @@
             <div class="card-header">
               <div class="row">
               <div class="col-md-10 col-lg-10">
-              <h1 class="h5">Internship Opportunities</h1>
+              <h1 class="h5">Partner Opportunities</h1>
             </div>
+          @if(Auth::user()->hasAnyRole(['superuser','fulledit','businesseditor']))
               <div class="col-md-2 col-lg-2 text-end">
-              <div class="btn btn-sm btn-success ml-auto" data-bs-toggle="modal" data-bs-target="#InternshipAddModal">Add</div>
+              <div class="btn btn-sm btn-success ml-auto " data-bs-toggle="modal" data-bs-target="#InternshipAddModal">Add</div>
             </div>
+            @endif
           </div>
             </div>
             <div class="card-body">
@@ -231,19 +251,21 @@
                         <div class="databuttons mb-1">
                           Toggle column:
                           <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="0">Record ID</a>
-                          <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="1">Internship Opportunity</a>
-                                  <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="2">Tier</a>
-                                  <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="3">Entry Point </a>
-                                  <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="4">Length of internship</a>
-                                  <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="5">Contact Method</a>
-                                  <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="6">Note</a>
+                          <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="1">Opportunity</a>
+                                  <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="2">Pathway</a>
+                                  <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="3">Tier</a>
+                                  <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="4">Entry Point </a>
+                                  <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="54">Length of internship</a>
+                                  <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="6">Contact Method</a>
+                                  <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="7">Note</a>
                                 </div>
 
                         <table class="table table-sm table-striped display allInternshipsDataTable" id="allInternshipsDataTable" >
                                             <thead>
                                                 <tr>
                                                   <th scope="col" >Record ID</th>
-                                                  <th scope="col" >Internship Opportunity</th>
+                                                  <th scope="col" >Opportunity</th>
+                                                  <th scope="col" >Pathway</th>
                                                   <th scope="col" >Min. Tier</th>
                                                   <th scope="col" >Entry Point</th>
                                                   <th scope="col" >Length of internship</th>
@@ -258,18 +280,22 @@
                                  <tr>
                                    <td>{{$internship->id}}</td>
                                    <td><a   href="#" data-bs-toggle="modal" data-bs-target="#InternshipAddModal" data-bs-action="/internshipupdate"
-                                     data-bs-internid="{{$internship->id}}" data-bs-interntitle="{{$internship->position_title}}" data-bs-tier="{{$internship->tier}}" data-bs-entry_point="{{$internship->entry_point}}" data-bs-intern_length="{{$internship->intern_length}}" data-bs-notes="{{$internship->notes}}" data-bs-contact_method="{{$internship->contact_method}}"
+                                     data-bs-internid="{{$internship->id}}" data-bs-interntitle="{{$internship->position_title}}" data-bs-pathwayid="{{$internship->pathway_id}}" data-bs-tier="{{$internship->tier}}" data-bs-entry_point="{{$internship->entry_point}}" data-bs-intern_length="{{$internship->intern_length}}" data-bs-notes="{{$internship->notes}}" data-bs-contact_method="{{$internship->contact_method}}"
                                      >{{$internship->position_title}}</a></td>
+                                 <td>@if($internship->pathway_id <> NULL){{$internship->pathway->pathway_desc}}@endif</td>
                                  <td>{{$internship->tier}}</td>
                                        <td>{{$internship->entry_point}}</td>
                                        <td>{{$internship->intern_length}}</td>
                                        <td>{{$internship->contact_method}}</td>
                                        <td>{{$internship->notes}}</td>
                                        <td>
+                                        @if(Auth::user()->hasAnyRole(['superuser','fulledit','businesseditor']))
+
                                          <div class=" btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#InternshipAddModal" data-bs-action="/internshipupdate"
-                                           data-bs-internid="{{$internship->id}}" data-bs-interntitle="{{$internship->position_title}}" data-bs-tier="{{$internship->tier}}" data-bs-entry_point="{{$internship->entry_point}}" data-bs-intern_length="{{$internship->intern_length}}" data-bs-notes="{{$internship->notes}}" data-bs-contact_method="{{$internship->contact_method}}"
+                                           data-bs-internid="{{$internship->id}}" data-bs-position_title="{{$internship->position_title}}" data-bs-pathwayid="{{$internship->pathway_id}}" data-bs-tier="{{$internship->tier}}" data-bs-entry_point="{{$internship->entry_point}}" data-bs-intern_length="{{$internship->intern_length}}" data-bs-notes="{{$internship->notes}}" data-bs-contact_method="{{$internship->contact_method}}"
                                            >Edit</div>
-                                         <div class=" btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#internshipremoveModal" data-bs-interntitle="{{$internship->position_title}}" data-bs-internshipid="{{$internship->id}}" data-bs-bizid="{{$internship->business_id}}">Remove</div>
+                                         <div class=" btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#internshipremoveModal" data-bs-position_title="{{$internship->position_title}}"   data-bs-internshipid="{{$internship->id}}" data-bs-bizid="{{$internship->business_id}}">Remove</div>
+                                         @endif
                                         </td>
                                     </tr>
                                  @endforeach

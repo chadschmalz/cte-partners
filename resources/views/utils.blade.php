@@ -273,6 +273,14 @@
                                                   </label>
                                               </div>
                                           </div>
+                                          <div class="col-md-12 col-md-offset-4">
+                                              <div class="checkbox">
+                                                  <label>
+                                                      <input type="radio" name="lane" value="shortformat"> Short Format Import 
+                                                  </label>
+                                                  (School,"lastname, firstname",Grade,Pathway,Cluster,Lane,Employer,Mentor,Semester)
+                                              </div>
+                                          </div>
                                       </div>
 
                                       <div class="form-group">
