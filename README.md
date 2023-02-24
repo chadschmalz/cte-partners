@@ -1,4 +1,4 @@
-## Laravel 8.4 CTE Business Partner Database
+## Laravel 8.4 Work-Based Learning Database
 
 Simple project for storing business partners, internship opportunities and student assignments.
 
