@@ -82,7 +82,7 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 	Route::get('/sampleuploadpathwaysfile', 'PathwayController@sampleuploadfile')->name('samplePathwayFile');
 
 
-	Route::get('/students/{semester?}/{location?}/{pathway?}', 'StudentController@index')->name('students');
+	Route::get('/students/{semester?}/{location?}/{pathway?}/{cluster?}', 'StudentController@index')->name('students');
 	Route::get('/studentdetail/{id}', 'StudentController@studentdetail')->name('studentdetail');
 	Route::get('/onboardingComplete/{id}', 'StudentController@onboardingComplete')->name('onboardingComplete');
 	Route::get('/backtounassigned/{id}', 'StudentController@backtounassigned')->name('backtounassigned');
@@ -100,14 +100,18 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 	Route::get('/updatetrackingAjax', 'StudentController@updatestudenttrackingAjax')->name('updatestudenttrackingAjax');
 	Route::post('/updatestudentws', 'StudentController@updatestudentws')->name('updatestudentws');
 
+	Route::get('/studentapplications/{year?}', 'StudentController@studentapplications')->name('studentapplications');
+	Route::get('/studentclusters/{year?}', 'StudentController@studentclusters')->name('studentclusters');
+
 	Route::get('/acceptedPreview', function () {
 		    return view('email.applicationaccepted');
 		})->name('appEmailApprovedPreview');
 
 
+	Route::get('/formimport', 'FormImportController@getImport')->name('formimport');
+	Route::post('/importparse', 'FormImportController@parseImport')->name('import_parse');
+	Route::post('/processImport', 'FormImportController@processImport')->name('import_process');
 	Route::get('/studentimport', 'StudentImportController@getImport')->name('studentimport');
-	Route::post('/importparse', 'StudentImportController@parseImport')->name('import_parse');
-	Route::post('/processImport', 'StudentImportController@processImport')->name('import_process');
 	Route::post('/directStudentImport', 'StudentImportController@directProcessImport')->name('directStudentImport');
 
 

@@ -14,16 +14,18 @@ class ApplicationMail extends Mailable
     use Queueable, SerializesModels;
 
     public $student;
+    public $markdown = 'emails.applicationaccepted';
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(student $student)
+    public function __construct(student $student, $markdown)
     {
 
         $this->student = $student;
+        $this->markdown = $markdown;
 
     }
 
@@ -35,7 +37,7 @@ class ApplicationMail extends Mailable
      */
     public function build()
     {
-        return $this->from('washk12internships@washk12.org')->subject('Internship Application (Response Required)')->markdown('emails.applicationaccepted');
+        return $this->from('washk12internships@washk12.org')->subject('Internship Application (Response Required)')->markdown($this->markdown);
     }
 
     public function setmarkdown($markdown){

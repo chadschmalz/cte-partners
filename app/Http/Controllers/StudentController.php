@@ -29,6 +29,7 @@ use App\Mail\SeatsFullMail;
 use App\Mail\L2AcceptanceMail;
 use App\Mail\RegistrationExpiredMail;
 
+use DB;
 
 class StudentController extends Controller
 {
@@ -37,85 +38,50 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($selectedSemester = 'unassigned',$selectedLocation = 'all', $selectedPathway= 'all', Request $request )
+    public function index($selectedSemester = 'unassigned',$selectedLocation = 'all', $selectedPathway= 'all', $selectedCluster= 'all', Request $request )
     {
         $students = [];
         if($selectedSemester== NULL){
 
           $selectedSemester = semester::where('status','active')->get()[0]->id;
         }
+        $selectedLocation == 'all' ? $selectedLocation = '%' : '';
+        $selectedPathway == 'all' ? $selectedPathway = '%' : '';
+        $selectedCluster == 'all' ? $selectedCluster = '%' : '';
 
-          if($selectedSemester == 'unassigned' && $selectedLocation == 'all' &&  $selectedPathway == 'all') {
+
+
+          if($selectedSemester == 'unassigned' && $selectedLocation == '%' &&  $selectedPathway == '%') {
              $students =  student::where('onboarding', 'Y')->get();
            }
-           else if($selectedSemester == 'unassigned' && $selectedLocation != 'all' &&  $selectedPathway == 'all'){
+           else if($selectedSemester == 'unassigned' && $selectedLocation != '%' &&  $selectedPathway == '%'){
              $students =  student::where('location_id',$selectedLocation)->where('onboarding', 'Y')->get();
            }
-           else if($selectedSemester == 'dropped' && $selectedLocation == 'all' &&  $selectedPathway == 'all') {
+           else if($selectedSemester == 'dropped' && $selectedLocation == '%' &&  $selectedPathway == '%') {
               $students =  student::where('dropped', 'Y')->get();
             }
-            else if($selectedSemester == 'dropped' && $selectedLocation != 'all' &&  $selectedPathway == 'all'){
+            else if($selectedSemester == 'dropped' && $selectedLocation != '%' &&  $selectedPathway == '%'){
               $students =  student::where('location_id',$selectedLocation)->where('dropped', 'Y')->get();
             }
-           else if( $selectedSemester == 'all' &&  $selectedLocation != 'all' &&  $selectedPathway == 'all') {
-              $students =  student::where('location_id',$selectedLocation)->orderBy('name','asc')->get();
-            }
-            else if($selectedLocation == 'all' && $selectedSemester != 'all' && $selectedPathway == 'all'  ) {
-              $students =  student::join('student_semesters','student_semesters.student_id','students.id')->whereNULL('student_semesters.deleted_at')
-                          ->where('student_semesters.semester_id',$selectedSemester)
-                          ->select('students.*')->orderBy('students.name','asc')->get();
-            }
-            else if($selectedSemester != 'all' && $selectedPathway != 'all' && $selectedLocation != 'all'){
-              $students =     student::where('location_id',$selectedLocation)->where('student_semesters.pathway_id',$selectedPathway)
-                            ->join('student_semesters','student_semesters.student_id','students.id')->whereNULL('student_semesters.deleted_at')
-                            ->where('student_semesters.semester_id',$selectedSemester)
-                            ->select('students.*')->orderBy('students.name','asc')->get();
-            }else if($selectedSemester != 'all' && $selectedLocation != 'all' && $selectedPathway == 'all' ){
-              $students =     student::where('location_id',$selectedLocation)->join('student_semesters','student_semesters.student_id','students.id')->whereNULL('student_semesters.deleted_at')
-                            ->where('student_semesters.semester_id',$selectedSemester)
-                            ->select('students.*')->orderBy('students.name','asc')->get();
-
-            }
-            else if($selectedPathway!= 'all' && $selectedLocation == 'all' && $selectedSemester == 'all'){
-              $students =   student::where('student_semesters.pathway_id',$selectedPathway)
-                            ->join('student_semesters','student_semesters.student_id','students.id')->whereNULL('student_semesters.deleted_at')
-                            ->select('students.*')->orderBy('students.name','asc')->get();
-
-            }else if($selectedSemester == 'all' && $selectedLocation != 'all' && $selectedPathway!= 'all' ){
-              $students =     student::where('location_id',$selectedLocation)->where('student_semesters.pathway_id',$selectedPathway)
-                            ->join('student_semesters','student_semesters.student_id','students.id')->whereNULL('student_semesters.deleted_at')
-                            ->select('students.*')->orderBy('students.name','asc')->get();
-
-            }else if($selectedSemester != 'all' && $selectedLocation == 'all' && $selectedPathway!= 'all' ){
-              $students =     student::where('student_semesters.pathway_id',$selectedPathway)->join('student_semesters','student_semesters.student_id','students.id')->whereNULL('student_semesters.deleted_at')
-                            ->where('student_semesters.semester_id',$selectedSemester)
-                            ->select('students.*')->orderBy('students.name','asc')->get();
-
-            }else if($selectedPathway!= 'all' && $selectedLocation != 'all' && $selectedSemester != 'all'){
-              $students =     student::where('location_id',$selectedLocation)->where('student_semesters.pathway_id',$selectedPathway)
-                            ->join('student_semesters','student_semesters.student_id','students.id')->whereNULL('student_semesters.deleted_at')
-                            ->where('student_semesters.semester_id',$selectedSemester)
-                            ->select('students.*')->orderBy('students.name','asc')->get();
-
-            }else if($selectedPathway== NULL && $selectedLocation != NULL && $selectedLocation != 'all'){
-              $students =  student::where('location_id',$selectedLocation)
-                    ->orderBy('name', 'asc')
-                    ->get();
-            }
             else{
-            $students = student::all();
-                }
+              $students =     student::where('location_id','like',$selectedLocation)->where('student_semesters.pathway_id','like',$selectedPathway)
+              ->join('student_semesters','student_semesters.student_id','students.id')->whereNULL('student_semesters.deleted_at')
+              ->join('pathways','pathways.id','student_semesters.pathway_id')
+              ->join('clusters','clusters.id','pathways.cluster_id')->where('clusters.id','like',$selectedCluster)
+              ->where('student_semesters.semester_id',$selectedSemester)
+              ->select('students.*')->orderBy('students.name','asc')->get();
+            }
 
-              $pathways = pathway::orderBy('pathway_desc')->get();
 
 
 
             $data = array(
                         'selectedSemester'=> $selectedSemester,
                         'selectedPathway'=> $selectedPathway,
+                        'selectedCluster'=> $selectedCluster,
                         'selectedLocation'=> $selectedLocation,
                         'clusters'=> cluster::all(),
-                        'pathways'=> $pathways,
+                        'pathways'=> pathway::orderBy('pathway_desc')->get(),
                         'locations'=> location::where('location_desc','like','%')->orderBy('location_desc')->get(),
                         'semesters'=> semester::where('id','like','%')->orderBy('semester_enddt')->get(),
                        'students'=> $students,
@@ -334,181 +300,230 @@ class StudentController extends Controller
 
       $counselor = counselor::find($request->counselor_id);
 
+
+      $email = new ApplicationMail($student,'emails.'.$request->emailtype);
+
+      
       $v = "/[a-zA-Z0-9_\-\..+]+@[a-zA-Z0-9\-]+.[a-zA-Z]+/";
-      if($request->emailtype == 'acceptance'){
-        if (!(bool)preg_match($v, $student->emerg_email))
-          return redirect('/studentdetail/' . $id)->with(['error'=>'Student email Error. Email not sent']);
+
+
+
+
+    if (!(bool)preg_match($v, $student->email))
+      return redirect('/studentdetail/' . $id)->with(['error'=>'Student email Error ('.$student->email.'). Email not sent']);
+    else if (!(bool)preg_match($v, $student->emerg_email))
+      return redirect('/studentdetail/' . $id)->with(['error'=>'Parent email Error('. $student->emerg_email .')_. Email not sent']);
+
+ 
+    if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
+      \Mail::to(array('email'=>$student->email))
+      ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org','coder'=>'chad.schmalz@washk12.org'))
+      ->send($email);
+      return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and parent and councilor email)']);
+    }else if(isset($counselor) && $counselor->email != NULL && isset($request->includecounselor)){
+      \Mail::to(array('email'=>$student->email))
+      ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
+      ->send($email);
+      return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and councilor email)']);
+    }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
+      \Mail::to(array('email'=>$student->email))
+      ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
+      ->send($email);
+      return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and parent email)']);
+
+    }else if($student->emerg_email == NULL ){
+      \Mail::to(array('email'=>$student->email))
+      ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
+      ->send($email);
+      return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent (only sent to student - missing parent email)']);
+
+    }else{
+            return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
+    }
+
+
+      // if($request->emailtype == 'acceptance'){
+
+
+        
+
+
+
+      //   if (!(bool)preg_match($v, $student->email))
+      //     return redirect('/studentdetail/' . $id)->with(['error'=>'Student email Error ('.$student->email.'). Email not sent']);
+      //   else if (!(bool)preg_match($v, $student->emerg_email))
+      //     return redirect('/studentdetail/' . $id)->with(['error'=>'Parent email Error('. $student->emerg_email .')_. Email not sent']);
 
      
-            if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
-              \Mail::to(array('email'=>$student->email))
-              ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org','coder'=>'chad.schmalz@washk12.org'))
-              ->send(new ApplicationMail($student));
-              return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and parent and councilor email)']);
-            }else if(isset($counselor) && $counselor->email != NULL && isset($request->includecounselor)){
-              \Mail::to(array('email'=>$student->email))
-              ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
-              ->send(new ApplicationMail($student));
-              return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and councilor email)']);
-            }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
-              \Mail::to(array('email'=>$student->email))
-              ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
-              ->send(new ApplicationMail($student));
-              return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and parent email)']);
+      //       if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
+      //         \Mail::to(array('email'=>$student->email))
+      //         ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org','coder'=>'chad.schmalz@washk12.org'))
+      //         ->send(new ApplicationMail($student));
+      //         return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and parent and councilor email)']);
+      //       }else if(isset($counselor) && $counselor->email != NULL && isset($request->includecounselor)){
+      //         \Mail::to(array('email'=>$student->email))
+      //         ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
+      //         ->send(new ApplicationMail($student));
+      //         return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and councilor email)']);
+      //       }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
+      //         \Mail::to(array('email'=>$student->email))
+      //         ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
+      //         ->send(new ApplicationMail($student));
+      //         return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and parent email)']);
 
-            }else if($student->emerg_email == NULL ){
-              \Mail::to(array('email'=>$student->email))
-              ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
-              ->send(new ApplicationMail($student));
-              return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent (only sent to student - missing parent email)']);
+      //       }else if($student->emerg_email == NULL ){
+      //         \Mail::to(array('email'=>$student->email))
+      //         ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
+      //         ->send(new ApplicationMail($student));
+      //         return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent (only sent to student - missing parent email)']);
 
-            }else{
-                    return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
-            }
+      //       }else{
+      //               return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
+      //       }
 
-            return redirect('/studentdetail/' . $id)->with(['error'=>'Email Error']);
-        }else if($request->emailtype == 'futureacceptance'){
-              if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
-                \Mail::to(array('email'=>$student->email))
-                ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
-                ->send(new FutureApplicationMail($student));
-                return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and parent and councilor email)']);
-              }else if(isset($counselor) && $counselor->email != NULL && isset($request->includecounselor)){
-                \Mail::to(array('email'=>$student->email))
-                ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
-                ->send(new FutureApplicationMail($student));
-                return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and councilor email)']);
-              }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
-                \Mail::to(array('email'=>$student->email))
-                ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
-                ->send(new FutureApplicationMail($student));
-                return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and parent email)']);
+      //       return redirect('/studentdetail/' . $id)->with(['error'=>'Email Error']);
+      //   }else if($request->emailtype == 'futureacceptance'){
+      //         if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
+      //           \Mail::to(array('email'=>$student->email))
+      //           ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
+      //           ->send(new FutureApplicationMail($student));
+      //           return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and parent and councilor email)']);
+      //         }else if(isset($counselor) && $counselor->email != NULL && isset($request->includecounselor)){
+      //           \Mail::to(array('email'=>$student->email))
+      //           ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
+      //           ->send(new FutureApplicationMail($student));
+      //           return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and councilor email)']);
+      //         }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
+      //           \Mail::to(array('email'=>$student->email))
+      //           ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
+      //           ->send(new FutureApplicationMail($student));
+      //           return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent(sent to student and parent email)']);
 
-              }else if($student->emerg_email == NULL ){
-                \Mail::to(array('email'=>$student->email))
-                ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
-                ->send(new FutureApplicationMail($student));
-                return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent (only sent to student - missing parent email)']);
+      //         }else if($student->emerg_email == NULL ){
+      //           \Mail::to(array('email'=>$student->email))
+      //           ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
+      //           ->send(new FutureApplicationMail($student));
+      //           return redirect('/studentdetail/' . $id)->with(['success'=>'Acceptance Email Sent (only sent to student - missing parent email)']);
 
-              }else{
-                      return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
-              }
+      //         }else{
+      //                 return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
+      //         }
 
-              return redirect('/studentdetail/' . $id)->with(['error'=>'Email Error']);
-          }else if($request->emailtype == 'l2accepted'){
-              if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
-                \Mail::to(array('email'=>$student->email))
-                ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
-                ->send(new L2AcceptanceMail($student));
-                return redirect('/studentdetail/' . $id)->with(['success'=>'L2 Acceptance Email Sent(sent to student and parent and councilor email)']);
-              }else if(isset($counselor) && $counselor->email != NULL && isset($request->includecounselor)){
-                \Mail::to(array('email'=>$student->email))
-                ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
-                ->send(new L2AcceptanceMail($student));
-                return redirect('/studentdetail/' . $id)->with(['success'=>'L2 Acceptance Email Sent(sent to student and councilor email)']);
-              }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
-                \Mail::to(array('email'=>$student->email))
-                ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
-                ->send(new L2AcceptanceMail($student));
-                return redirect('/studentdetail/' . $id)->with(['success'=>'L2 Acceptance Email Sent(sent to student and parent email)']);
+      //         return redirect('/studentdetail/' . $id)->with(['error'=>'Email Error']);
+      //     }else if($request->emailtype == 'l2accepted'){
+      //         if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
+      //           \Mail::to(array('email'=>$student->email))
+      //           ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
+      //           ->send(new L2AcceptanceMail($student));
+      //           return redirect('/studentdetail/' . $id)->with(['success'=>'L2 Acceptance Email Sent(sent to student and parent and councilor email)']);
+      //         }else if(isset($counselor) && $counselor->email != NULL && isset($request->includecounselor)){
+      //           \Mail::to(array('email'=>$student->email))
+      //           ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
+      //           ->send(new L2AcceptanceMail($student));
+      //           return redirect('/studentdetail/' . $id)->with(['success'=>'L2 Acceptance Email Sent(sent to student and councilor email)']);
+      //         }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
+      //           \Mail::to(array('email'=>$student->email))
+      //           ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
+      //           ->send(new L2AcceptanceMail($student));
+      //           return redirect('/studentdetail/' . $id)->with(['success'=>'L2 Acceptance Email Sent(sent to student and parent email)']);
 
-              }else if($student->emerg_email == NULL ){
-                \Mail::to(array('email'=>$student->email))
-                ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
-                ->send(new L2AcceptanceMail($student));
-                return redirect('/studentdetail/' . $id)->with(['success'=>'L2 Acceptance Email Sent (only sent to student - missing parent email)']);
+      //         }else if($student->emerg_email == NULL ){
+      //           \Mail::to(array('email'=>$student->email))
+      //           ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
+      //           ->send(new L2AcceptanceMail($student));
+      //           return redirect('/studentdetail/' . $id)->with(['success'=>'L2 Acceptance Email Sent (only sent to student - missing parent email)']);
 
-              }else{
-                      return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
-              }
+      //         }else{
+      //                 return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
+      //         }
 
-              return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent']);
-          }else if($request->emailtype == 'defer'){
-              if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
-                \Mail::to(array('email'=>$student->email))
-                ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
-                ->send(new DeferMail($student));
-                return redirect('/studentdetail/' . $id)->with(['success'=>'Deferral Email Sent(sent to student and parent and councilor email)']);
-              }else if(isset($counselor) && $counselor->email != NULL && isset($request->includecounselor)){
-                \Mail::to(array('email'=>$student->email))
-                ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
-                ->send(new DeferMail($student));
-                return redirect('/studentdetail/' . $id)->with(['success'=>'Deferral Email Sent(sent to student and councilor email)']);
-              }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
-                \Mail::to(array('email'=>$student->email))
-                ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
-                ->send(new DeferMail($student));
-                return redirect('/studentdetail/' . $id)->with(['success'=>'Defer Email Sent(sent to student and parent email)']);
+      //         return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent']);
+      //     }else if($request->emailtype == 'defer'){
+      //         if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
+      //           \Mail::to(array('email'=>$student->email))
+      //           ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
+      //           ->send(new DeferMail($student));
+      //           return redirect('/studentdetail/' . $id)->with(['success'=>'Deferral Email Sent(sent to student and parent and councilor email)']);
+      //         }else if(isset($counselor) && $counselor->email != NULL && isset($request->includecounselor)){
+      //           \Mail::to(array('email'=>$student->email))
+      //           ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
+      //           ->send(new DeferMail($student));
+      //           return redirect('/studentdetail/' . $id)->with(['success'=>'Deferral Email Sent(sent to student and councilor email)']);
+      //         }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
+      //           \Mail::to(array('email'=>$student->email))
+      //           ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
+      //           ->send(new DeferMail($student));
+      //           return redirect('/studentdetail/' . $id)->with(['success'=>'Defer Email Sent(sent to student and parent email)']);
 
-              }else if($student->emerg_email == NULL ){
-                \Mail::to(array('email'=>$student->email))
-                ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
-                ->send(new DeferMail($student));
-                return redirect('/studentdetail/' . $id)->with(['success'=>'Defer Email Sent (only sent to student - missing parent email)']);
+      //         }else if($student->emerg_email == NULL ){
+      //           \Mail::to(array('email'=>$student->email))
+      //           ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
+      //           ->send(new DeferMail($student));
+      //           return redirect('/studentdetail/' . $id)->with(['success'=>'Defer Email Sent (only sent to student - missing parent email)']);
 
-              }else{
-                      return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
-              }
+      //         }else{
+      //                 return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
+      //         }
 
-              return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
-          }
-          else if($request->emailtype == 'seatsFull'){
-                if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
-                  \Mail::to(array('email'=>$student->email))
-                  ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
-                  ->send(new SeatsFullMail($student));
-                  return redirect('/studentdetail/' . $id)->with(['success'=>'Deferral Email Sent(sent to student and parent and councilor email)']);
-                }else if(isset($counselor) && $counselor->email != NULL && isset($request->includecounselor)){
-                  \Mail::to(array('email'=>$student->email))
-                  ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
-                  ->send(new SeatsFullMail($student));
-                  return redirect('/studentdetail/' . $id)->with(['success'=>'Deferral Email Sent(sent to student and councilor email)']);
-                }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
-                  \Mail::to(array('email'=>$student->email))
-                  ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
-                  ->send(new SeatsFullMail($student));
-                  return redirect('/studentdetail/' . $id)->with(['success'=>'Seats Full Email Sent(sent to student and parent email)']);
+      //         return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
+      //     }
+      //     else if($request->emailtype == 'seatsFull'){
+      //           if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
+      //             \Mail::to(array('email'=>$student->email))
+      //             ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
+      //             ->send(new SeatsFullMail($student));
+      //             return redirect('/studentdetail/' . $id)->with(['success'=>'Deferral Email Sent(sent to student and parent and councilor email)']);
+      //           }else if(isset($counselor) && $counselor->email != NULL && isset($request->includecounselor)){
+      //             \Mail::to(array('email'=>$student->email))
+      //             ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
+      //             ->send(new SeatsFullMail($student));
+      //             return redirect('/studentdetail/' . $id)->with(['success'=>'Deferral Email Sent(sent to student and councilor email)']);
+      //           }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
+      //             \Mail::to(array('email'=>$student->email))
+      //             ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
+      //             ->send(new SeatsFullMail($student));
+      //             return redirect('/studentdetail/' . $id)->with(['success'=>'Seats Full Email Sent(sent to student and parent email)']);
 
-                }else if($student->emerg_email == NULL ){
-                  \Mail::to(array('email'=>$student->email))
-                  ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
-                  ->send(new SeatsFullMail($student));
-                  return redirect('/studentdetail/' . $id)->with(['success'=>'Seats Full Email Sent (only sent to student - missing parent email)']);
+      //           }else if($student->emerg_email == NULL ){
+      //             \Mail::to(array('email'=>$student->email))
+      //             ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
+      //             ->send(new SeatsFullMail($student));
+      //             return redirect('/studentdetail/' . $id)->with(['success'=>'Seats Full Email Sent (only sent to student - missing parent email)']);
 
-                }else{
-                        return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
-                }
+      //           }else{
+      //                   return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
+      //           }
 
-                return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent']);
-            }else if($request->emailtype == 'regExpired'){
-                  if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
-                    \Mail::to(array('email'=>$student->email))
-                    ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
-                    ->send(new RegistrationExpiredMail($student));
-                    return redirect('/studentdetail/' . $id)->with(['success'=>'RegExpired Email Sent(sent to student and parent and councilor email)']);
-                  }else if($counselor->email != NULL && isset($request->includecounselor)){
-                    \Mail::to(array('email'=>$student->email))
-                    ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
-                    ->send(new RegistrationExpiredMail($student));
-                    return redirect('/studentdetail/' . $id)->with(['success'=>'RegExpired Email Sent(sent to student and  councilor email)']);
-                  }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
-                    \Mail::to(array('email'=>$student->email))
-                    ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
-                    ->send(new RegistrationExpiredMail($student));
-                    return redirect('/studentdetail/' . $id)->with(['success'=>'Seats Full Email Sent(sent to student and parent email)']);
+      //           return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent']);
+      //       }else if($request->emailtype == 'regExpired'){
+      //             if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
+      //               \Mail::to(array('email'=>$student->email))
+      //               ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
+      //               ->send(new RegistrationExpiredMail($student));
+      //               return redirect('/studentdetail/' . $id)->with(['success'=>'RegExpired Email Sent(sent to student and parent and councilor email)']);
+      //             }else if($counselor->email != NULL && isset($request->includecounselor)){
+      //               \Mail::to(array('email'=>$student->email))
+      //               ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
+      //               ->send(new RegistrationExpiredMail($student));
+      //               return redirect('/studentdetail/' . $id)->with(['success'=>'RegExpired Email Sent(sent to student and  councilor email)']);
+      //             }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
+      //               \Mail::to(array('email'=>$student->email))
+      //               ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
+      //               ->send(new RegistrationExpiredMail($student));
+      //               return redirect('/studentdetail/' . $id)->with(['success'=>'Seats Full Email Sent(sent to student and parent email)']);
 
-                  }else if($student->emerg_email == NULL ){
-                    \Mail::to(array('email'=>$student->email))
-                    ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
-                    ->send(new RegistrationExpiredMail($student));
-                    return redirect('/studentdetail/' . $id)->with(['success'=>'Seats Full Email Sent (only sent to student - missing parent email)']);
+      //             }else if($student->emerg_email == NULL ){
+      //               \Mail::to(array('email'=>$student->email))
+      //               ->cc(array('coachemail'=>'mike.hassler@washk12.org'))
+      //               ->send(new RegistrationExpiredMail($student));
+      //               return redirect('/studentdetail/' . $id)->with(['success'=>'Seats Full Email Sent (only sent to student - missing parent email)']);
 
-                  }else{
-                          return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
-                  }
+      //             }else{
+      //                     return redirect('/studentdetail/' . $id)->with(['error'=>'Error sending email']);
+      //             }
 
-                  return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent']);
-              }
+      //             return redirect('/studentdetail/' . $id)->with(['success'=>'Email Sent']);
+      //         }
 
     }
 
@@ -637,4 +652,117 @@ class StudentController extends Controller
 
     }
 
+    public function studentapplications(Request $request,$year=2022){
+
+       
+
+      $locations = [];
+      $semestertotals = [];
+      $semesters = [];
+      foreach(location::where('location_desc','like','%')->orderBy('location_desc')->get() as $l)
+        $locations[$l->id] = $l;
+
+      foreach(semester::where('semesters.semester_enddt', '>=',$year.'-01-01')->where('semesters.semester_enddt', '<=', $year.'-12-31')->get() as $sem)
+        $semesters[$sem->id] = $sem;
+
+        foreach( DB::table('semesters')
+      ->join('student_semesters','student_semesters.semester_id','semesters.id')->whereNull('student_semesters.deleted_at')
+      ->join('students','students.id','student_semesters.student_id')->whereNull('students.deleted_at')
+      ->where('semesters.semester_enddt', '>=',$year.'-01-01')->where('semesters.semester_enddt', '<=', $year.'-12-31')
+      ->select('students.location_id','semesters.id', DB::raw(' count(students.id) as cnt'))
+      ->groupby('students.location_id','semesters.id')
+      ->get() as $s)
+        $semestertotals[$s->location_id][$s->id] = $s->cnt;
+
+
+      $data = array(
+        'schooltotals'=> DB::table('students')->where(DB::raw('year(created_at)'), $year)->whereNull('students.deleted_at')
+        ->select( DB::raw('location_id,sum(case when month(created_at) = 1 then 1 else 0 end) as JanCount,
+        sum(case when month(created_at) = 2 then 1 else 0 end) as FebCount,
+        sum(case when month(created_at) = 3 then 1 else 0 end) as MarCount,
+        sum(case when month(created_at) = 4 then 1 else 0 end) as AprCount,
+        sum(case when month(created_at) = 5 then 1 else 0 end) as MayCount,
+        sum(case when month(created_at) = 6 then 1 else 0 end) as JunCount,
+        sum(case when month(created_at) = 7 then 1 else 0 end) as JulCount,
+        sum(case when month(created_at) = 8 then 1 else 0 end) as AugCount,
+        sum(case when month(created_at) = 9 then 1 else 0 end) as SepCount,
+        sum(case when month(created_at) = 10 then 1 else 0 end) as OctCount,
+        sum(case when month(created_at) = 11 then 1 else 0 end) as NovCount,
+        sum(case when month(created_at) = 12 then 1 else 0 end) as DecCount'))
+        ->groupBy(DB::raw('location_id'))
+        ->get() ,
+        'totals'=> DB::table('students')->where(DB::raw('year(created_at)'), $year)->whereNull('students.deleted_at')
+        ->select( DB::raw('sum(case when month(created_at) = 1 then 1 else 0 end) as JanCount,
+        sum(case when month(created_at) = 2 then 1 else 0 end) as FebCount,
+        sum(case when month(created_at) = 3 then 1 else 0 end) as MarCount,
+        sum(case when month(created_at) = 4 then 1 else 0 end) as AprCount,
+        sum(case when month(created_at) = 5 then 1 else 0 end) as MayCount,
+        sum(case when month(created_at) = 6 then 1 else 0 end) as JunCount,
+        sum(case when month(created_at) = 7 then 1 else 0 end) as JulCount,
+        sum(case when month(created_at) = 8 then 1 else 0 end) as AugCount,
+        sum(case when month(created_at) = 9 then 1 else 0 end) as SepCount,
+        sum(case when month(created_at) = 10 then 1 else 0 end) as OctCount,
+        sum(case when month(created_at) = 11 then 1 else 0 end) as NovCount,
+        sum(case when month(created_at) = 12 then 1 else 0 end) as DecCount'))
+        ->get() ,
+        'semesters' => $semesters,
+        'semestertotals'=> $semestertotals,
+        'selectedyear'=> $year,
+        'years'=> student::distinct()->select(DB::raw('year(created_at) as year'))->orderby('year')->get(),
+        'locations'=> $locations,
+        'page'=> 'WBL Enroll Report',
+      );
+        return view('reports.studentapplications')->with($data);
+
+       
+    }
+
+    public function studentclusters(Request $request,$selectedsemester=NULL){
+
+       if($selectedsemester == NULL)
+        $selectedsemester = semester::where('status', 'active')->get()[0]->id;
+      
+
+      $locations = [];
+      $semestertotals = [];
+      $semesters = [];
+      $clustertotals = [];
+      foreach(location::where('location_desc','like','%')->orderBy('location_desc')->get() as $l)
+        $locations[$l->id] = $l;
+
+      foreach(semester::all() as $sem)
+        $semesters[$sem->id] = $sem;
+      foreach(cluster::all() as $c){
+        $clusters[$c->id] = $c;
+        $clustertotals[$c->id] = 0;
+        foreach(location::where('location_desc','like','%')->orderBy('location_desc')->get() as $l){
+          $semestertotals[$l->id][$c->id] = DB::table('students')
+                                              ->join('student_semesters','student_semesters.student_id','students.id')->whereNull('student_semesters.deleted_at')
+                                              ->join('pathways','pathways.id','student_semesters.pathway_id')->whereNull('students.deleted_at')
+                                              ->join('clusters','clusters.id','pathways.cluster_id')
+                                              ->where('student_semesters.semester_id', $selectedsemester)
+                                              ->where('clusters.id', $c->id)
+                                              ->where('students.location_id', $l->id)
+                                              ->select('clusters.id')
+                                              ->groupby('clusters.id')
+                                              ->count();
+          $clustertotals[$c->id] += $semestertotals[$l->id][$c->id];
+        }
+      }
+
+      $data = array(
+        
+        'semesters' => $semesters,
+        'clusters' => $clusters,
+        'semestertotals'=> $semestertotals,
+        'clustertotals'=> $clustertotals,
+        'selectedsemester'=> $selectedsemester,
+        'years'=> student::distinct()->select(DB::raw('year(created_at) as year'))->orderby('year')->get(),
+        'locations'=> $locations,
+        'page'=> 'WBL Enroll Report',
+      );
+        return view('reports.studentclusters')->with($data);
+
+       
+    }
 }

@@ -60,8 +60,9 @@
           </div>
           <div class="row ">
              <div class="col-4 ">
-               <h5><u>Pathway</u>: @if($student->pathway != NULL){{$student->pathway->pathway_desc}}@endif</h5>
+               <div><span class="h5"><u>Pathway</u>: @if($student->pathway != NULL){{$student->pathway->pathway_desc}}@endif</span> &nbsp;&nbsp;<strong><u>Cluster</u>: @if($student->pathway != NULL){{$student->pathway->cluster->cluster_desc}}@endif</strong></div>
             </div>
+            
             <div class="col-md-2 col-lg-2 form-group form-check p-0">
               <label class="form-check-label" for="ta"><input class="updateTracking " id="ta{{$student->id}}" data-studentid="{{$student->id}}"  type="checkbox" name="ta" class="form-check-input" {{$student->ta == 'Y'?'checked':''}}>   &nbsp;&nbsp;TA @if($student->ta == 'Y') - {{date('m/d/y',strtotime($student->ta_at))}} @endif</label>
             </div>

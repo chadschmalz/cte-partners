@@ -62,7 +62,23 @@
         </div>
       </li>
     @endif
+    @if(Auth::user()->hasAnyRole(['superuser','fulledit']))
 
+<li class="nav-item">
+  <a class="nav-link  d-inline-flex align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="false" href="/utils">
+    <span data-feather="layers"></span>
+    Reports
+  </a>
+  <div class="collapse " id="reports-collapse">
+    <ul class="nav flex-column mx-1">
+      <li class="nav-item mx-4 {{Request::is('/studentapplications') ? 'active':''}}"><a href="/studentapplications" class="nav-link">Applications Report</a></li>
+      <li class="nav-item mx-4 {{Request::is('/studentclusters') ? 'active':''}}"><a href="/studentclusters" class="nav-link">Student Clusters Report</a></li>
+    @if(Auth::user()->hasAnyRole(['superuser']))
+@endif
+    </ul>
+  </div>
+</li>
+@endif
 
     </ul>
 

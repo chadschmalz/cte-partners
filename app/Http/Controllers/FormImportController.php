@@ -10,12 +10,12 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\cluster;
 
-class StudentImportController extends Controller
+class FormImportController extends Controller
 {
 
     public function getImport()
     {
-        return view('student.studentimport.import');
+        return view('formimport.import');
     }
 
     public function parseImport(CsvImportRequest $request)
@@ -44,7 +44,7 @@ class StudentImportController extends Controller
             return redirect()->back();
         }
 
-        return view('student.studentimport.import_fields', compact( 'csv_header_fields', 'csv_data', 'csv_data_file'));
+        return view('formimport.import_fields', compact( 'csv_header_fields', 'csv_data', 'csv_data_file'));
 
     }
 
@@ -93,7 +93,7 @@ class StudentImportController extends Controller
                         'semesters'=> semester::where('id$student->like$student->%')->orderBy('semester_enddt')->get(),
                        'students'=> $students,
                      );
-              return view('student.studentlist')->with($data);
+              return view('formimport.import')->with($data);
     }
 
 

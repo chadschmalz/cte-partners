@@ -2,6 +2,7 @@
 
 @section('content')
 
+@include('inc.results')
 @include('student.add')
 <!-- Modal -->
 <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
@@ -40,7 +41,7 @@
 
 
       <div class="row mb-3">
-        <div class="col-md-3 col-lg-3">
+        <div class="col-md-2 col-lg-2">
           <label for="recipient-name" class="col-form-label">Semester:</label>
           <select class="form-select" id="studentSemester" aria-label="Default select example" onchange=" return refreshStudentList()">
             @if(isset($semesters))
@@ -78,7 +79,17 @@
         @endif
       </select>
     </div>
-
+    <div class="col-md-3 col-lg-3">
+        <label for="recipient-name" class="col-form-label">Cluster:</label>
+      <select class="form-select studentCluster" id="studentCluster" aria-label="Default select example" onchange="return refreshStudentList()">
+        <option value="all" {{ $selectedCluster==NULL  ?'selected':''}}>All</option>
+        @if(isset($clusters))
+          @foreach($clusters as $c)
+                  <option value="{{$c->id}}" {{ $selectedCluster==$c->id?'selected':''}}>{{$c->cluster_desc}}</option>
+          @endforeach
+        @endif
+      </select>
+    </div>
     <div class="col-md-1 col-lg-1">
       <label for="recipient-name" class="col-form-label">&nbsp;</label>
       <a href="/students"><button type="button" class="form-control btn btn-secondary">Reset</button></a>
@@ -105,13 +116,14 @@
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="8">Mentor</a>
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="9">Mentor Phone</a>
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="10">LetterSent</a>
-                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="11" style="text-align:center">LA</a>
-                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="12" style="text-align:center">WS1</a>
-                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="13" style="text-align:center">WS2</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="11" style="text-align:center">WS1</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="12" style="text-align:center">WS2</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="13" style="text-align:center">LA</a>
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="14" style="text-align:center">RESUME</a>
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="15" style="text-align:center">MOCK</a>
                        <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="16" style="text-align:center">TA</a>
-                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="20">Schedule</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="20" style="text-align:center">LANE</a>
+                       <a class="toggle-vis btn btn-sm btn-outline-primary" data-column="21">Schedule</a>
                                        </div>
 
 
@@ -129,15 +141,16 @@
                                                 <th scope="col" >Mentor</th>
                                                 <th scope="col" >Mentor Phone</th>
                                                 <th scope="col" >LetterSent</th>
-                                                <th scope="col" style="text-align:center">LA</th>
                                                 <th scope="col" style="text-align:center">WS1</th>
                                                 <th scope="col" style="text-align:center">WS2</th>
+                                                <th scope="col" style="text-align:center">LA</th>
                                                 <th scope="col" style="text-align:center">RESUME</th>
                                                 <th scope="col"style="text-align:center" >MOCK</th>
                                                 <th scope="col" style="text-align:center">TA</th>
                                                 <th scope="col" style="text-align:center">RESUME Data</th>
                                                 <th scope="col"style="text-align:center" >MOCK Data</th>
                                                 <th scope="col" style="text-align:center">TA Data</th>
+                                                <th scope="col" style="text-align:center">Lane</th>
                                                 <th scope="col" >Schedule</th>
 
                                               </tr>
@@ -198,15 +211,16 @@
                                        <td></td>
                                     @endif
                                      <td>@if($student->lettersent_at != NULL){{date('m/d/Y',strtotime($student->lettersent_at))}}@endif</td>
-                                     <td style="text-align:center"><input class="updateTracking " id="la{{$student->id}}" type="checkbox" class="form-check-input"  data-studentid="{{$student->id}}" {{$student->la == 'Y'?'checked':''}}></td>
                                      <td>{{$student->ws1}}</td>
                                      <td>{{$student->ws2}}</td>
+                                     <td style="text-align:center"><input class="updateTracking " id="la{{$student->id}}" type="checkbox" class="form-check-input"  data-studentid="{{$student->id}}" {{$student->la == 'Y'?'checked':''}}></td>
                                      <td style="text-align:center"><input class="updateTracking " id="resume{{$student->id}}" type="checkbox" class="form-check-input"  data-studentid="{{$student->id}}" {{$student->resume == 'Y'?'checked':''}}></td>
                                      <td style="text-align:center"><input class="updateTracking " id="mock{{$student->id}}" type="checkbox" class="form-check-input"  data-studentid="{{$student->id}}" {{$student->mock == 'Y'?'checked':''}}></td>
                                      <td style="text-align:center"><input class="updateTracking " id="ta{{$student->id}}" data-studentid="{{$student->id}}" type="checkbox" class="form-check-input"  {{$student->ta == 'Y'?'checked':''}}></td>
                                      <td>{{$student->resume}}</td>
                                      <td>{{$student->mock}}</td>
                                      <td>{{$student->ta}}</td>
+                                     <td>{{$student->lane}}</td>
                                      @if(count($student->semesters->where('semester_id',$selectedSemester)) > 0 )
                                      <td>@foreach($student->semesters->where('semester_id',$selectedSemester) as $sem) {{$sem->schedule}} @endforeach</td>
                                      @else

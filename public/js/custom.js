@@ -325,6 +325,22 @@ $app.studentdetail = function(){
 
 
 }
+$app.studentclusters = function(){
+
+  var allDataTable = $('#allDataTable').DataTable( {
+    "scrollY": "550px",
+    "paging": false,
+    buttons: [
+      {
+        extend: 'csv',
+        text: 'Download CSV',
+        "className": 'btn btn-primary btn-sm mx-2',
+    }
+        ]
+
+  } );
+  $('#allDataTable_filter').append(allDataTable.buttons().container());
+}
 $app.student = function(){
 
 
@@ -342,6 +358,10 @@ $app.student = function(){
     } );
     $('#allStudentDataTable_filter').append(allStudentDataTable.buttons().container());
     allStudentDataTable.column( 6 ).visible( false );
+    allStudentDataTable.column( 13 ).visible( false );
+    allStudentDataTable.column( 14 ).visible( false );
+    allStudentDataTable.column( 15).visible( false );
+    allStudentDataTable.column( 16 ).visible( false );
     allStudentDataTable.column( 17 ).visible( false );
     allStudentDataTable.column( 18 ).visible( false );
     allStudentDataTable.column( 19 ).visible( false );
@@ -793,6 +813,9 @@ $app.route = function(){
         case 'students':
             $app.student();
             break;
+        case 'studentclusters':
+            $app.studentclusters();
+            break;
         case 'counselors':
             $app.counselors();
             break;
@@ -830,10 +853,17 @@ function refreshBusinessAddressList() {
 }
 function refreshStudentList() {
     // if($('#studentCluster option:selected').val() === "empty")
-      location = '/students/'+$('#studentSemester option:selected').val()+'/'+$('#studentLocation option:selected').val()+'/'+$('#studentPathway option:selected').val();
+      location = '/students/'+$('#studentSemester option:selected').val()+'/'+$('#studentLocation option:selected').val()+'/'+$('#studentPathway option:selected').val()+'/'+$('#studentCluster option:selected').val();
     // return false;
 }
-
+function refreshApplicationReport() {
+  location = '/studentapplications/'+$('#calYear option:selected').val(); // 'right.html';
+// return false;
+}
+function refreshClusterReport() {
+  location = '/studentclusters/'+$('#calYear option:selected').val(); // 'right.html';
+// return false;
+}
 
 $(document).ready(function () {
 //All Requisitions Data table
