@@ -12,10 +12,10 @@ Otherwise, follow the steps below to reserve your spot.<br/>
 <strong>Terms of Enrollment(time sensitive next steps to begin):</strong>
 
 <ol type="1">
-  <li>Complete your training agreement within 7 days, or we cannot guarantee your spot. (<a href="https://www.washk12internships.org/">Click Here</a> to select your school and print the training agreement).</li>
+  <li>Complete your training agreement within 7 days, or we cannot guarantee your spot. (<a href="https://www.washk12internships.org/">Click Here</a> to select your <strong>school</strong> and print the <strong>training agreement</strong>).</li>
   <li>We will then set up a safety agreement with your internship employer.</li>
   <li>Once approved, we will send you the online self-paced Canvas course to complete.</li>
-  <li>Please note a LinkedIn Agreement must be completed to participate in the internship program.  Be sure to complete that assignment in the Canvas course.</li>
+  <li>Please note a LinkedIn Agreement <strong>must be completed</strong> to participate in the internship program.  Be sure to complete that assignment in the Canvas course.</li>
 </ol>
 
 <br />You will be receiving more communication as we get closer. Work hard, keep your G.P.A. high, and continue to be engaged in your classes. If you have any questions please feel free to contact either of us listed below.

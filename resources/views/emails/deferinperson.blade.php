@@ -9,7 +9,7 @@ Your online internship application is being processed. Due to high demand in you
 In the event a spot becomes available in your semester of choice, students who have completed the workshop training will receive priority placement. Click the link below to register for the workshops to prepare you for this opportunity. 
 <br/>
 
-<strong>Terms of Enrollment(time sensitive next steps to begin):</strong>
+<strong>Requirement for priority placement</strong>
 <br />
 <ol type="1">
   <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdDkG6S6TcK21MdkkAX-_9eom649npAYaepJj611DY4eEuNnw/viewform">Click here to register</a> for training <strong>within 7 days</strong>, or we cannot place you on the priority list.</li>

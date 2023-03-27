@@ -27,21 +27,12 @@
               <label for="recipient-name" class="col-form-label">Email Type:</label>
               <select class="form-select" id="emailtype" name="emailtype" aria-label="Default select example" >
 
-                @if(0==1)
-                <option value="acceptance" >L1 Acceptance Letter Email</option>
-                <option value="futureacceptance" >Future Student Acceptance Letter Email</option>
-                <option value="l2accepted" >L2 Acceptance Letter</option>
-                <option value="seatsFull" >Deferral: Employer Seats Full</option>
-                <option value="defer" >Deferral: No CTE Course</option>
-                <option value="regExpired" >Priority Registration Expired</option>
-                @endif
-
                 <option value="acceptedinperson" >Accepted In-Person</option>
                 <option value="l1onlinews" >L1 Accepted Online</option>
                 <option value="l2onlinews" >L2 Accepted Online</option>
                 <option value="deferinperson" >Deferral In-Person</option>
                 <option value="deferonlinews" >Deferral Online</option>
-                <option value="prereqreqired" >Prerequisite Required </option>
+                <option value="prereqrequired" >Prerequisite Required </option>
                 <option value="regexpired" >Priority Registration Expired</option>
               </select>
             </div>
