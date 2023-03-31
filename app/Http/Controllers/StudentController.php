@@ -63,7 +63,7 @@ class StudentController extends Controller
             else if($selectedSemester == 'dropped' && $selectedLocation != '%' &&  $selectedPathway == '%'){
               $students =  student::where('location_id',$selectedLocation)->where('dropped', 'Y')->get();
             }
-            else if($selectedSemester == 'unassigned' && $selectedLocation == '%' &&  $selectedPathway == '%') {
+            else if($selectedSemester != 'unassigned' && $selectedSemester != 'all' && $selectedLocation == '%' &&  $selectedPathway == '%') {
               $students =     student::where('location_id','like',$selectedLocation)->where('student_semesters.pathway_id','like',$selectedPathway)
               ->join('student_semesters','student_semesters.student_id','students.id')->whereNULL('student_semesters.deleted_at')
               ->join('pathways','pathways.id','student_semesters.pathway_id')
