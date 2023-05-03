@@ -47,7 +47,7 @@
             @if(isset($semesters))
             <option value="dropped">Dropped</option>
             <option value="unassigned" {{ $selectedSemester=='unassigned'?'selected':''}}>Unassigned</option>
-            <option value="all" {{ $selectedSemester=='all'?'selected':''}}>All</option>
+            <option value="all" {{ $selectedSemester=='%'?'selected':''}}>All</option>
               @foreach($semesters as $semester)
                       <option value="{{$semester->id}}" {{ $selectedSemester==$semester->id?'selected':''}}>{{ $semester->status=="active"  ?'Current: ':($semester->semester_enddt < now()  ?'Prev: ':'')}}{{$semester->semester_desc}}</option>
               @endforeach
@@ -159,7 +159,15 @@
                             @if(isset($students))
                                @foreach($students as $student)
                                <tr>
-                                 <td><a   href="/studentdetail/{{$student->id}}" target="_blank">{{$student->name}}</a></td>
+                                 <td><a   href="/studentdetail/{{$student->id}}" target="_blank">
+                                  @if( session('presentation'))  {{$student->fname}}
+                                  @else 
+                                  {{$student->name}}
+                                  @endif
+                                </a> 
+
+                                 
+                                </td>
 
                                  <td>{{$student->email}}</td>
                                  <td>{{$student->phone}}</td>

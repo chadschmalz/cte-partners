@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\location;
+use App\Models\conesite;
 
 class LocationController extends Controller
 {
@@ -16,6 +17,7 @@ class LocationController extends Controller
     {
       return view('locations.index')->with([
         'locations'=>location::all(),
+        'conesites'=>conesite::all(),
       ]);
 
     }
@@ -32,12 +34,13 @@ class LocationController extends Controller
         $location = new location;
 
         $location->location_num = $request->location_num;
-        $location->location_desc = $request->location_desc;
+        $location->location_desc = $request->desc;
         $location->address1 = $request->address1;
         $location->city = $request->city;
         $location->state = $request->state;
         $location->zip = $request->zip;
         $location->phone = $request->phone;
+        $location->conesite = $request->conesite;
         $location->save();
         // $location->school_year = $request->school_year;
         return redirect('/locations');
@@ -61,16 +64,17 @@ class LocationController extends Controller
           }
         }
 
-      $location = location::find($request->location_id);
+      $location = location::find($request->id);
 
       $location->location_num = $request->location_num;
-      $location->location_desc = $request->location_desc;
+      $location->location_desc = $request->desc;
       $location->address1 = $request->address1;
       $location->city = $request->city;
       $location->state = $request->state;
       $location->zip = $request->zip;
       $location->phone = $request->phone;
-      $location->save();
+        $location->conesite_id = $request->conesite;
+        $location->save();
       // $location->school_year = $request->school_year;
       return redirect('/locations');
     }

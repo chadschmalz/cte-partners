@@ -46,7 +46,6 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 	Route::post('/addPartners', 'BusinessController@uploadpartners')->name('uploadpartners');
 
 
-	Route::get('/', 'BusinessController@index')->name('business');
 	Route::get('/business/{cluster?}/{pathway?}/{activity?}', 'BusinessController@index')->name('business');
 	Route::get('/allpocs/{cluster?}/{pathway?}/{activity?}', 'BusinessController@allpocs')->name('allpocs');
 	Route::get('/businessaddress/{cluster?}/{pathway?}/{activity?}', 'BusinessController@address')->name('businessaddress');
@@ -82,6 +81,10 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 	Route::get('/sampleuploadpathwaysfile', 'PathwayController@sampleuploadfile')->name('samplePathwayFile');
 
 
+	Route::get('/', 'StudentController@index')->name('students');
+	Route::get('/togglePresent', 'StudentController@togglepresentmode')->name('PresentMode');
+
+	//student routes
 	Route::get('/students/{semester?}/{location?}/{pathway?}/{cluster?}', 'StudentController@index')->name('students');
 	Route::get('/studentdetail/{id}', 'StudentController@studentdetail')->name('studentdetail');
 	Route::get('/onboardingComplete/{id}', 'StudentController@onboardingComplete')->name('onboardingComplete');
@@ -102,6 +105,19 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
 	Route::get('/studentapplications/{year?}', 'StudentController@studentapplications')->name('studentapplications');
 	Route::get('/studentclusters/{year?}', 'StudentController@studentclusters')->name('studentclusters');
+	Route::get('/eventreport/{year?}', 'EventController@eventreport')->name('eventreport');
+
+
+//event routes
+	Route::get('/events/{semester?}/{location?}/{cluster?}', 'EventController@index')->name('events');
+	Route::get('/eventedit/{id?}', 'EventController@edit')->name('eventedit');
+	Route::get('/eventadd', 'EventController@add')->name('eventadd');
+	Route::post('/eventstore', 'EventController@store')->name('eventstore');
+	Route::post('/eventupdate', 'EventController@update')->name('eventupdate');
+
+
+
+
 
 	Route::get('/acceptedPreview', function () {
 		    return view('email.applicationaccepted');

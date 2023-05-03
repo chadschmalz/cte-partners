@@ -111,33 +111,41 @@
                             @if(isset($businesses))
                                @foreach($businesses as $biz)
                                <?php
-                               $clusterIDs = array();
-                               $bizclusters = '';
-                               foreach ($biz->pathways as $key => $value) {
-                                 $clusterIDs[$value->cluster_id] = $value->cluster_id;
-                               }
-                               foreach ($clusterIDs as $key => $value) {
-                                 if($bizclusters == '')
-                                    $bizclusters .= $clusters[$value]->cluster_desc;
-                                else
-                                   $bizclusters .= ',' . $clusters[$value]->cluster_desc ;
-                               }
+                              //  $clusterIDs = array();
+                              //  $bizclusters = '';
+                              //  foreach ($biz->pathways as $key => $value) {
+                              //    $clusterIDs[$value->cluster_id] = $value->cluster_id;
+                              //  }
+                              //  foreach ($clusterIDs as $key => $value) {
+                              //    if($bizclusters == '')
+                              //       $bizclusters .= $clusters[$value]->cluster_desc;
+                              //   else
+                              //      $bizclusters .= ',' . $clusters[$value]->cluster_desc ;
+                              //  }
                                ?>
                                <tr>
                                  <td><a   href="/businessdetail/{{$biz->id}}" target="_blank">{{$biz->name}}</a></td>
                                  <td>{{$biz->address}} {{$biz->city}} {{$biz->state}} {{$biz->zip}}</td>
                                <td>{{$biz->safety_agreement}}</td>
-                                     <td>{{$biz->pocs[0]->name}}</td>
-                                     <td>{{$biz->pocs[0]->email}}</td>
-                                     <td>{{$biz->pocs[0]->phone}}</td>
-                                     <td>{{$bizclusters}}</td>
+                               @if($selectedCluster == ' all')
+                                  <td>{{$biz->pocname}}</td>
+                                  <td>{{$biz->pocsemail}}</td>
+                                  <td>{{$biz->pocsphone}}</td>
+                               @else
+                                  <?php $b = $biz->pocs[0] ?>
+                                    <td>{{$b->name}}</td>
+                                    <td>{{$b->email}}</td>
+                                    <td>{{$b->phone}}</td>
+                                  
+                              @endif
+                                     <td>@if(isset($bizclusters[$biz->id])){{$bizclusters[$biz->id]}}@endif</td>
                                      <td>{{$biz->notes}}</td>
                                      <?PHP
                                      $activities = '';
-                                     foreach($biz->activities as $act)
-                                        $activities .= $act->activity->activity_desc.", ";
+                                    //  foreach($bizactivities as $act)
+                                    //     $activities .= $act->activity->activity_desc.", ";
                                      ?>
-                                     <td>{{$activities}}</td>
+                                     <td>@if(isset($bizactivities[$biz->id])){{$bizactivities[$biz->id]}}@endif</td>
 
                                      <td><a   href="/businessdetail/{{$biz->id}}">{{$biz->id}}</a></td>
                                      <td style="text-align:center"><div class=" btn btn-sm @if($biz->next_internship=='Yellow')btn-warning @elseif($biz->next_internship=='Red') btn-danger @elseif($biz->next_internship=='Green') btn-success @endif"> {{$biz->next_internship}}</div></td>

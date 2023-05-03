@@ -10,42 +10,54 @@
           @csrf
             <div class="form-group">
               <label for="recipient-name" class="col-form-label">Location #:</label>
-              <input type="text" class="form-control fscode" id="location_num" name="location_num" placeholder="Location Number" required>
+              <input type="text" class="form-control " id="location_num" name="location_num" placeholder="Location Number" required>
             </div>
             <div class="form-group">
               <label for="message-text" class="col-form-label">Location Description:</label>
-              <input class="form-control location_desc" id="location_desc" name="location_desc" placeholder="location Description" required>
-              <input type="hidden" class="form-control " id="location_id" name="location_id" value="0">
+              <input class="form-control location_desc" id="location_desc" name="desc" placeholder="location Description" required>
+              <input type="hidden" class="form-control " id="location_id" name="id" value="0">
 
             </div>
             <div class="form-group">
               <label for="message-text" class="col-form-label">Street:</label>
-              <input type="text" class="form-control " id="location_address1" name="location_address1" placeholder="Address" required>
+              <input type="text" class="form-control " id="location_address1" name="address1" placeholder="Address" required>
 
             </div>
             <div class="form-group">
               <label for="message-text" class="col-form-label">City:</label>
-              <input type="text" class="form-control " id="location_city" name="location_city" placeholder="City" required>
+              <input type="text" class="form-control " id="location_city" name="city" placeholder="City" required>
 
             </div>
             <div class="form-group">
               <label for="message-text" class="col-form-label">State:</label>
-              <input type="text" class="form-control " id="location_state" name="location_state" placeholder="State" required>
+              <input type="text" class="form-control " id="location_state" name="state" placeholder="State" required>
 
             </div>
             <div class="form-group">
               <label for="message-text" class="col-form-label">Zip:</label>
-              <input type="text" class="form-control " id="location_zip" name="location_zip" placeholder="Zip" required>
+              <input type="text" class="form-control " id="location_zip" name="zip" placeholder="Zip" required>
 
             </div>
             <div class="form-group">
               <label for="message-text" class="col-form-label">Phone:</label>
               <div class="form-group">
-                <input type="text" class="form-control " id="location_phone" name="location_phone" placeholder="Phone" required>
+                <input type="text" class="form-control " id="location_phone" name="phone" placeholder="Phone" >
 
           </div>
             </div>
-
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Conesite:</label>
+              <div class="form-group">
+                <select class="form-select " id="location_conesite" name="conesite" aria-label="" required>
+                <option value="" {{!isset($selectedPathway)?'selected':''}}></option>
+                @if(isset($conesites))
+                    @foreach($conesites as $conesite)
+                        <option value="{{$conesite->id}}"  >{{$conesite->conesite_desc}}</option>
+                    @endforeach
+                @endif
+            </select>
+          </div>
+            </div>
         </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

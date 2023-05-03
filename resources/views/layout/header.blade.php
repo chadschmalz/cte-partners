@@ -19,6 +19,11 @@
         
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li>
+            <div class="dropdown-item">
+              <label class="form-check-label" ><input type="checkbox" class="sessionPresent " id="sessionPresent"  {{session('presentation')=='1' ?'checked':''}} onchange="refreshPresentMode()">   Present Mode</label>
+            </div>
+            </li>
             <li><a class="dropdown-item" href="/logout">
             <i class="nav-icon icon-logout"></i> Logout</a></li>
           </ul>

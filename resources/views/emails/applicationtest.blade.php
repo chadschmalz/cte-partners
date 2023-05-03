@@ -32,5 +32,5 @@ Thank you for applying to the CTE Washk12 Internship Program!
 
 
 Thanks,<br />
-Washk12Internships
+Career Development
 @endcomponent

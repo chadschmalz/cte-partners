@@ -140,8 +140,20 @@
                               </div>
                               <div class="card-body">
                                 <div class="row ">
-                                  @foreach($business->studentinternships->where('deleted_at',NULL) as $intern)
-                                      <div class="mx-1"><a   href="/studentdetail/{{$intern->student->id}}" target="_blank">{{$intern->student->name}}</a> Semester:{{$intern->semester->semester_desc}}</div>
+                                  @foreach($business->studentinternships->whereNULL('deleted_at') as $intern)
+                                    <?php $st = $intern->student; ?>
+                                    @if(isset($st->id))
+                                        <div class="mx-1"><a   href="/studentdetail/{{$st->id}}" target="_blank">
+                                          
+                                        @if( session('presentation')) 
+                                         {{$st->fname}}
+                                        @else 
+                                         {{$st->name}}
+                                        @endif
+
+
+                                        </a> Semester:{{$intern->semester->semester_desc}}</div>
+                                    @endif
                                   @endforeach
                                 </div>
                               </div>

@@ -45,6 +45,7 @@ class StudentController extends Controller
 
           $selectedSemester = semester::where('status','active')->get()[0]->id;
         }
+        $selectedSemester == 'all' ? $selectedSemester = '%' : '';
         $selectedLocation == 'all' ? $selectedLocation = '%' : '';
         $selectedPathway == 'all' ? $selectedPathway = '%' : '';
         $selectedCluster == 'all' ? $selectedCluster = '%' : '';
@@ -63,19 +64,22 @@ class StudentController extends Controller
             else if($selectedSemester == 'dropped' && $selectedLocation != '%' &&  $selectedPathway == '%'){
               $students =  student::where('location_id',$selectedLocation)->where('dropped', 'Y')->get();
             }
-            else if($selectedSemester != 'unassigned' && $selectedSemester != 'all' && $selectedLocation == '%' &&  $selectedPathway == '%') {
-              $students =     student::where('location_id','like',$selectedLocation)->where('student_semesters.pathway_id','like',$selectedPathway)
-              ->join('student_semesters','student_semesters.student_id','students.id')->whereNULL('student_semesters.deleted_at')
+            else if($selectedSemester != 'unassigned' ) {
+              $students =     student::where('location_id','like',$selectedLocation)
+              ->whereIn('id',
+              student_semester::where('semester_id','like',$selectedSemester)
               ->join('pathways','pathways.id','student_semesters.pathway_id')
-              ->join('clusters','clusters.id','pathways.cluster_id')->where('clusters.id','like',$selectedCluster)
-              ->where('student_semesters.semester_id',$selectedSemester)
+              ->join('clusters','clusters.id','pathways.cluster_id')
+              ->where('clusters.id','like',$selectedCluster)
+              ->where('student_semesters.pathway_id','like',$selectedPathway)->pluck('student_id'))
               ->select('students.*')->orderBy('students.name','asc')->get();
-            } else{
+            }  else{
               $students =  student::where('onboarding','<>', 'Y')->get();
             }
 
-
-
+            // if( Auth::user()->name == 'Chad Schmalz') return session()->all(); 
+            // if(session('presentation') == NULL)
+            //   session(['presentation'=>'1']);
 
             $data = array(
                         'selectedSemester'=> $selectedSemester,
@@ -84,7 +88,7 @@ class StudentController extends Controller
                         'selectedLocation'=> $selectedLocation,
                         'clusters'=> cluster::all(),
                         'pathways'=> pathway::orderBy('pathway_desc')->get(),
-                        'locations'=> location::where('location_desc','like','%')->orderBy('location_desc')->get(),
+                        'locations'=> location::where('location_desc','like','%')->where('grades','HS')->orderBy('location_desc')->get(),
                         'semesters'=> semester::where('id','like','%')->orderBy('semester_enddt')->get(),
                        'students'=> $students,
                 'page'=> 'WBL Students',
@@ -109,7 +113,7 @@ class StudentController extends Controller
          'counselors'=> counselor::where('location_id',$student->location_id)->get(),
         //  'semesters'=>semester::where('semester_enddt','>=',date("Y-m-d H:i:s"))->orderBy('semester_enddt')->get(),
          'semesters'=>semester::where('semester_enddt','like','%')->orderBy('semester_enddt')->get(),
-        'page'=> 'WBL Student '.$student->name,
+        'page'=> 'WBL-'.$student->fname,
       );
         return view('student.studentdetail')->with($data);
     }
@@ -320,6 +324,8 @@ class StudentController extends Controller
         $emailType = "Prerequisite Required" ; 
       else if($request->emailtype == "regexpired" )
         $emailType = "Priority Registration Expired" ; 
+      else if($request->emailtype == "futuresemester" )
+        $emailType = "Future Semester Registration" ; 
       
       $v = "/[a-zA-Z0-9_\-\..+]+@[a-zA-Z0-9\-]+.[a-zA-Z]+/";
 
@@ -510,9 +516,8 @@ class StudentController extends Controller
       ->get() as $s)
         $semestertotals[$s->location_id][$s->id] = $s->cnt;
 
-
       $data = array(
-        'schooltotals'=> DB::table('students')->where(DB::raw('year(created_at)'), $year)->whereNull('students.deleted_at')
+        'schooltotals'=> DB::table('students')->where(DB::raw('year(created_at)'), $year)->whereNull('students.deleted_at')->whereNotNull('students.location_id')
         ->select( DB::raw('location_id,sum(case when month(created_at) = 1 then 1 else 0 end) as JanCount,
         sum(case when month(created_at) = 2 then 1 else 0 end) as FebCount,
         sum(case when month(created_at) = 3 then 1 else 0 end) as MarCount,
@@ -525,7 +530,7 @@ class StudentController extends Controller
         sum(case when month(created_at) = 10 then 1 else 0 end) as OctCount,
         sum(case when month(created_at) = 11 then 1 else 0 end) as NovCount,
         sum(case when month(created_at) = 12 then 1 else 0 end) as DecCount'))
-        ->groupBy(DB::raw('location_id'))
+        ->groupBy('location_id')
         ->get() ,
         'totals'=> DB::table('students')->where(DB::raw('year(created_at)'), $year)->whereNull('students.deleted_at')
         ->select( DB::raw('sum(case when month(created_at) = 1 then 1 else 0 end) as JanCount,
@@ -601,4 +606,24 @@ class StudentController extends Controller
 
        
     }
+    public function togglepresentmode(Request $request)
+    {
+        if(session('presentation')== '1'){
+          session(['presentation'=>'0']);
+        }
+        else {
+          session(['presentation'=>'1']);
+        }
+        return session('presentation');
+        
+          $result = array(
+            'success' => 'Present Mode Updated ' ,
+            'status' => 'success',
+            'action' => 'update',
+          );
+
+        //ajaxResponse
+        return response()->json($result);
+
+        }
 }

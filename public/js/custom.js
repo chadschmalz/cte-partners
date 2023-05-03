@@ -33,17 +33,18 @@ $app.locations = function(){
           if(button.getAttribute('data-bs-action') == 'locationupdate'){
             // Button that triggered the modal
             document.getElementById('locationaddform').action = '/locationupdate'
-            $('.locationid').val(button.getAttribute('data-bs-locationid'));
+            $('#location_id').val(button.getAttribute('data-bs-locationid'));
             $('#location_num').val(button.getAttribute('data-bs-location_num'));
             $('#location_desc').val(button.getAttribute('data-bs-desc'));
-            $('#location_address1').val(button.getAttribute('data-bs-phone'));
-            $('.stemail').val(button.getAttribute('data-bs-email'));
-            $('.stpathway').val(button.getAttribute('data-bs-pathway'));
-            $('.stemerg_phone').val(button.getAttribute('data-bs-emerg_phone'));
-            $('.stemerg_contact').val(button.getAttribute('data-bs-emerg_contact'));
-            $('.stnotes').val(button.getAttribute('data-bs-notes'));
+            $('#location_address1').val(button.getAttribute('data-bs-address1'));
+            $('#location_city').val(button.getAttribute('data-bs-city'));
+            $('#location_state').val(button.getAttribute('data-bs-state'));
+            $('#location_zip').val(button.getAttribute('data-bs-zip'));
+            $('#location_phone').val(button.getAttribute('data-bs-phone'));
+            $('#location_grades').val(button.getAttribute('data-bs-notes'));
+            $('#location_conesite').val(button.getAttribute('data-bs-conesite'));
 
-            var sel = document.getElementById('stlocation_id');
+            var sel = document.getElementById('conesite');
             var opts = sel.options;
             for (var opt, j = 0; opt = opts[j]; j++) {
               if (opt.value == button.getAttribute('data-bs-locationid')) {
@@ -122,6 +123,114 @@ var counselorUpdate = document.getElementById('addCounselorModal');
 
     });
 
+
+}
+$app.events = function(){
+
+  $(function () {
+    $('[data-toggle="popover"]').popover({
+      trigger: 'hover | click',
+      container: 'body',
+      placement: 'bottom'
+    })
+    
+  })
+
+  var eventmodal = document.getElementById('EventModal');
+
+  eventmodal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget
+    if(button.getAttribute('data-mode') == 'edit'){
+      // Button that triggered the modal
+      document.getElementById('eventform').action = '/eventupdate'
+
+      $('.event_dt').val(button.getAttribute('data-eventdt'));
+      $('.event_desc').val(button.getAttribute('data-eventdesc'));
+      $('.pathway_id').val(button.getAttribute('data-pathwayid'));
+      $('.cluster_id').val(button.getAttribute('data-clusterid'));
+      $('.location_id').val(button.getAttribute('data-locationid'));
+      $('.business_id').val(button.getAttribute('data-businessid'));
+      $('.notes').val(button.getAttribute('data-notes'));
+
+      document.getElementById('pathwaysel').value = button.getAttribute('data-bs-pathway');
+
+      var sel = document.getElementById('pathwaysel');
+      var opts = sel.options;
+      for (var opt, j = 0; opt = opts[j]; j++){
+        if (opt.value == button.getAttribute('data-pathwayid')) {
+          sel.selectedIndex = j;
+          sel.value = opt.value;
+          break;
+        }
+      }
+
+    }
+    else{
+      $('.event_dt').val();
+      $('.event_desc').val();
+      $('.pathway_id').val();
+      $('.cluster_id').val();
+      $('.location_id').val();
+      $('.business_id').val();
+      $('.notes').val();
+    }
+  });
+  
+  $(".employer_search2").select2({
+    ajax: {
+      url: "/businesssearch",
+      dataType: 'json',
+      delay: 250,type: 'GET',
+      data: function (params) {
+        return {
+          searchInput: params.term, // search term
+          page: params.page
+        };
+      }, success: function (data,params){console.log('success');},
+      processResults: function (data, params) {
+        // parse the results into the format expected by Select2
+        // since we are using custom formatting functions we do not need to
+        // alter the remote JSON data, except to indicate that infinite
+        // scrolling can be used
+
+        console.log('searching');
+
+        params.page = params.page || 1;
+        var select2Data = $.map(data.employers, function (obj) {
+                             obj.id = obj.id;
+                            obj.text = obj.name;
+                            return obj;
+                        });
+        return {
+          results: data.employers,
+          pagination: {
+            more: (params.page * 30) < data.total_count
+          }
+        };
+      },
+      cache: true
+    },
+    dropdownParent: $('#EventModal'),
+    placeholder: 'LOOKUP Employer ',
+    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+    minimumInputLength: 1,
+    templateResult: formatBusiness2,
+    templateSelection: formatBusinessSelection2
+  });
+
+
+  function formatBusiness2 (employers) {
+    if (employers.loading) {
+      return employers.name;
+    }
+    var markup = "<div class='businessrecord' value='"+employers.id+"'>" + employers.name + "</div>";
+    return markup;
+  }
+
+  function formatBusinessSelection2 (employers) {
+
+    return  employers.text ;
+  }
 
 }
 
@@ -325,10 +434,10 @@ $app.studentdetail = function(){
 
 
 }
-$app.studentclusters = function(){
+$app.clusterreport = function(){
 
   var allDataTable = $('#allDataTable').DataTable( {
-    "scrollY": "550px",
+    "scrollY": "65vh",
     "paging": false,
     buttons: [
       {
@@ -814,8 +923,11 @@ $app.route = function(){
             $app.student();
             break;
         case 'studentclusters':
-            $app.studentclusters();
+            $app.clusterreport();
             break;
+        case 'eventreport':
+          $app.clusterreport();
+          break;
         case 'counselors':
             $app.counselors();
             break;
@@ -831,10 +943,37 @@ $app.route = function(){
         case 'locations':
             $app.locations();
             break;
+        case 'events':
+          $app.events();
+          break;
+        case 'eventedit':
+          $app.events();
+          break;
+        case 'eventadd':
+          $app.events();
+          break;
         default:
             return;
     }
 }
+
+function refreshPresentMode() {
+  
+    $.ajax({
+      url: '/togglePresent',
+      type: 'GET',
+      headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+      success:function(data, textStatus, jqXHR){
+        location.reload();
+
+      },
+      error: function(jqXHR, status, error) {
+        console.log(status + ": " + error);
+       
+      }
+    });
+}
+
 function refreshBusinessList() {
       location = '/business/'+$('#businessCluster option:selected').val()+'/'+$('#businessPathway option:selected').val()+'/'+$('#businessInvolve option:selected').val()+'?Status='+$('#businessStatus option:selected').val(); // 'right.html';
     // return false;
@@ -864,6 +1003,9 @@ function refreshClusterReport() {
   location = '/studentclusters/'+$('#calYear option:selected').val(); // 'right.html';
 // return false;
 }
+function refreshEvents() {
+    location = '/events/'+$('#eventsSemester option:selected').val()+'/'+$('#eventsLocation option:selected').val()+'/'+$('#eventsCluster option:selected').val();
+}
 
 $(document).ready(function () {
 //All Requisitions Data table
@@ -874,7 +1016,7 @@ $(".clickable-row").on('click', function() {
 });
 
     var allBizDataTable = $('#allBizDataTable').DataTable( {
-      "scrollY": "400px",
+      "scrollY": "52vh",
       "paging": false,
       buttons: [
         {

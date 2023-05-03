@@ -20,6 +20,12 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="/events" >
+          <span data-feather="calendar"></span>
+          Events
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="/students" >
           <span data-feather="users"></span>
           Students
@@ -73,6 +79,7 @@
     <ul class="nav flex-column mx-1">
       <li class="nav-item mx-4 {{Request::is('/studentapplications') ? 'active':''}}"><a href="/studentapplications" class="nav-link">Applications Report</a></li>
       <li class="nav-item mx-4 {{Request::is('/studentclusters') ? 'active':''}}"><a href="/studentclusters" class="nav-link">Student Clusters Report</a></li>
+      <li class="nav-item mx-4 {{Request::is('/eventreport') ? 'active':''}}"><a href="/eventreport" class="nav-link">Event Report</a></li>
     @if(Auth::user()->hasAnyRole(['superuser']))
 @endif
     </ul>
@@ -81,40 +88,4 @@
 @endif
 
     </ul>
-
-<div style="display:none">
-    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"  >
-      <span>Saved reports</span>
-      <a class="link-secondary" href="#" aria-label="Add a new report">
-        <span data-feather="plus-circle"></span>
-      </a>
-    </h6>
-  </div>
-    <ul class="nav flex-column mb-2" style="display:none">
-      <li class="nav-item">
-        <a class="nav-link" href="#">
-          <span data-feather="file-text"></span>
-          Current month
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">
-          <span data-feather="file-text"></span>
-          Last quarter
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">
-          <span data-feather="file-text"></span>
-          Social engagement
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">
-          <span data-feather="file-text"></span>
-          Year-end sale
-        </a>
-      </li>
-    </ul>
-  </div>
 </nav>

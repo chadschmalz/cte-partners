@@ -34,6 +34,7 @@
                 <option value="deferonlinews" >Deferral Online</option>
                 <option value="prereqrequired" >Prerequisite Required </option>
                 <option value="regexpired" >Priority Registration Expired</option>
+                <option value="futuresemester" >Future Semester Registration</option>
               </select>
             </div>
             <div class=" col-lg-6">

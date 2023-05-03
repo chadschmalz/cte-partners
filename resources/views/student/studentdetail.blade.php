@@ -44,7 +44,14 @@
 
             <div class="row ">
               <div class="col-4">
-            <div class="h2">{{$student->name}}</div>
+            <div class="h2">
+            @if( session('presentation')) 
+             {{$student->fname}}
+            @else 
+              {{$student->name}}
+            @endif  
+
+            </div>
           </div>
           <div class="col-md-2 col-lg-2 form-group form-check">
             <label class="form-check-label" for="lettersent"><input type="checkbox" class="form-check-input" {{$student->lettersent == 'Y'?'checked':''}}>   Letter Sent @if($student->lettersent == 'Y') <br />{{date('m/d/y',strtotime($student->lettersent_at))}}@endif</label>
@@ -86,13 +93,17 @@
                                               </tr>
                                               </thead>
                                               <tbody >
-                               <tr>
+                                              @if( session('presentation'))  <tr></tr>
+                                  @else 
+                                  <tr>
                                      <td>{{$student->phone}}</td>
                                      <td>{{$student->email}}</td>
                                      <td>{{$student->emerg_contact}}</td>
                                      <td>{{$student->emerg_email}}</td>
 
                                   </tr>
+                                  @endif
+                               
                               </tbody>
                           </table>
                           <table class="table table-sm table-striped display" id="BizData" >

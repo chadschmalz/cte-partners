@@ -14,7 +14,7 @@
           <div class="row">
             <div class="col-md-12 col-lg-12 ">
               <label for="recipient-name" class="col-form-label">Employer student is placed with:</label>
-            <select class="form-control employer_search2" name='stemployer' id="InternERlookup">
+            <select class=" employer_search2" name='stemployer' id="InternERlookup">
             </select>
 
           </div>

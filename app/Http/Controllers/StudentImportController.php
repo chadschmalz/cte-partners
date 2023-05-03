@@ -121,7 +121,7 @@ class StudentImportController extends Controller
         // }
         
 
-        if(($request->has('header') && $rowindex == 0) || ($request->lane != 'shortformat' && count($row) != 18 )|| count(student::where('email',$row[1])->get()) > 0  || $row[1] == '' )
+        if(($request->has('header') && $rowindex == 0) || ( count($row) < 9 )|| count(student::where('email',$row[1])->get()) > 0  || $row[1] == '' )
             continue;
 
             $student = new student();

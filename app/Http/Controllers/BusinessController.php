@@ -12,7 +12,10 @@ use App\Models\poc;
 use App\Models\business_activity;
 use App\Models\business_pathway;
 use App\Models\business_internship;
+use App\Models\vbusiness_summary;
 use App\Models\semester;
+use Auth;
+use DB;
 
 use App\Mail\BusinessMail;
 
@@ -28,29 +31,77 @@ class BusinessController extends Controller
       if($request->Status == '')
         $request->Status = '%';
 
-      if($selectedpathway!='all' && $selectedcluster == 'all'){
+      if($selectedpathway!='all'){
           $selectedcluster = pathway::find($selectedpathway)->cluster_id;
         }
 
       if(($selectedcluster == NULL  && $selectedpathway== NULL && $selectedactivity == NULL) or ($selectedcluster == 'all'  && $selectedpathway== 'all' && $selectedactivity == 'all')){
-        $businesses =  business::where('name','like','%')->orderBy('name', 'asc')->get();
+               if(Auth::user()->name == 'Chad Schmalz'){
+                  $businesses =  business::where('business.name','like','%')->orderBy('business.name', 'asc')
+                    ->get();
+                    $bizids =  business::where('business.name','like','%')->pluck('id');
+                }
+                else{
+                  
+                  $businesses =  business::where('business.name','like','%')->orderBy('business.name', 'asc')
+                  ->get();
+                  $bizids =  business::where('business.name','like','%')->pluck('id');
+                  
+                }
+
       }else if($selectedcluster != NULL && $selectedcluster != 'all' && $selectedpathway== 'all' && $selectedactivity == 'all'){
         $businesses =  business::
-          whereIn('business.id',business_pathway::where('cluster_id',$selectedcluster)->pluck('business_id'))->where('next_internship','like',$request->Status)
+          whereIn('business.id',business_pathway::where('cluster_id',$selectedcluster)->whereNull('deleted_at')->pluck('business_id'))->where('next_internship','like',$request->Status)
               ->join('business_pathways', 'business.id', '=', 'business_pathways.business_id')
               ->select( 'business.*')
               ->distinct()
               ->orderBy('business.name', 'asc')
               ->get();
-      }else if($selectedpathway != 'all' && $selectedactivity == 'all'){
+      }
+      else if($selectedpathway == 'all' && $selectedcluster != 'all' && $selectedactivity != 'all'){
         $businesses =  business::
-          whereIn('business.id',business_pathway::where('pathway_id',$selectedpathway)->pluck('business_id'))->where('next_internship','like',$request->Status)
+        whereIn('business.id',business_activity::where('activity_id',$selectedactivity)->whereNull('deleted_at')->pluck('business_id'))->where('next_internship','like',$request->Status)
+          ->whereIn('business.id',business_pathway::where('cluster_id',$selectedcluster)->whereNull('deleted_at')->pluck('business_id'))
+          ->join('business_activities', 'business.id', '=', 'business_activities.business_id')
+              ->select( 'business.*')
+              ->distinct()
+              ->orderBy('business.name', 'asc')
+              ->get();
+      }
+      else if($selectedpathway != 'all' && $selectedcluster != 'all' && $selectedactivity != 'all'){
+        $businesses =  business::
+        whereIn('business.id',business_activity::where('activity_id',$selectedactivity)->whereNull('deleted_at')->pluck('business_id'))->where('next_internship','like',$request->Status)
+          ->whereIn('business.id',business_pathway::where('pathway_id',$selectedpathway)->whereNull('deleted_at')->pluck('business_id'))
+          ->whereIn('business.id',business_pathway::where('cluster_id',$selectedcluster)->whereNull('deleted_at')->pluck('business_id'))
+          ->join('business_activities', 'business.id', '=', 'business_activities.business_id')
+              ->select( 'business.*')
+              ->distinct()
+              ->orderBy('business.name', 'asc')
+              ->get();
+      }else if($selectedpathway != 'all' && $selectedcluster != 'all'){
+
+        $businesses =  business::
+          whereIn('business.id',business_pathway::where('cluster_id',$selectedcluster)->pluck('business_id'))
+          ->whereIn('business.id',business_pathway::where('pathway_id',$selectedpathway)->pluck('business_id'))
+          ->where('next_internship','like',$request->Status)
               ->join('business_pathways', 'business.id', '=', 'business_pathways.business_id')
               ->select( 'business.*')
               ->distinct()
               ->orderBy('business.name', 'asc')
               ->get();
-      }else if($selectedpathway == 'all' && $selectedcluster == 'all' && $selectedactivity != 'all'){
+      }else if($selectedpathway != 'all' && $selectedactivity != 'all'){
+
+        $businesses =  business::
+          whereIn('business.id',business_pathway::where('pathway_id',$selectedpathway)->pluck('business_id'))
+          ->whereIn('business.id',business_activity::where('activity_id',$selectedactivity)->pluck('business_id'))
+          ->where('next_internship','like',$request->Status)
+              ->join('business_pathways', 'business.id', '=', 'business_pathways.business_id')
+              ->select( 'business.*')
+              ->distinct()
+              ->orderBy('business.name', 'asc')
+              ->get();
+      }
+      else if($selectedpathway == 'all' && $selectedcluster == 'all' && $selectedactivity != 'all'){
         $businesses =  business::
         whereIn('business.id',business_activity::where('activity_id',$selectedactivity)->pluck('business_id'))->where('next_internship','like',$request->Status)
               ->join('business_activities', 'business.id', '=', 'business_activities.business_id')
@@ -74,6 +125,50 @@ class BusinessController extends Controller
         $clusters[$value->id] =  $value;
       }
 
+
+      $bizactivities = array();
+      $bizclusters = array();
+      
+      // if(Auth::user()->name == 'Chad  Schmalz' && $clusters == 'all'){
+        
+      //   //use businesscluster view to load list faster
+      //   $cs = DB::table('vbusinessclusters')->select(db::raw('business_id, group_concat(cluster_desc) as clusters'))
+      //                                   ->whereIn('business_id',$bizids)->groupBy('business_id')->get();
+      //   foreach ($cs as $key => $cluster) {
+      //     $bizclusters[$cluster->business_id] = $cluster->clusters;
+      //   }
+
+      //   //use businessactivity view to load list faster
+      //   $acts = DB::table('vbusinessactivities')->select(db::raw('business_id, group_concat(activity_desc) as activities'))
+      //   ->whereIn('business_id',$bizids)->groupBy('business_id')->get();
+        
+      //   foreach ($acts as $key => $activity) {
+      //    $bizactivities[$activity->business_id] = $activity->activities;
+      //   }
+
+      // }else{
+        foreach ($businesses as $key => $biz) {
+          $bizactivities[$biz->id] = "";
+            $bizclusters[$biz->id] = '';
+        
+            foreach (business_activity::where('business_id',$biz->id)
+                      ->join('activity','business_activities.activity_id','activity.id')
+                      ->pluck('activity.activity_desc') as  $act) {
+              $bizactivities[$biz->id] .=  $act.",";
+            }
+
+            foreach (business_pathway::where('business_id',$biz->id)
+            ->whereNull('business_pathways.deleted_at')
+            ->whereNull('clusters.deleted_at')->distinct()
+            ->join('pathways','business_pathways.pathway_id','pathways.id')
+            ->join('clusters','pathways.cluster_id','clusters.id')
+            ->pluck('clusters.cluster_desc') as  $clusterdesc) {
+              $bizclusters[$biz->id] .=  $clusterdesc.",";
+            }   
+          }
+      // }
+
+// return $bizactivities;
       $data = array(
                   'selectedCluster'=> $selectedcluster,
                   'selectedPathway'=> $selectedpathway,
@@ -81,6 +176,8 @@ class BusinessController extends Controller
                   'selectedStatus'=> $request->Status,
                   'clusters'=> $clusters,
                   'pathways'=> $pathways,
+                  'bizactivities'=> $bizactivities,
+                  'bizclusters'=> $bizclusters,
                   'activitys'=> activity::all(),
                  'businesses'=> $businesses,
                  'page'=> 'WBL Business Partners',
@@ -106,6 +203,7 @@ class BusinessController extends Controller
 
       if(($selectedcluster == NULL  && $selectedpathway== NULL && $selectedactivity == NULL) or ($selectedcluster == 'all'  && $selectedpathway== 'all' && $selectedactivity == 'all')){
         $businesses =  business::where('name','like','%')->orderBy('name', 'asc')->get();
+
       }else if($selectedcluster != NULL && $selectedcluster != 'all' && $selectedpathway== 'all' && $selectedactivity == 'all'){
         $businesses =  business::
           whereIn('business.id',business_pathway::where('cluster_id',$selectedcluster)->pluck('business_id'))->where('next_internship','like',$request->Status)
@@ -143,7 +241,13 @@ class BusinessController extends Controller
               ->get();
       }
       else{
-        $businesses =  business::where('name','like','%')->orderBy('name', 'asc')->get();
+        $businesses =  business::where('name','like','%')->orderBy('name', 'asc')
+                         ->leftJoin('business_pocs',function($query){
+                          $query->on('business_pocs.business_id','=','business.id');
+                            $query->limit(1);
+                            //$query->min('photos.created_at');
+                          })
+        ->get();
           }
 
       if($selectedcluster==NULL || $selectedcluster=='all')

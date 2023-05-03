@@ -19,7 +19,13 @@ class location extends Model
       {
           return $this->hasMany('App\Models\student');
       }
-
-
+      public function events()
+      {
+          return $this->hasMany('App\Models\event');
+      }  
+      public function conesite()
+      {
+          return $this->belongsTo('App\Models\conesite');
+      }
 
 }
