@@ -39,7 +39,7 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 	Route::get('/noaccess', function(){ return abort(404);});
   
 	});
-  Route::group(['middleware' => 'roles:fulledit,fullaccess,superuser'], function (){
+  Route::group(['middleware' => 'roles:view,fulledit,fullaccess,superuser'], function (){
 
 	Route::get('/testSelect', function(){return view('modals.sample.testSelect');});
 	Route::get('/downloadSamplePartner', 'BusinessController@downloadsamplepartner')->name('samplepartner');

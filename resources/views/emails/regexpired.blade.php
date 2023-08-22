@@ -8,7 +8,7 @@ Registration for training within 7 days was required for <strong>priority</stron
 You may still complete the training courses, but will not receive priority placement.<br /><br />
 However, in the event a spot becomes available, students who have completed the workshop training will earn priority placement. <br />
 <ol type="1">
-  <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdDkG6S6TcK21MdkkAX-_9eom649npAYaepJj611DY4eEuNnw/viewform">Click here to register</a> for the two training workshops.  </li>
+  <li><a href="https://forms.gle/6u7pQVxZgA4ZT6FH7">Click here to register</a> for the two training workshops.  </li>
   <li>Click this link to print the parental permission form <a href="https://docs.google.com/forms/d/e/1FAIpQLSdDkG6S6TcK21MdkkAX-_9eom649npAYaepJj611DY4eEuNnw/viewform">LinkedIn Agreement</a> and upload it to the website at washk12internships.org (click your school logo, click on LinkedIn Agreement, scroll down and upload picture of signed form,) or bring it with you to Workshop 1. </li>
 </ol>
 
@@ -21,8 +21,5 @@ Mike Hassler, Workbased Learning Coordinator<br />
 mike.hassler@washk12.org<br />
 435-817-5714<br /><br />
 
-Sophia Ford, Onboarding Specialist<br />
-sophia.ford@washk12.org<br />
-435-656-1076<br />
 
 @endcomponent

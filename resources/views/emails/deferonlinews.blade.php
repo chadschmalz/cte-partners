@@ -25,8 +25,5 @@ Mike Hassler, Workbased Learning Coordinator<br />
 mike.hassler@washk12.org<br />
 435-817-5714<br /><br />
 
-Sophia Ford, Onboarding Specialist<br />
-sophia.ford@washk12.org<br />
-435-656-1076<br />
 
 @endcomponent

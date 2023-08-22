@@ -54,15 +54,19 @@ class StudentController extends Controller
 
           if($selectedSemester == 'unassigned' && $selectedLocation == '%' &&  $selectedPathway == '%') {
              $students =  student::where('onboarding', 'Y')->get();
+             $studentids =  student::where('onboarding', 'Y')->pluck('id');
            }
            else if($selectedSemester == 'unassigned' && $selectedLocation != '%' &&  $selectedPathway == '%'){
              $students =  student::where('location_id',$selectedLocation)->where('onboarding', 'Y')->get();
+             $studentids =  student::where('location_id',$selectedLocation)->where('onboarding', 'Y')->pluck('id');
            }
            else if($selectedSemester == 'dropped' && $selectedLocation == '%' &&  $selectedPathway == '%') {
               $students =  student::where('dropped', 'Y')->get();
+              $studentids =  student::where('dropped', 'Y')->pluck('id');
             }
             else if($selectedSemester == 'dropped' && $selectedLocation != '%' &&  $selectedPathway == '%'){
               $students =  student::where('location_id',$selectedLocation)->where('dropped', 'Y')->get();
+              $studentids =  student::where('location_id',$selectedLocation)->where('dropped', 'Y')->pluck('id');
             }
             else if($selectedSemester != 'unassigned' ) {
               $students =     student::where('location_id','like',$selectedLocation)
@@ -75,24 +79,28 @@ class StudentController extends Controller
               ->select('students.*')->orderBy('students.name','asc')->get();
             }  else{
               $students =  student::where('onboarding','<>', 'Y')->get();
+              $studentids =  student::where('onboarding','<>', 'Y')->pluck('id');
             }
 
             // if( Auth::user()->name == 'Chad Schmalz') return session()->all(); 
             // if(session('presentation') == NULL)
             //   session(['presentation'=>'1']);
 
+      
+
             $data = array(
-                        'selectedSemester'=> $selectedSemester,
-                        'selectedPathway'=> $selectedPathway,
-                        'selectedCluster'=> $selectedCluster,
-                        'selectedLocation'=> $selectedLocation,
-                        'clusters'=> cluster::all(),
-                        'pathways'=> pathway::orderBy('pathway_desc')->get(),
-                        'locations'=> location::where('location_desc','like','%')->where('grades','HS')->orderBy('location_desc')->get(),
-                        'semesters'=> semester::where('id','like','%')->orderBy('semester_enddt')->get(),
-                       'students'=> $students,
-                'page'=> 'WBL Students',
-              );
+              'selectedSemester'=> $selectedSemester,
+              'selectedPathway'=> $selectedPathway,
+              'selectedCluster'=> $selectedCluster,
+              'selectedLocation'=> $selectedLocation,
+              'clusters'=> cluster::all(),
+              'pathways'=> pathway::orderBy('pathway_desc')->get(),
+              'locations'=> location::where('location_desc','like','%')->where('grades','HS')->orderBy('location_desc')->get(),
+              'semesters'=> semester::where('id','like','%')->orderBy('semester_enddt')->get(),
+             'students'=> $students,
+      'page'=> 'WBL Students',
+    );
+
               return view('student.studentlist')->with($data);
     }
 
@@ -342,17 +350,17 @@ class StudentController extends Controller
   
       if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email)  && $counselor->email != NULL && isset($request->includecounselor) ){
         \Mail::to(array('email'=>$student->email))
-        ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
+        ->cc(array('pemail'=>$student->emerg_email,'cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org','recruiteremail'=>'maicey.hunt@washk12.org'))
         ->send($email);
         return redirect('/studentdetail/' . $id)->with(['success'=>$emailType . '  Sent(sent to student and parent and councilor email)']);
       }else if(isset($counselor) && $counselor->email != NULL && isset($request->includecounselor)){
         \Mail::to(array('email'=>$student->email))
-        ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org'))
+        ->cc(array('cemail'=>$counselor->email,'coachemail'=>'mike.hassler@washk12.org','recruiteremail'=>'maicey.hunt@washk12.org'))
         ->send($email);
         return redirect('/studentdetail/' . $id)->with(['success'=>$emailType . '  Sent(sent to student and councilor email)']);
       }else if($student->emerg_email != NULL && (bool)preg_match($v, $student->emerg_email) ){
         \Mail::to(array('email'=>$student->email))
-        ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org'))
+        ->cc(array('pemail'=>$student->emerg_email,'coachemail'=>'mike.hassler@washk12.org','recruiteremail'=>'maicey.hunt@washk12.org'))
         ->send($email);
         return redirect('/studentdetail/' . $id)->with(['success'=>$emailType . '  Sent(sent to student and parent email)']);
 
@@ -446,36 +454,36 @@ class StudentController extends Controller
 
       $student = student::find($request->id);
 
-      if($request->ta == 'true' && $student->ta != 'Y'){
+      if(($request->ta == 'on' || $request->ta == 'true') && $student->ta != 'Y'){
         $student->ta = 'Y';
         $student->ta_at = date("Y-m-d");
-      }else if($request->ta == 'false' && $student->ta == 'Y'){
+      }else if($request->ta == '' && $student->ta == 'Y'){
         $student->ta = 'N';
       }
-      if($request->la == 'true' && $student->la != 'Y'){
+      if(($request->la == 'on' || $request->la == 'true') && $student->la != 'Y'){
         $student->la = 'Y';
         $student->la_at = date("Y-m-d");
       }
-      else if($request->la == 'false' && $student->la == 'Y'){
+      else if($request->la == '' && $student->la == 'Y'){
         $student->la = 'N';
       }
-      if($request->mock == 'true' && $student->mock != 'Y'){
+      if(($request->mock == 'on' || $request->mock == 'true') && $student->mock != 'Y'){
         $student->mock = 'Y';
         $student->mock_at = date("Y-m-d");
-      }else if($request->mock == 'false' && $student->mock == 'Y'){
+      }else if($request->mock == '' && $student->mock == 'Y'){
         $student->mock = 'N';
       }
-      if($request->resume == 'true' && $student->resume != 'Y'){
+      if(($request->resume == 'on' || $request->resume == 'true') && $student->resume != 'Y'){
         $student->resume = 'Y';
         $student->resume_at = date("Y-m-d");
-      } else if($request->resume == 'false' && $student->resume == 'Y'){
+      } else if($request->resume == '' && $student->resume == 'Y'){
         $student->resume = 'N';
       }
 
-      if($request->dropped == 'true' && $student->dropped != 'Y'){
+      if(($request->dropped == 'on' || $request->dropped == 'true') && $student->dropped != 'Y'){
         $student->dropped = 'Y';
         $student->dropped_at = date("Y-m-d");
-      } else if($request->dropped == 'false' && $student->dropped == 'Y'){
+      } else if($request->dropped == '' && $student->dropped == 'Y'){
         $student->dropped = 'N';
       }
 

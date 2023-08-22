@@ -467,13 +467,13 @@ $app.student = function(){
     } );
     $('#allStudentDataTable_filter').append(allStudentDataTable.buttons().container());
     allStudentDataTable.column( 6 ).visible( false );
-    allStudentDataTable.column( 13 ).visible( false );
+    allStudentDataTable.column( 10 ).visible( false );
     allStudentDataTable.column( 14 ).visible( false );
-    allStudentDataTable.column( 15).visible( false );
-    allStudentDataTable.column( 16 ).visible( false );
-    allStudentDataTable.column( 17 ).visible( false );
     allStudentDataTable.column( 18 ).visible( false );
     allStudentDataTable.column( 19 ).visible( false );
+    allStudentDataTable.column( 20 ).visible( false );
+    allStudentDataTable.column( 21 ).visible( false );
+    allStudentDataTable.column( 22 ).visible( false );
     allStudentDataTable.column( 1).visible( false );
     allStudentDataTable.column( 2).visible( false );
 
@@ -547,12 +547,13 @@ function formatBusinessSelection (employers) {
 
 
 $('.updateTracking').on('change',function(){
-  console.log(document.getElementById('ta'+$(this).data('studentid')).checked+ ' ' +document.getElementById('la'+$(this).data('studentid')).checked+ ' ' +document.getElementById('mock'+$(this).data('studentid')).checked + ' ' +document.getElementById('resume'+$(this).data('studentid')).checked);
+  console.log('StudentID: '+ $(this).data('studentid'));
 $.ajax({
     url: '/updatetrackingAjax',
     type: 'GET',
     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-    data: {id:$(this).data('studentid'),ta:document.getElementById('ta'+$(this).data('studentid')).checked,la:document.getElementById('la'+$(this).data('studentid')).checked,mock:document.getElementById('mock'+$(this).data('studentid')).checked,resume:document.getElementById('resume'+$(this).data('studentid')).checked},
+    
+    data: {id:$(this).data('studentid'),ta:$('#ta'+$(this).data('studentid')+':checked').val(),la:$('#la'+$(this).data('studentid')+':checked').val(),mock:$('#mock'+$(this).data('studentid')+':checked').val(),resume:$('#resume'+$(this).data('studentid')+':checked').val()},
     dataType: 'json',
     success:function(data, textStatus, jqXHR){
       if(data.success){

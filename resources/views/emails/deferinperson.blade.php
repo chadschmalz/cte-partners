@@ -12,7 +12,7 @@ In the event a spot becomes available in your semester of choice, students who h
 <strong>Requirement for priority placement</strong>
 <br />
 <ol type="1">
-  <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdDkG6S6TcK21MdkkAX-_9eom649npAYaepJj611DY4eEuNnw/viewform">Click here to register</a> for training <strong>within 7 days</strong>, or we cannot place you on the priority list.</li>
+  <li><a href="https://forms.gle/6u7pQVxZgA4ZT6FH7">Click here to register</a> for training <strong>within 7 days</strong>, or we cannot place you on the priority list.</li>
   <li>Click this link to print the parental permission form <a href="https://www.washk12internships.org/uploads/2/9/9/6/29960495/linkedin_policy_w_form_final.pdf">LinkedIn Agreement</a> and upload it to the website at washk12internships.org (click your school logo, click on LinkedIn Agreement, scroll down and upload picture of signed form,) or bring it with you to Workshop 1. </li>
 </ol>
 
@@ -25,8 +25,5 @@ Mike Hassler, Workbased Learning Coordinator<br />
 mike.hassler@washk12.org<br />
 435-817-5714<br /><br />
 
-Sophia Ford, Onboarding Specialist<br />
-sophia.ford@washk12.org<br />
-435-656-1076<br />
 
 @endcomponent

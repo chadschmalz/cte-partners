@@ -12,7 +12,7 @@ Congratulations! Your online internship application has been accepted and is bei
 </div>
 <br />
 <ol type="1">
-  <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdDkG6S6TcK21MdkkAX-_9eom649npAYaepJj611DY4eEuNnw/viewform">Click Here to choose your training preference</a> <strong>within 7 days</strong>, or we cannot guarantee your spot. </li>
+  <li><a href="https://forms.gle/6u7pQVxZgA4ZT6FH7">Click Here to choose your training preference</a> <strong>within 7 days</strong>, or we cannot guarantee your spot. </li>
   <li>Add the CTE Internship class to your schedule (must be either the first two periods or last two periods). (You can earn up to one full credit per semester.)</li>
 </ol>
 

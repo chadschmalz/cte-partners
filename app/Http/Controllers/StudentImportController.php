@@ -128,6 +128,7 @@ class StudentImportController extends Controller
 
           if( $request->lane != 'shortformat'){
 
+            
               $student->email = trim($row[1]);
               $student->lname = $row[2];
               $student->fname = $row[3];
