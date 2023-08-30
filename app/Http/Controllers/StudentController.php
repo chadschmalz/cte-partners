@@ -53,7 +53,7 @@ class StudentController extends Controller
 
 
           if($selectedSemester == 'unassigned' && $selectedLocation == '%' &&  $selectedPathway == '%') {
-             $students =  student::where('onboarding', 'Y')->get();
+             $students =  student::where('onboarding', 'Y')->orWhere('location_id','=',NULL)->get();
              $studentids =  student::where('onboarding', 'Y')->pluck('id');
            }
            else if($selectedSemester == 'unassigned' && $selectedLocation != '%' &&  $selectedPathway == '%'){
@@ -68,7 +68,9 @@ class StudentController extends Controller
               $students =  student::where('location_id',$selectedLocation)->where('dropped', 'Y')->get();
               $studentids =  student::where('location_id',$selectedLocation)->where('dropped', 'Y')->pluck('id');
             }
-            else if($selectedSemester != 'unassigned' ) {
+            else if($selectedSemester != 'unassigned' && $selectedSemester != '%' ) {
+              
+              
               $students =     student::where('location_id','like',$selectedLocation)
               ->whereIn('id',
               student_semester::where('semester_id','like',$selectedSemester)
@@ -77,7 +79,14 @@ class StudentController extends Controller
               ->where('clusters.id','like',$selectedCluster)
               ->where('student_semesters.pathway_id','like',$selectedPathway)->pluck('student_id'))
               ->select('students.*')->orderBy('students.name','asc')->get();
+            }else if($selectedLocation != '%' && $selectedSemester == '%' ) {
+              
+              
+              $students =     student::where('location_id','like',$selectedLocation)
+              ->select('students.*')->orderBy('students.name','asc')->get();
+
             }  else{
+              
               $students =  student::where('onboarding','<>', 'Y')->get();
               $studentids =  student::where('onboarding','<>', 'Y')->pluck('id');
             }

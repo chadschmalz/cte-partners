@@ -122,7 +122,7 @@
 
                                      <td>{{$student->lane}}</td>
                                      <td>{{$student->grad_year}}</td>
-                                     <td>{{$student->school_name}}</td>
+                                     <td>@if($student->location_id != NULL){{$student->location->location_desc}}@else <div class="text-danger">Location not fully assigned: {{$student->school_name }} </div> @endif</td>
                                      <td>{{$student->career_interest}}</td>
                                      <td>{{$student->semester_apply}}</td>
                                      <td>{{$student->accomodations}}</td>

@@ -173,7 +173,7 @@
 
                                  <td>{{$student->email}}</td>
                                  <td>{{$student->phone}}</td>
-                                     <td>@if($student->location_id != NULL){{$student->location->location_desc}}@else  {{$student->school_name }}  @endif</td>
+                                     <td>@if($student->location_id != NULL){{$student->location->location_desc}}@else <div class="text-danger">Location not fully assigned:</div> {{$student->school_name }}  @endif</td>
                                      @if(count($student->semesters->where('semester_id',$selectedSemester)) > 0 )
                                      <td>@foreach($student->semesters->where('semester_id',$selectedSemester) as $sem) @if(isset($sem->pathway)) {{$sem->pathway->pathway_desc}} @endif @endforeach</td>
                                      @elseif($selectedSemester == 'all' )
@@ -183,17 +183,12 @@
                                      @endif
                                     @if(count($student->internships->where('semester_id',$selectedSemester)) > 0 && $selectedSemester != 'all')
 
-                                    <?php $internship = $student->internships->where('semester_id',$selectedSemester);
+                                    <?php $internship = $student->internships->where('semester_id',$selectedSemester)->first();
                       
-                                      if(isset($internship[0]))
-                                        $internship = $internship[0];
-                                        if(isset($internship['1']))
-                                        $internship = $internship['1'];
-                                      else
-                                        $intership = NULL;
+                                     
 
                                     ?>
-                                    @if($internship <> NULL)
+                                    @if($internship <> NULL )
                                         <td>{{$internship->employer->name}}</td>
                                         <td>{{$internship->employer->address}}, {{$internship->employer->city}}, {{$internship->employer->state}} {{$internship->employer->zip}}</td>
                                         <td>{{$internship->semester->semester_desc}}</td>
@@ -228,6 +223,13 @@
                                       @endif
                                     
                                     @elseif(count($student->internships->where('semester_id',$selectedSemester)) == 0 || $selectedSemester == 'all')
+                                       <td></td>
+                                       <td></td>
+                                       <td></td>
+                                       <td></td>
+                                       <td></td>
+                                       <td></td>
+                                      @else 
                                        <td></td>
                                        <td></td>
                                        <td></td>

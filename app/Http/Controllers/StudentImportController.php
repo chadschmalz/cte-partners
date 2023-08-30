@@ -100,6 +100,7 @@ class StudentImportController extends Controller
     public function directProcessImport(CsvImportRequest $request)
     {
         $importedStudents = 0;
+        $rowsSkipped = 0;
 
         $path = $request->file('csv_file')->getRealPath();
 
@@ -121,8 +122,10 @@ class StudentImportController extends Controller
         // }
         
 
-        if(($request->has('header') && $rowindex == 0) || ( count($row) < 9 )|| count(student::where('email',$row[1])->get()) > 0  || $row[1] == '' )
-            continue;
+        if(($request->has('header') && $rowindex == 0) || count(student::where('email',$row[1])->get()) > 0  || $row[1] == '' ){
+          $rowsSkipped++;
+          continue;
+        }
 
             $student = new student();
 
@@ -195,7 +198,7 @@ class StudentImportController extends Controller
 
 
             $data = array(
-                        'success'=> 'Import Complete -- ' . $importedStudents ." students imported.",
+                        'success'=> 'Import Complete -- ' . $importedStudents ." students imported. Rows Skipped: " . $rowsSkipped,
                      );
               return redirect('/students')->with($data);
     }
