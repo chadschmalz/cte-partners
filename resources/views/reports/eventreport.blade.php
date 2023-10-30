@@ -8,10 +8,10 @@
     <div class="row mb-3">
       <div class="col-md-3 col-lg-3">
         <label for="recipient-name" class="col-form-label">Semester:</label>
-        <select class="form-select" id="calYear" aria-label="Default select example"  onchange=" return refreshClusterReport()">
+        <select class="form-select" id="calYear" aria-label="Default select example"  onchange=" return refreshEventReport()">
           @if(isset($semesters))
             @foreach($semesters as $sem)
-              <option value="{{$sem->id}}" >{{$sem->semester_desc}}</option>
+              <option value="{{$sem->id}}" {{ $selectedsemester == $sem->id ? 'selected':'' }}>{{$sem->semester_desc}}</option>
             @endforeach
           @endif
         </select>

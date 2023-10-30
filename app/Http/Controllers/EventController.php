@@ -174,7 +174,6 @@ class EventController extends Controller
 
       if($selectedsemester == NULL)
        $selectedsemester = semester::where('status', 'active')->get()[0]->id;
-     
 
      $locations = [];
      $conesites = [];
@@ -199,7 +198,9 @@ class EventController extends Controller
                                              ->join('clusters','clusters.id','events.cluster_id')
                                              ->where('clusters.id', $c->id)
                                              ->where('conesites.id', $cl->id)
-                                             ->select('events.cluster_id')
+                                             ->where('event_dt','>=',date('Y-m-d',strtotime(semester::where('id','like',$selectedsemester)->pluck('semester_startdate')[0])))
+                                             ->where('event_dt',"<=",date('Y-m-d',strtotime(semester::where('id','like',$selectedsemester)->pluck('semester_enddt')[0])))
+                                              ->select('events.cluster_id')
                                              ->groupby('clusters.cluster_desc' , 'clusters.id' , 'conesites.conesite_desc')->count();
          $clustertotals[$c->id] += $semestertotals[$cl->id][$c->id];
        }

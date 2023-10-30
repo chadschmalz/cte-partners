@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+
 use App\Models\student;
 use App\Models\CsvData;
 use App\Models\location;
@@ -122,7 +124,50 @@ class StudentImportController extends Controller
         // }
         
 
-        if(($request->has('header') && $rowindex == 0) || count(student::where('email',$row[1])->get()) > 0  || $row[1] == '' ){
+      if(($request->has('header') && $rowindex != 0) && (count($row) < 10 && $request->lane != 'shortformat') ){
+
+          return "<h1>Something is wrong with this record on the import file. <br /> There are to few items in the record. <br />This might be a problem with the header moving to additional lines.</h1><br /><br />
+          <table width='100%' border='1'>
+          <thead>
+          <th>rownumber</th>
+          <th>timestamp</th>
+          <th>email</th>
+          <th>lname</th>
+          <th>fname</th>
+          <th>phone</th>
+          <th>transportation</th>
+          <th>emerg_contact</th>
+          <th>emerg_email</th>
+          <th>school_name</th>
+          <th>grad_year</th>
+          <th>career_interest</th>
+          <th>cte_courses</th>
+          <th>semester_apply</th>
+          <th>accomodations</th>
+          <th>notes</th>
+          </thead>
+          <tbody>
+          <td>".$rowindex."</td>
+          <td>".trim($row[0])."</td>
+          <td>".(isset($row[1]) ? trim($row[1]) : '')."</td>
+          <td>". (isset($row[2]) ? $row[2] : '') ."</td>
+          <td>". (isset($row[3])  ? $row[3]: '') ."</td>
+          <td>". (isset($row[4])  ? $row[4]: '') ."</td>
+          <td>". (isset($row[5])  ? $row[5]: '') ."</td>
+          <td>". (isset($row[6])  ? $row[6]: '') ."</td>
+          <td>". (isset($row[7])  ? $row[7]: '') ."</td>
+          <td>". (isset($row[8])  ? $row[8]: '') ."</td>
+          <td>". (isset($row[9])  ? $row[9]: '') ."</td>
+          <td>". (isset($row[10])  ? $row[10]: '') ."</td>
+          <td>". (isset($row[11])  ? $row[11]: '') ."</td>
+          <td>". (isset($row[12])  ? $row[12]: '') ."</td>
+          <td>". (isset($row[13])  ? $row[13]: '') ."</td>
+          <td>". (isset($row[14])  ? $row[14]: '') ."</td>
+         
+          </tbody>
+          </table>
+          ";
+        } else if(($request->has('header') && $rowindex == 0)  || count(student::where('email',$row[1])->get()) > 0   || $row[1] == '' ){
           $rowsSkipped++;
           continue;
         }

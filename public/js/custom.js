@@ -376,7 +376,7 @@ $app.studentdetail = function(){
 
 
       $('.updateTracking').on('change',function(){
-        console.log(document.getElementById('ta'+$(this).data('studentid')).checked+ ' ' +document.getElementById('la'+$(this).data('studentid')).checked+ ' ' +document.getElementById('mock'+$(this).data('studentid')).checked + ' ' +document.getElementById('resume'+$(this).data('studentid')).checked);
+        console.log(document.getElementById('ta'+$(this).data('studentid')).checked+ ' ' +document.getElementById('la'+$(this).data('studentid')).checked+ ' ' +document.getElementById('mock'+$(this).data('studentid')).checked + ' ' +document.getElementById('dropped'+$(this).data('studentid')).checked);
       $.ajax({
           url: '/updatetrackingAjax',
           type: 'GET',
@@ -1002,6 +1002,10 @@ function refreshApplicationReport() {
 }
 function refreshClusterReport() {
   location = '/studentclusters/'+$('#calYear option:selected').val(); // 'right.html';
+// return false;
+}
+function refreshEventReport() {
+  location = '/eventreport/'+$('#calYear option:selected').val(); // 'right.html';
 // return false;
 }
 function refreshEvents() {

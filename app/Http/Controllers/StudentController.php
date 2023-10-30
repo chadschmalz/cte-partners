@@ -450,11 +450,15 @@ class StudentController extends Controller
       }else if(isset($request->resume)){
         $student->resume = 'Y';
         $student->resume_at = date("Y-m-d");
+      }else if(isset($request->dropped)){
+        $student->resume = 'Y';
+        $student->resume_at = date("Y-m-d");
       }
+
 
       $student->save();
 
-      return redirect('/studentdetail/' . $request->id)->with(['success'=>'Student Response Updated']);
+      return redirect('/studentdetail/' . $request->id)->with(['success'=>'Student Response Updated ']);
 
 
     }
@@ -466,33 +470,33 @@ class StudentController extends Controller
       if(($request->ta == 'on' || $request->ta == 'true') && $student->ta != 'Y'){
         $student->ta = 'Y';
         $student->ta_at = date("Y-m-d");
-      }else if($request->ta == '' && $student->ta == 'Y'){
+      }else if($request->ta != 'true' && $student->ta == 'Y'){
         $student->ta = 'N';
       }
       if(($request->la == 'on' || $request->la == 'true') && $student->la != 'Y'){
         $student->la = 'Y';
         $student->la_at = date("Y-m-d");
       }
-      else if($request->la == '' && $student->la == 'Y'){
+      else if($request->la != 'true' && $student->la == 'Y'){
         $student->la = 'N';
       }
       if(($request->mock == 'on' || $request->mock == 'true') && $student->mock != 'Y'){
         $student->mock = 'Y';
         $student->mock_at = date("Y-m-d");
-      }else if($request->mock == '' && $student->mock == 'Y'){
+      }else if($request->mock != 'true' && $student->mock == 'Y'){
         $student->mock = 'N';
       }
       if(($request->resume == 'on' || $request->resume == 'true') && $student->resume != 'Y'){
         $student->resume = 'Y';
         $student->resume_at = date("Y-m-d");
-      } else if($request->resume == '' && $student->resume == 'Y'){
+      } else if($request->resume != 'true' && $student->resume == 'Y'){
         $student->resume = 'N';
       }
 
       if(($request->dropped == 'on' || $request->dropped == 'true') && $student->dropped != 'Y'){
         $student->dropped = 'Y';
         $student->dropped_at = date("Y-m-d");
-      } else if($request->dropped == '' && $student->dropped == 'Y'){
+      } else if( $request->dropped != 'true'  && $student->dropped == 'Y'){
         $student->dropped = 'N';
       }
 
