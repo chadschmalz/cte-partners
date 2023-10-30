@@ -2,9 +2,15 @@
   <div class="position-sticky pt-3">
     <ul class="nav flex-column">
       <li class="nav-item">
-        <a class="nav-link {{Request::is('/') ? 'active':''}}" aria-current="page" href="/" style="display:none">
+        <a class="nav-link {{Request::is('/') ? 'active':''}}" aria-current="page" href="/" style="{{Auth::user()->hasAnyRole(['superuser'])?'':'display:none'}}">
           <span data-feather="home"></span>
           Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/students" >
+          <span data-feather="users"></span>
+          Students
         </a>
       </li>
       <li class="nav-item">
@@ -25,14 +31,9 @@
           Events
         </a>
       </li>
+
       <li class="nav-item">
-        <a class="nav-link" href="/students" >
-          <span data-feather="users"></span>
-          Students
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link  {{Request::is('seatallocation') ? 'active':''}}" href="/seatallocation/{{App\Models\semester::where('status','active')->get()[0]->id}}" >
+        <a class="nav-link  {{Request::is('seatallocation') ? 'active':''}}" href="/seatallocation/{{count(App\Models\semester::where('status','active')->get()) > 0 ? App\Models\semester::where('status','active')->get()[0]->id : ''}}" >
           <span data-feather="sliders"></span>
           Assigned Seats
         </a>
@@ -63,7 +64,7 @@
             <li class="nav-item mx-4 {{Request::is('semesters') ? 'active':''}}"><a href="/semesters" class="nav-link">Manage Semesters</a></li>
             <li class="nav-item mx-4 {{Request::is('locations') ? 'active':''}}"><a href="/locations" class="nav-link">Manage Locations</a></li>
             <li class="nav-item mx-4 {{Request::is('pathways') ? 'active':''}}"><a href="/pathways" class="nav-link">Manage Pathways</a></li>
-            <li class="nav-item mx-4 {{Request::is('pathwayseats') ? 'active':''}}"><a href="/pathwayseats/{{App\Models\semester::where('status','active')->get()[0]->id}}" class="nav-link">Manage Seats</a></li>
+            <li class="nav-item mx-4 {{Request::is('pathwayseats') ? 'active':''}}"><a href="/pathwayseats/{{count(App\Models\semester::where('status','active')->get()) > 0 ? App\Models\semester::where('status','active')->get()[0]->id : ''}}" class="nav-link">Manage Seats</a></li>
           </ul>
         </div>
       </li>

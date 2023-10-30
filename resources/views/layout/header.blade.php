@@ -6,7 +6,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
     <ul class="nav navbar-nav px-3 "><li class="nav-item text-light ">
-<h5>{{env('APP_TITLE','WBL')}}</h5></li>
+<h5>{{env('APP_NAME','WBL')}}</h5></li>
 </ul>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
@@ -16,7 +16,7 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <span>Welcome, {{ Auth::user()->name }} </span>
-        
+
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
             <li>

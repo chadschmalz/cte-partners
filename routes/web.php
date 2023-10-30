@@ -33,11 +33,25 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
   // Route::get('/', function () {
   //     return view('layout/app');
   // });
-	
+
+
+
+	Route::get('/',  function () {
+        if(Auth::user()->hasAnyRole(['superuser'])){
+            return redirect('/students');
+            return 'StudentController@index';
+        }else{
+            return redirect('/students');
+        }
+
+    })->name('root');
+
+	Route::get('/students', 'StudentController@index')->name('students');
+
   Route::group(['middleware' => 'roles:404,error,noaccess'], function (){
 	Route::get('/access', function(){ return abort(404);});
 	Route::get('/noaccess', function(){ return abort(404);});
-  
+
 	});
   Route::group(['middleware' => 'roles:view,fulledit,fullaccess,superuser'], function (){
 
@@ -81,7 +95,7 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 	Route::get('/sampleuploadpathwaysfile', 'PathwayController@sampleuploadfile')->name('samplePathwayFile');
 
 
-	Route::get('/', 'StudentController@index')->name('students');
+
 	Route::get('/togglePresent', 'StudentController@togglepresentmode')->name('PresentMode');
 
 	//student routes

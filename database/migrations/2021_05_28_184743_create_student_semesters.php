@@ -15,10 +15,10 @@ class CreateStudentSemesters extends Migration
     {
         Schema::create('student_semesters', function (Blueprint $table) {
             $table->id();
-            $table->integer('semester_id', 20)->nullable();
-            $table->integer('pathway_id', 20)->nullable();
-            $table->integer('semester_desc', 20)->nullable();
-            $table->integer('seats', 20)->nullable();
+            $table->integer('semester_id')->nullable();
+            $table->integer('pathway_id')->nullable();
+            $table->integer('semester_desc')->nullable();
+            $table->integer('seats')->nullable();
             $table->string('schedule', 100)->nullable();
             $table->text('notes', 100)->nullable();
             $table->date('semester_enddt')->nullable();
@@ -35,6 +35,6 @@ class CreateStudentSemesters extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('semesters');
+        Schema::dropIfExists('student_semesters');
     }
 }

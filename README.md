@@ -7,6 +7,7 @@ Simple project for storing business partners, internship opportunities and stude
 ### How to use
 
 - Clone the repository with __git clone__
+- Update storage folder permissions (ex. sudo chown -R www-data:www-data storage)
 - Copy __.env.example__ file to __.env__ and edit database credentials there
 - Set up your App registration on your authentication system (Google,Microsoft), 
    then add the configuration to your .env file for Socialite authentication

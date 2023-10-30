@@ -23,6 +23,7 @@ class CreateLocations extends Migration
             $table->string('zip')->nullable();
             $table->string('phone')->nullable();
             $table->text('notes')->nullable();
+            $table->string('grades')->nullable();
             $table->timestamps();
             $table->softDeletes($column = 'deleted_at', $precision = 0);
         });
